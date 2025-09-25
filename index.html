@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="home/homepage.css">
+    <title>Home Page</title>
+    <p id="welcomeMessage"></p>
+    <p style="display: flex; justify-content:flex-end;">ESSENCE: <span id="pmsPrice"></span></p>
+    <p style="display: flex; justify-content:flex-end;">MAZOUT: <span id="agoPrice"></span></p>
+    <p><span id="status"></span></p>
+    <nav>
+      <ul>
+        <li><a href="index.html">Rapport</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="home/stock.html">Stock</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="home/situation.html">Situation</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="#">Customers</a>&nbsp;&nbsp;&nbsp;</li>
+      </ul>
+    </nav>
+</head>
+<body>
+    <div class="forms-container">
+        <div class="form-side">            
+            <form action="" id="rapportForm">
+                <label for="logDate">Date:</label>
+                <input type="date" name="logDate" id="logDate"></input><br><br>
+                <label for="shift">Shift:</label>
+                <select id="shift">
+                    <option value=""></option>
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
+                    <option value="Evening">Evening</option>
+                </select><br><br>
+                <h1 style="text-align: center;">Index <br></h1>
+                <label for="index">P1 (PMS) :&nbsp;&nbsp; Start</label>
+                <input type="number" name="pms" id="pms1">
+                <label for="index">&nbsp;&nbsp;&nbsp; End</label>
+                <input type="number" name="pms" id="pms2">
+                <br><br>
+
+                <label for="index">P2 (PMS) :&nbsp;&nbsp; Start</label>
+                <input type="number" name="pms" id="pms3">
+                <label for="index">&nbsp;&nbsp;&nbsp; End</label>
+                <input type="number" name="pms" id="pms4">
+                <br><br>
+
+                <label for="index">P3 (AGO) :&nbsp;&nbsp; Start</label>
+                <input type="number" name="ago" id="ago1">
+                <label for="index">&nbsp;&nbsp;&nbsp; End</label>
+                <input type="number" name="ago" id="ago2">
+                <br><br>
+
+                <label for="index">P4 (AGO) :&nbsp;&nbsp; Start</label>
+                <input type="number" name="ago" id="ago3">
+                <label for="index">&nbsp;&nbsp;&nbsp; End</label>
+                <input type="number" name="ago" id="ago4">
+                <br><br>
+
+            </form>
+            <button onclick="calculateIndex()"> Calculate </button>
+
+            <p>Total Pms Vente: <span class="output" id="resultpms"></span></p>
+            <p>Total Ago Vente: <span class="output" id="resultago"></span></p>
+            <p>Total Vente: <span class="output" id="result"></span></p>
+
+
+        </div>
+
+        <div class="form-side">
+            <h1 style="text-align: center; ">Payments</h1>
+            <form action="" id="paymentsForm">
+                <label for="momo"> MoMo: &nbsp;</label>
+                <input type="number" name="momo" id="momo"><br><br>
+
+                <label for="momoLoss"> MoMo Loss: &nbsp;</label>
+                <input type="number" name="momoLoss" id="momoLoss"><br><br>
+                
+                <label for="terminal"> Terminal: &nbsp;</label>
+                <input type="number" name="terminal" id="terminal"><br><br>
+                
+                <label for="fiche"> Fiche: &nbsp;</label>
+                <input type="number" name="fiche" id="fiche"><br><br>
+                
+                <label for="bankCard"> Bank Card: &nbsp;</label>
+                <input type="number" name="bankCard" id="bankCard"><br><br>
+
+                <label for="bulletage">Bulletage: &nbsp;</label><br>
+
+                <label for="5000" style="margin-left: 20px;">5000 x</label>
+                <input type="number" name="cash" id="5000"><br><br>
+
+                <label for="2000" style="margin-left: 20px;">2000 x</label>
+                <input type="number" name="cash" id="2000"><br><br>
+
+                <label for="1000" style="margin-left: 20px;">1000 x</label>
+                <input type="number" name="cash" id="1000"><br><br>
+
+                <label for="500" style="margin-left: 20px;">500 x</label>
+                <input type="number" name="cash" id="500"><br>
+
+                <p>Total Cash: &nbsp;<span class="output" id="totalCash"></span></p>
+
+            </form>
+            <button onclick="payments()">Calculate payments</button>
+
+            <p>Total Payments: &nbsp;<span class="output" id="totalPayments"></span></p>
+            <p>Gain/Loss: &nbsp;<span class="output" id="gainPayments"></span></p>
+        </div>
+
+    </div>
+    <button onclick="situation()">Confirm and store Rapport</button><br><br>
+    <button onclick="checkIndex()">Check index</button><br><br>
+    <!-- <button onclick="getDayBefore()">Check index</button><br><br> -->
+
+    <footer><button onclick="logout()">Log out</button></footer>
+
+    <script src="home/calculations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script>welcomeMessage()</script>
+    <script src="home/fuelPrices.js"></script>
+</body>
+</html>

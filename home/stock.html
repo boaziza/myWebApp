@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock</title>
+    <link rel="stylesheet" href="homepage.css">
+    <span><p id="welcomeMessage"></p></span>
+    <p style="display: flex; justify-content:flex-end;">ESSENCE: <span id="pmsPrice"></span></p>
+    <p style="display: flex; justify-content:flex-end;">MAZOUT: <span id="agoPrice"></span></p>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Rapport</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="stock.html">Stock</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="situation.html">Situation</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="#">Customers</a>&nbsp;&nbsp;&nbsp;</li>
+      </ul>
+    </nav>
+</head>
+<body>
+    <h1>Stock</h1>
+    <form action="" id="stockForm">
+      <label for="logDate">Enter the date:</label>
+      <input type="date" name="logDate" id="logDate"></input><br><br>
+      
+      
+        <label for="initialPms"> ESSENCE <br><br> Jauge Debut:</label>
+        <input type="number" name="initialPms" id="initialPms">
+        <label for="venteLitresPms"> Ventes Litres: </label>
+        <span class="output" id="venteLitresPms"></span>
+        <br><br>
+        
+        <label for="initialAgo"> MAZOUT <br><br> Jauge Debut:</label>
+        <input type="number" name="initialAgo" id="initialAgo">
+        <label for="venteLitresAgo"> Ventes Litres: </label>
+        <span class="output" id="venteLitresAgo"></span>
+        <br>
+
+        <h3>Received Litres</h3><br>
+        <label for="receivedPms">ESSENCE: </label>
+        <input type="number" name="receivedPms" id="receivedPms">
+        <br><br>
+
+        <label for="receivedAgo">MAZOUT: </label>
+        <input type="number" name="receivedAgo" id="receivedAgo">
+        <br><br>
+
+        <h3>Physical stock</h3>
+        <label for="physicalStockPms">ESSENCE:</label>
+        <input type="number" name="physicalStockPms" id="physicalStockPms">
+        <br><br>
+        <label for="physicalStockAgo">MAZOUT:</label>
+        <input type="number" name="physicalStockAgo" id="physicalStockAgo">
+        <br><br>
+    </form>
+    <button onclick="stock()">Calculate Stock</button>
+    <h2>Theory Stock</h2>
+    <p>ESSENCE:&nbsp;<span class="output" id="theoryStockPms"></span></p>
+    <p>MAZOUT:&nbsp;<span class="output" id="theoryStockAgo"></span></p> 
+
+    <h2>Gain\Loss</h2>
+    <p>ESSENCE:&nbsp;<span class="output" id="gainFuelPms"></span></p>
+    <p>MAZOUT:&nbsp;<span class="output" id="gainFuelAgo"></span></p>
+    
+    <button onclick="storeStock()">Confirm and store Stock</button>
+
+    <script src="calculations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script>welcomeMessage()</script>
+    <script src="fuelPrices.js"></script>
+</body>
+</html>

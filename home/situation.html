@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Situation - Journal</title>
+  <link rel="stylesheet" href="situation.css">
+  
+</head>
+<body>
+  <p id="welcomeMessage"></p>
+  <p style="display: flex; justify-content:flex-end; font-weight: bolder;">ESSENCE: <span id="pmsPrice"></span></p>
+  <p style="display: flex; justify-content:flex-end; font-weight: bolder;">MAZOUT: <span id="agoPrice"></span></p>
+  <header class="page-header">
+    <div class="center">
+      <h1>SITUATION</h1>
+    </div>
+
+    <div class="right">
+      <div class="meta-row"><strong>Date:&nbsp;&nbsp;<input type="date" name="logDate" id="logDate"></strong></div>
+    </div>
+  </header>
+
+  <nav class="top-nav">
+    <ul>
+      <li><a href="../index.html">Rapport&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="stock.html">Stock&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="situation.html">Situation&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="#">Customers</a></li>
+    </ul>
+  </nav>
+
+  <main class="sheet">
+
+    <section class="indices">
+      <table class="indices-table">
+        <thead>
+          <tr>
+            <th>P</th>
+            <th>POMPE N°</th>
+            <th>Fin journée</th>
+            <th>Début journée</th>
+            <th>Essence (L)</th>
+            <th>Gasoil (L)</th>
+            <th>Kérosène (L)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>P1</td>
+            <td>Pump 1</td>
+            <td><span id="pms2"></span></td>
+            <td><span id="pms1"></span></td>
+            <td><span id="p1_essence"></span></td>
+            <td><span id="p1_gasoil">-</span></td>
+            <td><span id="p1_kero">-</span></td>
+          </tr>
+
+          <tr>
+            <td>P2</td>
+            <td>Pump 2</td>
+            <td><span id="pms4"></span></td>
+            <td><span id="pms3"></span></td>
+            <td><span id="p2_essence"></span></td>
+            <td><span id="p2_gasoil">-</span></td>
+            <td><span id="p2_kero">-</span></td>
+          </tr>
+
+          <tr>
+            <td>P3</td>
+            <td>Pump 3</td>
+            <td><span id="ago2"></span></td>
+            <td><span id="ago1"></span></td>
+            <td><span id="p3_essence">-</span></td>
+            <td><span id="p3_gasoil"></span></td>
+            <td><span id="p3_kero">-</span></td>
+          </tr>
+
+          <tr>
+            <td>P4</td>
+            <td>Pump 4</td>
+            <td><span id="ago4"></span></td>
+            <td><span id="ago3"></span></td>
+            <td><span id="p4_essence">-</span></td>
+            <td><span id="p4_gasoil"></span></td>
+            <td><span id="p4_kero">-</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total litres (A)</td>
+            <td><span id="venteLitresPms"></span></td>
+            <td><span id="venteLitresAgo"></span></td>
+            <td><span id="venteLitresKerosene">-</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Fuel Transfered(B)</td>
+            <td><span id="transferedPms"></span></td>
+            <td><span id="transferedAgo"></span></td>
+            <td><span id="transferedKerosene">-</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total litres Sold (C=A-B)</td>
+            <td><span id="venteLitresPms"></span></td>
+            <td><span id="venteLitresAgo"></span></td>
+            <td><span id="venteLitresKerosene">-</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Price (D)</td>
+            <td><span id="pmsPrice"></span></td>
+            <td><span id="agoPrice"></span></td>
+            <td><span id="kerosenePrice">-</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total Sales in Frws (CxD)</td>
+            <td><span id="totalPms"></span></td>
+            <td><span id="totalAgo"></span></td>
+            <td><span id="totalKerosene">-</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total Sales</td>
+            <td><span id="totalVente"></span></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="totals-and-payments">     
+
+      <div class="payments">
+        <h3>Payments</h3>
+        <div class="pay-row"><label>MoMo:</label><span id="momo"></span></div>
+        <div class="pay-row"><label>Terminal:</label><span id="terminal"></span></div>
+        <div class="pay-row"><label>Bank Card:</label><span id="bankCard"></span></div>
+        <div class="pay-row"><label>Fiche: </label><span id="fiche"></span></div>
+        <div class="pay-row"><label>MoMo Loss:</label><span id="momoLoss"></span></div>
+        <div class="pay-row"><label>Total Cash:</label><span id="totalCash"></span></div>
+        <div class="pay-row"><label>Total Sales:</label><span id="totalPayments"></span></div>
+        <div class="pay-row"><label>Gain/Loss :</label><span id="gainPayments"></span></div>
+      </div>
+    </section>
+
+    <!-- Tanks / stocks table -->
+    <section class="stocks">
+      <h3>Stocks de cuves</h3>
+      <table class="stocks-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Jauge début X (L)</th>
+            <th>Réceptions Y (L)</th>
+            <th>Ventes A (L)</th>
+            <th>Transferts B (L)</th>
+            <th>Theory Stock Z</th>
+            <th>Physical Stock Q</th>
+            <th>Gain/Loss</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ESSENCE</td>
+            <td><span id="initialPms"></span></td>
+            <td><span id="receivedPms"></span></td>
+            <td><span id="venteLitresPms"></span></td>
+            <td><span id="transferedPms">-</span></td>
+            <td><span id="theoryStockPms"></span></td>
+            <td><span id="physicalStockPms"></span></td>
+            <td><span id="gainFuelPms"></span></td>
+          </tr>
+
+          <tr>
+            <td>MAZOUT</td>
+            <td><span id="initialAgo"></span></td>
+            <td><span id="receivedAgo"></span></td>
+            <td><span id="venteLitresAgo"></span></td>
+            <td><span id="transferedAgo">-</span></td>
+            <td><span id="theoryStockAgo"></span></td>
+            <td><span id="physicalStockAgo"></span></td>
+            <td><span id="gainFuelAgo"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+  <div class="meta-row">Done: <span id="done"></span></div>
+  <button onclick="fetchSituation()"> Show Situation</button>
+  <script src="calculations.js"> </script>
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script>welcomeMessage()</script>
+  <script src="fuelPrices.js"></script>
+</body>
+</html>

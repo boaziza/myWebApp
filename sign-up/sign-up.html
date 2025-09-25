@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Page</title>
+  <link rel="stylesheet" href="sign-up.css">
+</head>
+<body>
+  <div class="split-page">
+    <div class="image-half">
+        <img src="" alt="">
+    </div>
+    <div class="form-half">
+      <div class="login-container">
+        <h1>Welcome</h1>
+        <p>Please sign in to your account</p>
+        <form id="signupForm">
+          <div class="input-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="input-group">
+            <label for="employeeId">Employee ID</label>
+            <input type="text" id="employeeId" name="employeeId" required>
+          </div>
+          <div class="input-group">
+            <label for="email">email</label>
+            <input type="text" id="email" name="email" required>
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+
+          <button type="submit" class="login-button">Sign Up</button>
+        </form>
+        <p class="signup-link">Already have an account? <a href="../sign-in/sign-in.html">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script>
+    // Connect to Appwrite
+    const client = new Appwrite.Client()
+      .setEndpoint("https://cloud.appwrite.io/v1") // or your self-hosted endpoint
+      .setProject("68c3ec870024955539b0"); // paste your Appwrite project ID here
+
+    const account = new Appwrite.Account(client);
+
+    // Handle Sign Up
+    document.getElementById("signupForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // stop form from refreshing page
+
+      const name = document.getElementById("name").value;
+      const employeeId = document.getElementById("employeeId").value;
+      const email = document.getElementById("email").value; // using email for login
+      const password = document.getElementById("password").value;
+
+      // Create user in Appwrite
+      account.create("unique()", email, password, name)
+        .then(() => {
+          alert("Account created successfully! Now go to login page.");
+          // You could also redirect automatically:
+          window.location.href = "/hom";
+        })
+        .catch(err => {
+          alert("Error: " + err.message);
+        });
+    });
+  </script>
+</body>
+</html>

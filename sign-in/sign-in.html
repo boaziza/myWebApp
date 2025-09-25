@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="sign-in.css">
+</head>
+<body>
+  <div class="split-page">
+    <div class="image-half">
+        <img src="" alt="">
+    </div>
+    <div class="form-half">
+      <div class="login-container">
+        <h1>Welcome Back</h1>
+        <p>Please sign in to your account</p>
+        <form id="loginForm">
+          <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="input-group">
+            <label for="employeeId">Employee Id</label>
+            <input type="text" id="employeeId" name="employeeId" required>
+          </div>
+          <div class="input-group">
+            <label for="shift">Shift:</label>
+              <select id="shift">
+                <option value=""></option>
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+              </select><br><br>
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <button type="submit" class="login-button">Sign In</button>
+        </form>
+        <p class="signup-link">Don't have an account? <a href="../sign-up/sign-up.html">Sign Up</a></p>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script>
+      const client = new Appwrite.Client()
+        .setEndpoint("https://cloud.appwrite.io/v1") 
+        .setProject("68c3ec870024955539b0");
+
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+
+    const databaseId = "68c3f10d002b0dfc0b2d";
+    const collectionId = "68c82cf90024f35d491a";
+
+    // account.get()
+    //   .then(user => {
+    //     console.log("Already logged in:", user);
+    //     // Redirect to homepage
+    //     window.location.href = "/work project/app sample/home/homepage.html";
+    //   })
+    //   .catch(() => {
+    //     console.log("No active session, showing login form.");
+    //     // Do nothing → user must log in
+    //   });
+
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      
+      try {
+      // Step 1: Login
+      await account.createEmailSession(email, password);
+      alert("Login successful!");
+
+      // Step 2: Save employee data immediately
+      const data = {
+        employeeId: parseInt(document.getElementById("employeeId").value),
+        emailAddress: document.getElementById("email").value,
+        logDate: new Date().toISOString(), 
+        shift: document.getElementById("shift").value,
+      };
+
+      await databases.createDocument(
+        databaseId,
+        collectionId,
+        "unique()", // Appwrite generates an ID
+        data
+      );
+
+      alert("Data saved successfully!");
+
+      // Step 3: Redirect
+      window.location.href = "../index.html";
+
+    } catch (err) {
+      console.error("Error:", err.message);
+      alert("Error: " + err.message);
+    }
+  });
+  </script>
+</body>
+</html>
+
+
+

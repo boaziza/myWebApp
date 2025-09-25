@@ -1,0 +1,150 @@
+/* =============================== */
+/* ====== Sign In Page CSS ======= */
+/* =============================== */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  height: 100vh; /* full screen height */
+  display: flex;
+  justify-content: center; /* horizontally center */
+  align-items: center;     /* vertically center */
+}
+
+/* Container around form */
+.login-container {
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Heading & subtitle */
+.login-container h1 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #0d1b2a;
+}
+
+.login-container p {
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Input groups */
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #0d1b2a;
+  font-size: 13px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fdfdfd;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #1b263b;
+  outline: none;
+}
+
+/* Login button */
+.login-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1b263b;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.login-button:hover {
+  background-color: #415a77;
+  transform: translateY(-2px);
+}
+
+/* Signup link */
+.signup-link {
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.signup-link a {
+  color: #1b263b;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+
+/* ===== Select styling for .input-group (e.g. #shift) ===== */
+.login-container .input-group select,
+.input-group select {
+  width: 100%;
+  padding: 10px 38px 10px 14px;   /* space for custom arrow on the right */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fdfdfd;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.2;
+  cursor: pointer;
+
+  /* remove native arrow to use custom one */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* custom arrow (SVG) positioned to the right */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path fill='%23666' d='M0 0l5 6 5-6z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 12px) center;
+  background-size: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-container .input-group select:focus,
+.input-group select:focus {
+  border-color: #1b263b; /* navy focus color */
+  box-shadow: 0 0 6px rgba(27, 38, 59, 0.15);
+  outline: none;
+}
+
+/* optional: show placeholder option in lighter color */
+.input-group select option[value=""] {
+  color: #999;
+}
+
+/* small-screen tweaks (if you reduce input widths elsewhere) */
+@media (max-width: 420px) {
+  .login-container .input-group select,
+  .input-group select {
+    padding-right: 34px;
+    font-size: 13px;
+  }
+}
