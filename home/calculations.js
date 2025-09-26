@@ -155,6 +155,8 @@ async function situation() {
         const user = await account.get();
         console.log("Logged in as:", user.email);
         const email = user.email;
+        console.log("Email", email);
+        
 
         const dataIndex = {
             venteLitresPms, 
