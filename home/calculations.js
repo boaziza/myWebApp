@@ -107,7 +107,7 @@ async function calculateIndex() {
 
 }
 
-let momo, momoLoss, terminal, fiche, bankCard;
+let momo, momoLoss, terminal, fiche,spFuelCard, bankCard;
 let cash5000, cash2000, cash1000, cash500;
 let totalCash, totalPayments, gainPayments;
 
@@ -117,6 +117,7 @@ function payments() {
     momoLoss = Number(document.getElementById("momoLoss").value);
     terminal = Number(document.getElementById("terminal").value);
     fiche = Number(document.getElementById("fiche").value);
+    spFuelCard = Number(document.getElementById("spFuelCard").value);
     bankCard = Number(document.getElementById("bankCard").value);
     cash5000 = Number(document.getElementById("5000").value);
     cash2000 = Number(document.getElementById("2000").value);
@@ -127,7 +128,7 @@ function payments() {
 
 
     totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-    totalPayments = momo+ momoLoss + terminal + fiche + bankCard + totalCash ;
+    totalPayments = momo+ momoLoss + terminal + fiche + spFuelCard + bankCard + totalCash ;
     gainPayments = totalPayments - totalVente;
 
     document.getElementById("totalPayments").textContent = totalPayments;  
@@ -181,6 +182,7 @@ async function situation() {
             momoLoss, 
             terminal, 
             fiche, 
+            spFuelCard,
             bankCard,
             cash5000, 
             cash2000, 
@@ -201,6 +203,7 @@ async function situation() {
                 momoLoss, 
                 terminal, 
                 fiche, 
+                spFuelCard,
                 bankCard,
                 totalCash, 
                 totalPayments, 
@@ -235,6 +238,7 @@ async function situation() {
             momoLoss += doc.momoLoss;
             terminal += doc.terminal;
             fiche += doc.fiche;
+            spFuelCard += doc.spFuelCard;
             bankCard += doc.bankCard;
             totalCash += doc.totalCash;
             totalPayments += doc.totalPayments;
@@ -249,7 +253,8 @@ async function situation() {
                 momo, 
                 momoLoss, 
                 terminal, 
-                fiche, 
+                fiche,
+                spFuelCard, 
                 bankCard,
                 totalCash, 
                 totalPayments, 
@@ -277,6 +282,7 @@ async function situation() {
             momoLoss += doc.momoLoss;
             terminal += doc.terminal;
             fiche += doc.fiche;
+            spFuelCard += doc.spFuelCard;
             bankCard += doc.bankCard;
             totalCash += doc.totalCash;
             totalPayments += doc.totalPayments;
@@ -292,6 +298,7 @@ async function situation() {
                 momoLoss, 
                 terminal, 
                 fiche, 
+                spFuelCard,
                 bankCard,
                 totalCash, 
                 totalPayments, 
@@ -605,6 +612,7 @@ async function fetchSituation() {
       document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
       document.getElementById("terminal").textContent = doc.terminal || "0";
       document.getElementById("fiche").textContent = doc.fiche || "0";
+      document.getElementById("spFuelCard").textContent = doc.spFuelCard || "0";
       document.getElementById("bankCard").textContent = doc.bankCard || "0";
       document.getElementById("totalCash").textContent = doc.totalCash || "0";
       document.getElementById("totalPayments").textContent = doc.totalPayments || "0";
