@@ -83,7 +83,7 @@ async function calculateIndex() {
 
             for (let i = 0; i < beforeResponse.documents.length; i++) {
 
-                const doc = response.documents[i];
+                const doc = beforeResponse.documents[i];
 
                 if ( pms1 === doc.pms2 && pms3 === doc.pms4 && ago1 === doc.ago2 && ago3 === doc.ago4) {
                     match = true;
