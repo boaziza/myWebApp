@@ -93,7 +93,7 @@ async function calculateIndex() {
 
         } 
 
-        if (match === true) {
+        if (match) {
             alert("All index match")
         } else {
             alert("Check Index they do not match")
