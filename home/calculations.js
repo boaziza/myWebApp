@@ -3,7 +3,7 @@
 
 let totalVente,pms1,pms2,pms3,pms4,ago1,ago2,ago3,ago4;
 let venteLitresPms, totalPms, venteLitresAgo, totalAgo;
-let pmsPrice, agoPrice, logDate, shift, dateBefore;
+let pmsPrice, agoPrice, logDate, shift;
 
 async function calculateIndex() {
     const client = new Appwrite.Client()
@@ -45,7 +45,7 @@ async function calculateIndex() {
 
     try {
         
-        function getDayBefore() {
+        async function getDayBefore(logDate) {
 
             if (!logDate) return alert("Select a date!");
 
@@ -56,11 +56,11 @@ async function calculateIndex() {
             const dd = String(selectedDate.getDate()).padStart(2, '0');
             const yyyy = selectedDate.getFullYear();
 
-            dateBefore = `${mm}/${dd}/${yyyy}`;
+            return `${mm}/${dd}/${yyyy}`;
 
         }
 
-        getDayBefore();
+        const dateBefore = await getDayBefore(logDate);
 
         let match = false;
 
@@ -77,7 +77,7 @@ async function calculateIndex() {
             
         }
 
-        if (match === false) {
+        if (match === false && shift === "Evening") {
             
             const beforeResponse = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", dateBefore)]);
 
