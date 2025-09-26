@@ -154,7 +154,7 @@ async function situation() {
         
         const user = await account.get();
         console.log("Logged in as:", user.email);
-        // const responsei = await databases.listDocuments(databaseId, employeeLogsId, [Appwrite.Query.equal("emailAddress", user.email)]);
+        const email = user.email;
 
         const dataIndex = {
             venteLitresPms, 
@@ -172,6 +172,7 @@ async function situation() {
             ago4,
             pmsPrice,
             agoPrice,
+            email,
             logDate,
             shift,
         };
@@ -190,6 +191,7 @@ async function situation() {
             totalCash, 
             totalPayments, 
             gainPayments,
+            email,
             logDate,
             shift,
         };
@@ -443,6 +445,7 @@ async function storeStock() {
         
         const user = await account.get();
         console.log("Logged in as:", user.email);
+        const email = user.email;
 
         const dataAgo = {
             initialAgo,
@@ -451,6 +454,7 @@ async function storeStock() {
             physicalStockAgo,
             theoryStockAgo,
             gainFuelAgo,
+            email,
             logDate, 
         };
 
@@ -461,6 +465,7 @@ async function storeStock() {
             physicalStockPms,
             theoryStockPms,
             gainFuelPms,
+            email,
             logDate,  
         };
 
