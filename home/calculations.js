@@ -154,7 +154,7 @@ async function situation() {
         
         const user = await account.get();
         console.log("Logged in as:", user.email);
-        const email = user.email;
+        const email = await account.get().email;
         console.log("Email", email);
         
 
