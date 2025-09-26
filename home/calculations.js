@@ -77,7 +77,7 @@ async function calculateIndex() {
             
         }
 
-        if (match === false && shift === "Evening") {
+        if (match === false) {
             
             const beforeResponse = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", dateBefore)]);
 
@@ -85,7 +85,7 @@ async function calculateIndex() {
 
                 const doc = beforeResponse.documents[i];
 
-                if ( pms1 === doc.pms2 && pms3 === doc.pms4 && ago1 === doc.ago2 && ago3 === doc.ago4) {
+                if ( pms1 === doc.pms2 && pms3 === doc.pms4 && ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Evening") {
                     match = true;
                 } 
                 
