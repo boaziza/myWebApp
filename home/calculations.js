@@ -91,13 +91,12 @@ async function calculateIndex() {
                 
             } 
 
+        } 
+
+        if (match === true) {
+            alert("All index match")
         } else {
-            alert("All index match") 
-            }
-
-        if (match === false) {
-
-            alert("Check index, they do not match.")
+            alert("Check Index they do not match")
         }
 
     } catch (error) {
