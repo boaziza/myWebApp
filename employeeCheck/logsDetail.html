@@ -8,16 +8,20 @@
   
 </head>
 <body>
-  <p style="display: flex; justify-content:flex-end; font-weight: bolder;">ESSENCE: <span id="pmsPrice"></span></p>
-  <p style="display: flex; justify-content:flex-end; font-weight: bolder;">MAZOUT: <span id="agoPrice"></span></p>
-  <header class="page-header">
-    <div class="center">
+  <div class="fuel-prices">
+    <h2>Live Fuel Prices</h2>
+    <p>ESSENCE: <span id="pmsPrice"></span></p>
+    <p>MAZOUT: <span id="agoPrice"></span></p>
+  </div>
+
+  <header>
+    <div style="justify-content: center; display: flex;">
       <h1>Pompiste Report</h1>
     </div>
 
-    <div class="right">
-      <div class="meta-row"><strong>Employee's Email:&nbsp;&nbsp;<input type="email" name="email" id="email"></strong></div>
-      <div class="meta-row"><strong>Date:&nbsp;&nbsp;<input type="date" name="logDate" id="logDate"></strong></div>
+    <div>
+      <div><strong>Email:&nbsp;&nbsp;<input type="email" name="email" id="email"></strong></div>
+      <div><strong>Date:&nbsp;&nbsp;<input type="date" name="logDate" id="logDate"></strong></div>
     </div>
   </header>
 
@@ -28,7 +32,7 @@
       <li><a href="../home/situation.html">Situation&nbsp;&nbsp;&nbsp;</a></li>
       <li><a href="logsDetail.html">Pompiste's Report</a></li>
     </ul>
-  </nav>
+  </nav><br>
 
   <main class="sheet">
 
@@ -143,7 +147,7 @@
       </table>
     </section>
 
-    <section class="totals-and-payments">     
+    <section class="totals-and-payments avoid-break">     
 
       <div class="payments">
         <h3>Payments</h3>
@@ -162,7 +166,36 @@
   </main>
   <script type="module" src="logs.js"></script>
   <button onclick="displayDetails()">Get Report</button>
+  <button id="downloadReport">Download Report</button>
   <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
   <script type="module" src="../home/fuelPrices.js"></script>
+  <!-- html2pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.getElementById("downloadReport").addEventListener("click", function () {
+      // Ensure data is up to date
+      // If your displayDetails() fetches/fills data, call it here or make sure it's already run
+      // displayDetails();
+
+      // Choose the section to export: body, main, or a wrapper
+
+      const logDate = document.getElementById("logDate").value;
+      const email = document.getElementById("email").value;
+
+      const element = document.querySelector("main"); // or document.body if you want the full page
+
+      const opt = {
+        margin:       0.4,
+        filename:     email + logDate + ".pdf",
+        image:        { type: "jpeg", quality: 0.98 },
+        html2canvas:  { scale: 4, useCORS: true },
+        jsPDF:        { unit: "in", format: "a4", orientation: "portrait" },
+        pagebreak:    { mode: ['css', 'legacy'] } 
+      };
+
+      html2pdf().set(opt).from(element).save();
+    });
+  </script>
+
 </body>
 </html>
