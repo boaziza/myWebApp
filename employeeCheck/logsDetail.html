@@ -8,7 +8,6 @@
   
 </head>
 <body>
-  <p id="welcomeMessage"></p>
   <p style="display: flex; justify-content:flex-end; font-weight: bolder;">ESSENCE: <span id="pmsPrice"></span></p>
   <p style="display: flex; justify-content:flex-end; font-weight: bolder;">MAZOUT: <span id="agoPrice"></span></p>
   <header class="page-header">
@@ -25,8 +24,8 @@
   <nav class="top-nav">
     <ul>
       <li><a href="../index.html">Rapport&nbsp;&nbsp;&nbsp;</a></li>
-      <li><a href="stock.html">Stock&nbsp;&nbsp;&nbsp;</a></li>
-      <li><a href="situation.html">Situation&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="../home/stock.html">Stock&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="../home/situation.html">Situation&nbsp;&nbsp;&nbsp;</a></li>
       <li><a href="logsDetail.html">Pompiste's Report</a></li>
     </ul>
   </nav>
@@ -165,7 +164,5 @@
   <button onclick="displayDetails()">Get Report</button>
   <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
   <script type="module" src="../home/fuelPrices.js"></script>
-  <script>welcomeMessage()</script>  
-  <script type="module" src="../home/calculations.js"> </script>
 </body>
 </html>
