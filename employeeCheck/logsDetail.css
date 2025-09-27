@@ -162,7 +162,7 @@ button:hover {
     transform: translateY(-2px); /* small lift effect */
 }
 
-input[type="date"] {
+input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -173,7 +173,7 @@ input[type="date"] {
   transition: border 0.3s, box-shadow 0.3s;
 }
 
-input[type="date"]:focus {
+input:focus {
   border-color: #1b263b; /* navy */
   box-shadow: 0 0 4px rgba(27, 38, 59, 0.3);
   outline: none;
