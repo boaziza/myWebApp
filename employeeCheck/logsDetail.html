@@ -182,14 +182,14 @@
       const logDate = document.getElementById("logDate").value;
       const email = document.getElementById("email").value;
 
-      const element = document.querySelector("main"); // or document.body if you want the full page
+      const element = document.body;
 
       const opt = {
         margin:       0.4,
         filename:     email + logDate + ".pdf",
         image:        { type: "jpeg", quality: 0.98 },
-        html2canvas:  { scale: 4, useCORS: true },
-        jsPDF:        { unit: "in", format: "a4", orientation: "portrait" },
+        html2canvas:  { scale: 4, useCORS: true },        
+        jsPDF:        { unit: "px", format: [element.scrollWidth, element.scrollHeight], orientation: "portrait" },
         pagebreak:    { mode: ['css', 'legacy'] } 
       };
 

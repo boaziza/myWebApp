@@ -286,3 +286,9 @@ select {
   font-weight: 700;
   color: #1b263b; /* navy accent */
 }
+
+
+body p {
+  font-weight: bolder;
+  font-size: medium;
+}
