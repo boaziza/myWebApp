@@ -8,7 +8,7 @@ async function logout() {
     
     await account.deleteSession("current");
     alert("User logged out successfully ✅");
-    window.location.replace("../sign-in/sign-in.html")
+    window.location.replace("../myWebApp/sign-in/sign-in.html")
     
   } catch (error) {
     console.log("error for page access",error);
