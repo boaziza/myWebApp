@@ -200,7 +200,7 @@ async function situation() {
 
         const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
 
-        if (shift === "Morning" && response.documents.length > 0 ) {
+        if (shift === "Morning" && response.documents.length === 0 ) {
             dataSituation = {
                 momo, 
                 momoLoss, 
