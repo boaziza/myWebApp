@@ -400,19 +400,19 @@ async function stock() {
     if (response.documents.length > 0) {
       const doc = response.documents[0]; 
 
-      venteLitresAgo = doc.venteLitresAgo;
-      venteLitresPms = doc.venteLitresPms;
+      venteLitresAgo = parseInt(doc.venteLitresAgo, 10);
+      venteLitresPms = parseInt(doc.venteLitresPms, 10);
     }
   } catch (err) {
     console.error("Error fetching:", err);
   }
 
-    initialPms = Number(document.getElementById("initialPms").value);
-    initialAgo = Number(document.getElementById("initialAgo").value);
-    receivedPms = Number(document.getElementById("receivedPms").value);
-    receivedAgo = Number(document.getElementById("receivedAgo").value);
-    physicalStockPms = Number(document.getElementById("physicalStockPms").value);
-    physicalStockAgo = Number(document.getElementById("physicalStockAgo").value);
+    initialPms = parseInt(document.getElementById("initialPms").value);
+    initialAgo = parseInt(document.getElementById("initialAgo").value);
+    receivedPms = parseInt(document.getElementById("receivedPms").value);
+    receivedAgo = parseInt(document.getElementById("receivedAgo").value);
+    physicalStockPms = parseInt(document.getElementById("physicalStockPms").value);
+    physicalStockAgo = parseInt(document.getElementById("physicalStockAgo").value);
 
     theoryStockPms = initialPms + receivedPms - venteLitresPms ;
     theoryStockAgo = initialAgo + receivedAgo - venteLitresAgo ;
