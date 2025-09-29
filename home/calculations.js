@@ -409,8 +409,8 @@ async function stock() {
 
     initialPms = parseInt(document.getElementById("initialPms").value);
     initialAgo = parseInt(document.getElementById("initialAgo").value);
-    receivedPms = parseInt(document.getElementById("receivedPms").value);
-    receivedAgo = parseInt(document.getElementById("receivedAgo").value);
+    receivedPms = parseInt(document.getElementById("receivedPms").value) || 0;
+    receivedAgo = parseInt(document.getElementById("receivedAgo").value) || 0;
     physicalStockPms = parseInt(document.getElementById("physicalStockPms").value);
     physicalStockAgo = parseInt(document.getElementById("physicalStockAgo").value);
 
@@ -547,7 +547,7 @@ async function storeStock() {
         alert("Data saved successfully");
 
     } catch (error) {
-        console.error("Error updating:", error);
+        alert("Error updating:", error);
     }
 
 }
@@ -604,7 +604,7 @@ async function fetchSituation() {
     if (response.documents.length > 0) {
       const doc = response.documents[0]; 
 
-      document.getElementById("receivedAgo").textContent = doc.receivedAgo || "N/A";
+      document.getElementById("receivedAgo").textContent = doc.receivedAgo || "0";
       document.getElementById("receivedPms").textContent = doc.receivedPms || "0";
       document.getElementById("initialPms").textContent = doc.initialPms || "0";
       document.getElementById("initialAgo").textContent = doc.initialAgo || "0";
