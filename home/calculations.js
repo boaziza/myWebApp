@@ -32,10 +32,10 @@ async function calculateIndex() {
     shift = document.getElementById("shift").value;
 
     venteLitresPms = (pms2 - pms1) + (pms4 - pms3);
-    totalPms = venteLitresPms*pmsPrice;
+    totalPms = parseInt(venteLitresPms*pmsPrice, 10);
 
     venteLitresAgo = (ago2 - ago1) + (ago4 - ago3);
-    totalAgo = venteLitresAgo*agoPrice;
+    totalAgo = parseInt(venteLitresAgo*agoPrice, 10);
 
     totalVente = totalAgo + totalPms;
 
