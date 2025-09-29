@@ -5,7 +5,7 @@ async function checkAccess() {
     const ip = data.ip;
 
         //List of allowed IPs/networks
-    const allowed = ["41.216.105.56"];
+    const allowed = ["41.216.105.56", "105.178.32.18"];
 
     if (!allowed.includes(ip)) {
         document.body.innerHTML = "<h1>🚫 Access Denied</h1>";
