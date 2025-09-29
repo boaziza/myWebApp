@@ -200,7 +200,7 @@ async function situation() {
 
         const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
 
-        if (shift === "Morning" ) {
+        if (shift === "Morning" && response.documents.length > 0 ) {
             dataSituation = {
                 momo, 
                 momoLoss, 
@@ -232,7 +232,7 @@ async function situation() {
                 dataSituation
             )
 
-        } else if (shift === "Afternoon") {
+        } else if (shift === "Afternoon" || shift === "Morning") {
             const doc = response.documents[0];
 
             const docId = doc.$id;
