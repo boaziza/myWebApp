@@ -343,6 +343,54 @@ async function situation() {
             dataPayments
         );
 
+
+        const selectedDate = new Date(logDate);
+        
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+
+        const gainPompisteId = "68dbbb760034fb10a518"
+        const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)]);
+        const doc = gainDocs.documents;
+
+
+        if ( doc.length === 0) {
+            
+            const username = user.name;
+
+            const newData = {
+               username,
+               email,
+               gainPayments,
+               logDate,
+               month, 
+            };
+            
+            await databases.createDocument(
+                databaseId,
+                gainPompisteId,
+                "unique()",
+                newData
+            );
+
+        } else if ( doc.month === month) {
+            
+            const oldData = {
+               username,
+               email,
+               gainPayments,
+               logDate,
+               month, 
+            };
+
+            await databases.updateDocument(
+                databaseId,
+                gainPompisteId,
+                "unique()",
+                oldData
+            );
+            
+        }
+
         alert("Data saved successfully"); 
 
         function clearOutputs() {
