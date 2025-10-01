@@ -1,7 +1,8 @@
-async function excelGain() {
+async function downloadGain() {
+  try {
     const client = new Appwrite.Client()
-        .setEndpoint("https://cloud.appwrite.io/v1") 
-        .setProject("68c3ec870024955539b0");
+      .setEndpoint("https://cloud.appwrite.io/v1") 
+      .setProject("68c3ec870024955539b0");
 
     const account = new Appwrite.Account(client);
     const databases = new Appwrite.Databases(client);
@@ -10,16 +11,39 @@ async function excelGain() {
     const gainPompisteId = "68dbbb760034fb10a518"
 
     const monthYear = document.getElementById("monthYear").value;
-    const output = [];
 
     const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("monthYear", monthYear)]);
     const doc = gainDocs.documents;
 
+    let output = [];
+    let totalGain = 0;
+
     for (let i = 0; i < doc.length; i++) {
-        
+      let tempDoc = doc[i];
+
+      totalGain += tempDoc.gainPayments
+
+      output.push({ "N°":  `${i+1}`, "Name": tempDoc.username, "Email": tempDoc.email, "Month/Year": tempDoc.monthYear, "Gain/Loss": tempDoc.gainPayments });
     }
 
+    output.push({ "N°": "", "Name": "", "Email": "", "Month/Year": "Total Gain/Loss:", "Gain/Loss": totalGain });
+
+    const newSheet = XLSX.utils.json_to_sheet(output);
+    const newBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(newBook, newSheet, "Report");
+
+    XLSX.writeFile(newBook, `Gain/Loss Report ${monthYear}.xlsx`);
+    
+  } catch (error) {
+    alert("Error:",error)
+    console.log("error:",error);
+    
+  }
+
 }
+
+
+window.downloadGain = downloadGain;
 
 async function displayGain() {
     try {
@@ -65,3 +89,6 @@ async function displayGain() {
         
     }
 }
+
+
+window.displayGain = displayGain;
