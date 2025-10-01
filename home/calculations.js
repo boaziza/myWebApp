@@ -354,20 +354,22 @@ async function situation() {
 
 
         const gainPompisteId = "68dbbb760034fb10a518"
-        const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)]);
-        const doc = gainDocs.documents;
+        const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)], [Appwrite.Query.equal("monthYear", monthYear)]);
+        const doc = gainDocs.documents;     
 
 
         if ( doc.length === 0) {
             
             const username = user.name;
+            
+            console.log("Code",username);
 
             const newData = {
                username,
                email,
                gainPayments,
                logDate,
-               monthYear, 
+               monthYear
             };
             
             await databases.createDocument(
@@ -377,24 +379,34 @@ async function situation() {
                 newData
             );
 
-        } else if ( doc.monthYear === monthYear) {
+        } else {
+            
+            const username = user.name;
+            const docId = doc[0].$id;
+            const newGain = gainPayments + doc[0].gainPayments;
+            
+            console.log("Code",docId);
+            
             
             const oldData = {
                username,
                email,
-               gainPayments,
+               gainPayments: newGain,
                logDate,
-               monthYear, 
+               monthYear
             };
 
             await databases.updateDocument(
                 databaseId,
                 gainPompisteId,
-                "unique()",
+                docId,
                 oldData
             );
             
         }
+
+        console.log("monthYear",monthYear);
+        
 
         alert("Data saved successfully"); 
 
