@@ -346,7 +346,11 @@ async function situation() {
 
         const selectedDate = new Date(logDate);
         
-        const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const yyyy = selectedDate.getFullYear();
+
+        const monthYear = `${yyyy}-${mm}`;
+
 
         const gainPompisteId = "68dbbb760034fb10a518"
         const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)]);
@@ -362,7 +366,7 @@ async function situation() {
                email,
                gainPayments,
                logDate,
-               month, 
+               monthYear, 
             };
             
             await databases.createDocument(
@@ -379,7 +383,7 @@ async function situation() {
                email,
                gainPayments,
                logDate,
-               month, 
+               monthYear, 
             };
 
             await databases.updateDocument(
