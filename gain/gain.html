@@ -13,7 +13,7 @@
 
     <header>
         <div style="justify-content: center; display: flex;">
-        <h1>Pompiste Report</h1>
+        <h1>Gain/Loss Report</h1>
         </div>
 
         <div>
@@ -50,42 +50,43 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>     
+                        <td>1</td>         
+                        <td><span id="username0"></span></td>
+                        <td><span id="email0"></span></td>
+                        <td><span id="monthYear0"></span></td>
+                        <td><span id="gainPayments0"></span></td>
+                    </tr>
                     <tr>
-                        <td>1</td>            
-                        <td><span id="email1"></span></td>
+                        <td>2</td>            
                         <td><span id="username1"></span></td>
+                        <td><span id="email1"></span></td>
                         <td><span id="monthYear1"></span></td>
                         <td><span id="gainPayments1"></span></td>
                     </tr>
                     <tr> 
-                        <td>2</td>             
-                        <td><span id="email2"></span></td>
+                        <td>3</td>             
                         <td><span id="username2"></span></td>
+                        <td><span id="email2"></span></td>
                         <td><span id="monthYear2"></span></td>
                         <td><span id="gainPayments2"></span></td>
                     </tr>
                     <tr>  
-                        <td>3</td>            
-                        <td><span id="email3"></span></td>
+                        <td>4</td>            
                         <td><span id="username3"></span></td>
+                        <td><span id="email3"></span></td>
                         <td><span id="monthYear3"></span></td>
                         <td><span id="gainPayments3"></span></td>
                     </tr>
                     <tr>    
-                        <td>4</td>          
-                        <td><span id="email4"></span></td>
+                        <td>5</td>          
                         <td><span id="username4"></span></td>
+                        <td><span id="email4"></span></td>
                         <td><span id="monthYear4"></span></td>
                         <td><span id="gainPayments4"></span></td>
                     </tr>
-                    <tr>     
-                        <td>5</td>         
-                        <td><span id="email5"></span></td>
-                        <td><span id="username5"></span></td>
-                        <td><span id="monthYear5"></span></td>
-                        <td><span id="gainPayments5"></span></td>
-                    </tr>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td>Total Gain/loss: </td>
@@ -99,8 +100,11 @@
 </body>
 <footer>
     <button onclick="displayGain()">Fetch Gain/Loss Report</button>
+    <br><br>
+    <button onclick="logout()"> Log Out</button>
 </footer>
-<script src="../addToExcel.js"></script>
+<script src="gainLoss.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
 <script type="module" src="../home/fuelPrices.js"></script>
+<script src="../home/logout.js"></script>
 </html>

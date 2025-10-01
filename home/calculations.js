@@ -156,6 +156,67 @@ async function situation() {
         console.log("Logged in as:", user.email);
         const email = await user.email;
         console.log("Email", email);
+
+        const selectedDate = new Date(logDate);
+        selectedDate.setDate(selectedDate.getDate() - 1);
+        
+        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const yyyy = selectedDate.getFullYear();
+
+        const monthYear = `${yyyy}-${mm}`;
+
+
+        const gainPompisteId = "68dbbb760034fb10a518"
+        const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)], [Appwrite.Query.equal("monthYear", monthYear)]);
+        const doc = gainDocs.documents;     
+
+
+        if ( doc.length === 0) {
+            
+            const username = user.name;
+            
+            console.log("Code",gainPayments);
+
+            const newData = {
+               username,
+               email,
+               gainPayments,
+               logDate,
+               monthYear
+            };
+            
+            await databases.createDocument(
+                databaseId,
+                gainPompisteId,
+                "unique()",
+                newData
+            );
+
+        } else {
+            
+            const username = user.name;
+            const docId = doc[0].$id;
+            const newGain = gainPayments + doc[0].gainPayments;
+            
+            console.log("Code",docId);
+            
+            
+            const oldData = {
+               username,
+               email,
+               gainPayments: newGain,
+               logDate,
+               monthYear
+            };
+
+            await databases.updateDocument(
+                databaseId,
+                gainPompisteId,
+                docId,
+                oldData
+            );
+            
+        }
         
 
         const dataIndex = {
@@ -342,68 +403,6 @@ async function situation() {
             "unique()", // Appwrite generates an ID
             dataPayments
         );
-
-
-        const selectedDate = new Date(logDate);
-        selectedDate.setDate(selectedDate.getDate() - 1);
-        
-        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-        const yyyy = selectedDate.getFullYear();
-
-        const monthYear = `${yyyy}-${mm}`;
-
-
-        const gainPompisteId = "68dbbb760034fb10a518"
-        const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)], [Appwrite.Query.equal("monthYear", monthYear)]);
-        const doc = gainDocs.documents;     
-
-
-        if ( doc.length === 0) {
-            
-            const username = user.name;
-            
-            console.log("Code",username);
-
-            const newData = {
-               username,
-               email,
-               gainPayments,
-               logDate,
-               monthYear
-            };
-            
-            await databases.createDocument(
-                databaseId,
-                gainPompisteId,
-                "unique()",
-                newData
-            );
-
-        } else {
-            
-            const username = user.name;
-            const docId = doc[0].$id;
-            const newGain = gainPayments + doc[0].gainPayments;
-            
-            console.log("Code",docId);
-            
-            
-            const oldData = {
-               username,
-               email,
-               gainPayments: newGain,
-               logDate,
-               monthYear
-            };
-
-            await databases.updateDocument(
-                databaseId,
-                gainPompisteId,
-                docId,
-                oldData
-            );
-            
-        }
 
         console.log("monthYear",monthYear);
         
