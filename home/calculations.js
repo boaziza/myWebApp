@@ -376,7 +376,7 @@ async function situation() {
                 newData
             );
 
-        } else if ( doc.month === month) {
+        } else if ( doc.monthYear === monthYear) {
             
             const oldData = {
                username,

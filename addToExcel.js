@@ -9,7 +9,7 @@ async function excelGain() {
     const databaseId = "68c3f10d002b0dfc0b2d";
     const gainPompisteId = "68dbbb760034fb10a518"
 
-    const monthYear = document.getElementById("monthyear").value;
+    const monthYear = document.getElementById("monthYear").value;
     const output = [];
 
     const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("monthYear", monthYear)]);
