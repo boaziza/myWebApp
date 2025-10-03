@@ -320,7 +320,7 @@ body p {
 }
 
 .dropdown-menu li {
-  padding: 2px 8px;
+  padding: 5px 5px;
 }
 
 .dropdown-menu li a {
@@ -331,6 +331,7 @@ body p {
 
 .dropdown-menu li a:hover {
   background: #f2f2f2;
+  border-radius: 3px;
 }
 
 nav ul {

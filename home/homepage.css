@@ -247,3 +247,63 @@ select:focus {
 .dropdown-menu li a:hover {
   background: #f2f2f2;
 }
+/* Popup overlay */
+.popup {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%;
+  background: rgba(0,0,0,0.4); /* semi-transparent black */
+}
+
+/* Popup content */
+.popup-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 320px;
+  margin: 15% auto;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  color: #0d1b2a; /* navy text */
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Buttons inside popup */
+.popup-content button {
+  margin: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Confirm Logout button */
+#confirmLogout {
+  background: #1b263b; /* navy */
+  color: white;
+}
+
+#confirmLogout:hover {
+  background: #415a77; /* lighter navy */
+  transform: translateY(-2px);
+}
+
+/* Cancel button */
+#cancelLogout {
+  background: #f2f6fb; /* very light navy-gray */
+  color: #1b263b;
+  border: 1px solid #ccc;
+}
+
+#cancelLogout:hover {
+  background: #e6ecf5;
+  transform: translateY(-2px);
+}

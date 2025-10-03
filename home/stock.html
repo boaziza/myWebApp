@@ -68,13 +68,21 @@
     <h2>Gain\Loss</h2>
     <p>ESSENCE:&nbsp;<span class="output" id="gainFuelPms"></span></p>
     <p>MAZOUT:&nbsp;<span class="output" id="gainFuelAgo"></span></p>
+
+    <div id="logoutPopup" class="popup">
+      <div class="popup-content">
+        <p>Are you done ?</p>
+        <button id="confirmLogout">Yes, Logout</button>
+        <button id="cancelLogout">Cancel</button>
+      </div>
+    </div>
     
-    <button onclick="storeStock()">Store Stock</button><br><br>
+    <button onclick="storeStock(); logoutBlock();" id="logoutBtn">Store Stock</button><br><br>
     <button onclick="logout()"> Log Out</button>
 
     <script src="calculations.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-    <script>welcomeMessage()</script>
+    <script src="../utils/welcomeMessage.js"></script>
     <script src="fuelPrices.js"></script>
     <script src="logout.js"></script>
     <script src="pageAccess.js"></script>

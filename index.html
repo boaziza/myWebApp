@@ -121,13 +121,21 @@
         </div>
 
     </div>
-    <button onclick="situation()">Store Report</button><br><br>
+    <button onclick="situation(); logoutBlock();" id="logoutBtn" >Store Report</button><br><br>
 
     <footer><button onclick="logout()">Log Out</button></footer>
 
+    <div id="logoutPopup" class="popup">
+        <div class="popup-content">
+            <p>Are you done ?</p>
+            <button id="confirmLogout">Yes, Logout</button>
+            <button id="cancelLogout">Cancel</button>
+        </div>
+    </div>
+
     <script src="home/calculations.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-    <script>welcomeMessage()</script>
+    <script src="utils/welcomeMessage.js"></script>
     <script src="home/fuelPrices.js"></script>
     <script src="home/checkUser.js"></script>
     <script src="home/logout.js"></script>

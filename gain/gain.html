@@ -100,14 +100,16 @@
 </body>
 <footer>
     <button onclick="displayGain()">Fetch Gain/Loss Report</button>
-    <button onclick="downloadGain()">Download Report</button>
+    <button onclick="downloadGain();">Download Report</button>
     <br><br>
-    <button onclick="logout()"> Log Out</button>
+    <!-- Logout Button -->
+    <button onclick="logout()">Logout</button>
 </footer>
-<script type="module" src="gainLoss.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-<script type="module" src="../home/fuelPrices.js"></script>
-<script src="../home/logout.js"></script>
-<script src="../home/checkUser.js"></script>
+    <script type="module" src="gainLoss.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script type="module" src="../home/fuelPrices.js"></script>
+    <script src="../home/logout.js"></script>
+    <script src="../home/checkUser.js"></script>
+    <script src="../utils/welcomeMessage.js"></script>
 </html>
