@@ -27,7 +27,7 @@ function welcomeMessage() {
             
         } catch {
             // If not logged in, send back to sign in
-            window.location.replace("../myWebApp/sign-in/sign-in.html");
+            window.location.replace("../sign-in/sign-in.html");
         }
     }
     showUser();
