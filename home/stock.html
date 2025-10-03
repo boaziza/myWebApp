@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Stock</title>
-    <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="stock.css">
     <span><p id="welcomeMessage"></p></span>
     <div class="fuel-prices">
       <h2>Live Fuel Prices</h2>
@@ -52,22 +52,20 @@
         <input type="number" name="receivedAgo" id="receivedAgo">
         <br><br>
 
-        <h3>Physical stock</h3>
+        <h3>Physical stock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Theory Stock</h3>
         <label for="physicalStockPms">ESSENCE:</label>
         <input type="number" name="physicalStockPms" id="physicalStockPms">
+        <label>ESSENCE:&nbsp;<span class="output" id="theoryStockPms"></span></label>
         <br><br>
         <label for="physicalStockAgo">MAZOUT:</label>
         <input type="number" name="physicalStockAgo" id="physicalStockAgo">
-        <br><br>
+        <label>MAZOUT:&nbsp;<span class="output" id="theoryStockAgo"></span></label> 
+
+        <h2>Gain\Loss</h2>
+        <p>ESSENCE:&nbsp;<span class="output" id="gainFuelPms"></span></p>
+        <p>MAZOUT:&nbsp;<span class="output" id="gainFuelAgo"></span></p>
     </form>
     <button onclick="stock()">Calculate Stock</button>
-    <h2>Theory Stock</h2>
-    <p>ESSENCE:&nbsp;<span class="output" id="theoryStockPms"></span></p>
-    <p>MAZOUT:&nbsp;<span class="output" id="theoryStockAgo"></span></p> 
-
-    <h2>Gain\Loss</h2>
-    <p>ESSENCE:&nbsp;<span class="output" id="gainFuelPms"></span></p>
-    <p>MAZOUT:&nbsp;<span class="output" id="gainFuelAgo"></span></p>
 
     <div id="logoutPopup" class="popup">
       <div class="popup-content">

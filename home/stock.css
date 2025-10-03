@@ -1,0 +1,281 @@
+/* General body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 40px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Form container */
+form {
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    font-size: 13px;
+}
+
+/* Labels */
+label {
+    display: inline-block;
+    width: 120px;
+    font-weight: 500;
+    color: #0d1b2a;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+/* Inputs */
+input[type="number"],
+input[type="text"],
+input[type="date"] {
+    padding: 5px 8px;
+    margin: 4px 10px 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+    color: #333;
+    font-size: 13px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 110px;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="date"]:focus {
+    border-color: #1b263b;
+    box-shadow: 0 0 4px rgba(27, 38, 59, 0.3);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Select dropdown */
+select {
+    padding: 3px;
+    margin: 8px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fdfdfd;
+    color: #333;
+    font-size: 12px;
+    width: 120px;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select:focus {
+    border-color: #1b263b;
+    box-shadow: 0 0 6px rgba(27, 38, 59, 0.3);
+    outline: none;
+}
+
+/* Buttons */
+button {
+    background-color: #1b263b;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #415a77;
+    transform: translateY(-2px);
+}
+
+/* Paragraphs and outputs */
+p {
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+span {
+    font-weight: 600;
+    color: #0d1b2a;
+}
+
+.output {
+    font-weight: 700;
+    color: #1b263b;
+}
+
+/* Navigation bar */
+nav ul {
+    list-style: none;
+    background-color: #2c3e50;
+    display: flex;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 8px;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 10px;
+}
+
+/* Dropdown menu */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    list-style: none;
+    padding: 5px 0;
+    min-width: 180px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 6px 12px;
+}
+
+.dropdown-menu li a:hover {
+    background: #f2f2f2;
+}
+
+/* Fuel prices box */
+.fuel-prices {
+  margin-left: auto;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.fuel-prices h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0d1b2a;
+  margin: 0 0 8px 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.fuel-prices p {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  margin: 4px 0;
+}
+
+/* Popup */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1000; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+}
+
+.popup-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 320px;
+  margin: 15% auto;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  color: #0d1b2a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Popup buttons */
+.popup-content button {
+  margin: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#confirmLogout {
+  background: #1b263b;
+  color: white;
+}
+
+#confirmLogout:hover {
+  background: #415a77;
+  transform: translateY(-2px);
+}
+
+#cancelLogout {
+  background: #f2f6fb;
+  color: #1b263b;
+  border: 1px solid #ccc;
+}
+
+#cancelLogout:hover {
+  background: #e6ecf5;
+  transform: translateY(-2px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 1400px) {
+    .forms-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-side {
+        width: 90%;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    form {
+        width: 100%;
+        padding: 12px;
+    }
+    input[type="number"],
+    input[type="text"] {
+        width: 90px;
+    }
+    label {
+        width: auto;
+        display: block;
+        margin-top: 5px;
+    }
+}
+
+
