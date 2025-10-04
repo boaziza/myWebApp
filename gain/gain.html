@@ -97,13 +97,19 @@
         </section>
 
     </main>  
+    <div id="logoutPopup" class="popup">
+        <div class="popup-content">
+            <p>Are you done ?</p>
+            <button id="confirmLogout">Yes, Logout</button>
+            <button id="cancelLogout">Cancel</button>
+        </div>
+    </div>
 </body>
 <footer>
     <button onclick="displayGain()">Fetch Gain/Loss Report</button>
     <button onclick="downloadGain();">Download Report</button>
     <br><br>
-    <!-- Logout Button -->
-    <button onclick="logout()">Logout</button>
+    <button onclick="logoutBlock() " id="logoutBtn">Logout</button>
 </footer>
     <script type="module" src="gainLoss.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
