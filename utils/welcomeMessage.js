@@ -12,7 +12,7 @@ function welcomeMessage() {
     })
     .catch(err => {
         console.warn("Not logged in, redirecting...");
-        window.location.replace("/sign-in/sign-in.html"); // 👈 change to your login page path
+        window.location.replace("../myWebApp/sign-in/sign-in.html"); // 👈 change to your login page path
     });
 
     async function showUser() {
@@ -27,7 +27,7 @@ function welcomeMessage() {
             
         } catch {
             // If not logged in, send back to sign in
-            window.location.replace("/sign-in/sign-in.html");
+            window.location.replace("../myWebApp/sign-in/sign-in.html");
         }
     }
     showUser();
