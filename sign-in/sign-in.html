@@ -58,12 +58,12 @@
       const password = document.getElementById("password").value;
       const employeeIds = parseInt(document.getElementById("employeeId").value);
 
-      const response = await databases.listDocuments(databaseId, collectionId, [Appwrite.Query.equal("emailAddress", email)]);
+      // const response = await databases.listDocuments(databaseId, collectionId, [Appwrite.Query.equal("emailAddress", email)]);
       
-      const docs = response.documents[0];
+      // const docs = response.documents[0];
 
-      const currentUser = await account.get();
-      const currentEmail = await currentUser.email;
+      // // const currentUser = await account.get();
+      // const currentEmail = await currentUser.email;
       
 
       if ( currentEmail === email && employeeIds === docs.employeeId) {

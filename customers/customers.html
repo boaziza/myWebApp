@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="customers.css">
+    <title>Customers</title>
+</head>
+<body>    
+    <div class="fuel-prices">
+        <h2>Live Fuel Prices</h2>
+        <p>ESSENCE: <span id="pmsPrice"></span></p>
+        <p>MAZOUT: <span id="agoPrice"></span></p>
+    </div>
+
+    <header>
+        <div style="justify-content: center; display: flex;">
+            <h1>Customers Report</h1>
+        </div>
+
+        <div>
+            <div><strong>Month:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="month" name="monthYear" id="monthYear"></strong></div>
+            <div><strong>Plate:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="plate" id="plate" placeholder="Example: RAA001A"></strong></div>
+            <div><strong>Company:&nbsp;&nbsp;&nbsp;<input type="text" name="company" id="company" placeholder="Example: Ritco"></strong></div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../index">Rapport&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../home/stock">Stock&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../home/situation">Situation&nbsp;&nbsp;&nbsp;</a></li>
+            <li class="dropdown">
+                <a href="#"> Reports </a>
+                <ul class="dropdown-menu">                
+                    <li><a href="../employeeCheck/logsDetail">Pompiste's Report</a></li>
+                    <li><a href="../gain/gain">Gain/Loss Report</a></li>
+                </ul>
+            </li>
+            <li><a href="customers">Customers&nbsp;&nbsp;&nbsp;</a></li>
+        </ul>
+    </nav><br>
+    <main class="sheet">
+        
+        <section class="indices">
+            
+            <table class="indices-table">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Plate</th>
+                        <th>Company</th>
+                        <th>Driver</th>
+                        <th>Month/Year</th>
+                        <th>TIN Number</th>
+                        <th>Product</th>
+                        <th>Payment Type</th>
+                        <th>Total Litres</th>
+                        <th>Price</th>
+                        <th>Total Amount</th>
+                        <th>Log Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>     
+                        <td>1</td>         
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>                
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr> 
+                        <td>3</td>                      
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>  
+                        <td>4</td>                     
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>    
+                        <td>5</td>                   
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>         
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>  
+        </section>
+
+    </main>  
+    <div id="logoutPopup" class="popup">
+        <div class="popup-content">
+            <p>Are you done ?</p>
+            <button id="confirmLogout">Yes, Logout</button>
+            <button id="cancelLogout">Cancel</button>
+        </div>
+    </div>
+</body>
+<footer>
+    <button onclick="">Fetch Customers Report</button>
+    <button onclick="">Download Report</button>
+    <br><br>
+    <button onclick="logoutBlock()" id="logoutBtn">Logout</button>
+</footer>
+    <!-- <script type="module" src="gainLoss.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script type="module" src="../home/fuelPrices.js"></script>
+    <script src="../home/logout.js"></script>
+    <script src="../home/checkUser.js"></script>
+    <script src="../utils/welcomeMessage.js"></script>
+    <script src="../home/pageAccess.js"> </script> -->
+</html>
