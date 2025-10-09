@@ -116,8 +116,8 @@ function payments() {
     momoLoss = Number(document.getElementById("momoLoss").value);
     terminal = Number(document.getElementById("terminal").value);
     fiche = Number(document.getElementById("fiche").value);
-    spFuelCard = Number(document.getElementById("spFuelCard").value);
-    bankCard = Number(document.getElementById("bankCard").value);
+    spFuelCard = document.getElementById("spFuelCard").value;
+    bankCard = document.getElementById("bankCard").value;
     cash5000 = Number(document.getElementById("5000").value);
     cash2000 = Number(document.getElementById("2000").value);
     cash1000 = Number(document.getElementById("1000").value);
@@ -126,7 +126,7 @@ function payments() {
     shift = document.getElementById("shift").value;
 
     listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
-    listBC = bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+    lisard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
 
     totalSFC = listSFC.reduce((sum,n) => sum + n, 0)
     totalBC = listBC.reduce((sum,n) => sum + n, 0)
