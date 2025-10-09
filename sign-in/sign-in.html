@@ -66,41 +66,40 @@
       // const currentEmail = await currentUser.email;
       
 
-      if ( currentEmail === email && employeeIds === docs.employeeId) {
-        window.location.replace("../index.html")
+      // if ( currentEmail === email && employeeIds === docs.employeeId) {
+      //   window.location.replace("../index.html")
         
-      } else {
+      // } else {
 
-        try {
-          // Step 1: Login
-          await account.createEmailSession(email, password);
-          alert("Login successful!");
+      try {
+        // Step 1: Login
+        await account.createEmailSession(email, password);
+        alert("Login successful!");
 
-          // Step 2: Save employee data immediately
-          const data = {
-            employeeId: parseInt(document.getElementById("employeeId").value),
-            emailAddress: document.getElementById("email").value,
-            logDate: new Date().toISOString(), 
-            shift: document.getElementById("shift").value,
-          };
+        // Step 2: Save employee data immediately
+        const data = {
+          employeeId: parseInt(document.getElementById("employeeId").value),
+          emailAddress: document.getElementById("email").value,
+          logDate: new Date().toISOString(), 
+          shift: document.getElementById("shift").value,
+        };
 
-          await databases.createDocument(
-            databaseId,
-            collectionId,
-            "unique()", // Appwrite generates an ID
-            data
-          );
+        await databases.createDocument(
+          databaseId,
+          collectionId,
+          "unique()", // Appwrite generates an ID
+          data
+        );
 
-          alert("Data saved successfully!");
+        alert("Data saved successfully!");
 
-          // Step 3: Redirect
-          window.location.replace("../index.html");
+        // Step 3: Redirect
+        window.location.replace("../index.html");
 
-        } catch (err) {
-          console.error("Error:", err.message);
-          alert("Error: " + err.message);
-        }
-      }
+      } catch (err) {
+        console.error("Error:", err.message);
+        alert("Error: " + err.message);
+      }      
     });
   </script>
 </body>
