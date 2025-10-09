@@ -126,7 +126,7 @@ function payments() {
     shift = document.getElementById("shift").value;
 
     listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
-    lisard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+    listBC = bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
 
     totalSFC = listSFC.reduce((sum,n) => sum + n, 0)
     totalBC = listBC.reduce((sum,n) => sum + n, 0)
