@@ -107,8 +107,8 @@ async function calculateIndex() {
 }
 
 let momo, momoLoss, terminal, fiche,spFuelCard, bankCard;
-let cash5000, cash2000, cash1000, cash500;
-let totalCash, totalPayments, gainPayments;
+let cash5000, cash2000, cash1000, cash500, totalBC, totalSFC;
+let totalCash, totalPayments, gainPayments, listBC, listSFC;
 
 function payments() {
 
@@ -125,9 +125,14 @@ function payments() {
     logDate= document.getElementById("logDate").value;
     shift = document.getElementById("shift").value;
 
+    listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+    listBC = bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+
+    totalSFC = listSFC.reduce((sum,n) => sum + n, 0)
+    totalBC = listBC.reduce((sum,n) => sum + n, 0)
 
     totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-    totalPayments = momo+ momoLoss + terminal + fiche + spFuelCard + bankCard + totalCash ;
+    totalPayments = momo+ momoLoss + terminal + fiche + totalSFC + totalBC + totalCash ;
     gainPayments = totalPayments - totalVente;
 
     document.getElementById("totalPayments").textContent = totalPayments;  
@@ -245,8 +250,10 @@ async function situation() {
             momoLoss, 
             terminal, 
             fiche, 
-            spFuelCard,
-            bankCard,
+            listBC,
+            listSFC,
+            totalBC,
+            totalSFC,
             cash5000, 
             cash2000, 
             cash1000, 
@@ -267,8 +274,8 @@ async function situation() {
                 momoLoss, 
                 terminal, 
                 fiche, 
-                spFuelCard,
-                bankCard,
+                totalSFC,
+                totalBC,
                 totalCash, 
                 totalPayments, 
                 gainPayments,
@@ -302,8 +309,8 @@ async function situation() {
             momoLoss += doc.momoLoss;
             terminal += doc.terminal;
             fiche += doc.fiche;
-            spFuelCard += doc.spFuelCard;
-            bankCard += doc.bankCard;
+            totalSFC += doc.totalSFC;
+            totalBC += doc.totalBC;
             totalCash += doc.totalCash;
             totalPayments += doc.totalPayments;
             gainPayments += doc.gainPayments;
@@ -318,8 +325,8 @@ async function situation() {
                 momoLoss, 
                 terminal, 
                 fiche,
-                spFuelCard, 
-                bankCard,
+                totalSFC,
+                totalBC,
                 totalCash, 
                 totalPayments, 
                 gainPayments,
@@ -346,8 +353,8 @@ async function situation() {
             momoLoss += doc.momoLoss;
             terminal += doc.terminal;
             fiche += doc.fiche;
-            spFuelCard += doc.spFuelCard;
-            bankCard += doc.bankCard;
+            totalSFC += doc.totalSFC;
+            totalBC += doc.totalBC;
             totalCash += doc.totalCash;
             totalPayments += doc.totalPayments;
             gainPayments += doc.gainPayments;
@@ -362,8 +369,8 @@ async function situation() {
                 momoLoss, 
                 terminal, 
                 fiche, 
-                spFuelCard,
-                bankCard,
+                totalSFC,
+                totalBC,
                 totalCash, 
                 totalPayments, 
                 gainPayments,
@@ -650,8 +657,8 @@ async function fetchSituation() {
       document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
       document.getElementById("terminal").textContent = doc.terminal || "0";
       document.getElementById("fiche").textContent = doc.fiche || "0";
-      document.getElementById("spFuelCard").textContent = doc.spFuelCard || "0";
-      document.getElementById("bankCard").textContent = doc.bankCard || "0";
+      document.getElementById("totalSFC").textContent = doc.totalSFC || "0";
+      document.getElementById("totalBC").textContent = doc.totalBC || "0";
       document.getElementById("totalCash").textContent = doc.totalCash || "0";
       document.getElementById("totalPayments").textContent = doc.totalPayments || "0";
       document.getElementById("gainPayments").textContent = doc.gainPayments || "0";
