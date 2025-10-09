@@ -679,11 +679,12 @@ async function fetchSituation() {
         document.getElementById("venteLitresPms").textContent = doc.venteLitresPms || "0";
         document.getElementById("done").textContent = doc.done || false;
 
-        document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1) || "0";
-        document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3) || "0";
-        document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1) || "0";
-        document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3) || "0";
-
+        if (doc.done === true) {            
+            document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1) || "0";
+            document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3) || "0";
+            document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1) || "0";
+            document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3) || "0";
+        }
         
         document.getElementById("pmsPrices").textContent = doc.pmsPrice || "0";
         document.getElementById("agoPrices").textContent = doc.agoPrice || "0";
