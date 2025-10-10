@@ -71,7 +71,7 @@ async function calculateIndex() {
 
             const doc = response.documents[i];
 
-            if ( pms1 === doc.pms2 && pms3 === doc.pms4 && ago1 === doc.ago2 && ago3 === doc.ago4) {
+            if ( pms1 === doc.pms2 && pms3 === doc.pms4 || ago1 === doc.ago2 && ago3 === doc.ago4) {
                 match = true;
             } 
             
@@ -85,7 +85,7 @@ async function calculateIndex() {
 
                 const doc = beforeResponse.documents[i];
 
-                if ( pms1 === doc.pms2 && pms3 === doc.pms4 && ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Evening") {
+                if ( pms1 === doc.pms2 && pms3 === doc.pms4 && doc.shift === "Evening" || ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Evening") {
                     match = true;
                 } 
                 
