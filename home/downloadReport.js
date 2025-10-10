@@ -13,7 +13,7 @@ function download() {
 
         const opt = {
         margin:       0.4,
-        filename:     logDate + ".pdf",
+        filename:     "Situation "+logDate + ".pdf",
         image:        { type: "jpeg", quality: 0.98 },
         html2canvas:  { scale: 4, useCORS: true, scrollY: 0 },        
         jsPDF:        { unit: "px", format: [element.scrollWidth, element.scrollHeight], orientation: "portrait" },

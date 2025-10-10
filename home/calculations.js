@@ -667,15 +667,15 @@ async function fetchSituation() {
         document.getElementById("totalAgo").textContent = doc.totalAgo || "0";
         document.getElementById("totalPms").textContent = doc.totalPms || "0";
         document.getElementById("totalVente").textContent = doc.totalVente || "0";
-        document.getElementById("venteLitresAgo").textContent = doc.venteLitresAgo || "0";
-        document.getElementById("venteLitresPms").textContent = doc.venteLitresPms || "0";
+        document.getElementById("venteLitresAgo").textContent = (doc.venteLitresAgo).toFixed(2) || "0";
+        document.getElementById("venteLitresPms").textContent = (doc.venteLitresPms).toFixed(2) || "0";
         document.getElementById("done").textContent = doc.done || false;
 
         if (doc.done === true) {            
-            document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1) || "0";
-            document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3) || "0";
-            document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1) || "0";
-            document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3) || "0";
+            document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
+            document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
+            document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
+            document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
         }
         
         document.getElementById("pmsPrices").textContent = doc.pmsPrice || "0";
