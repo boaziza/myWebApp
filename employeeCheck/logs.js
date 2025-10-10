@@ -70,7 +70,7 @@ export async function displayDetails() {
 
             if ( doc.email === email ) {
                 const fields = [
-                    "momo","momoLoss","terminal","fiche","totalSFC","totalBC","listSFC","listBC",
+                    "momo","momoLoss","fiche","totalSFC","totalBC","listSFC","listBC",
                     "totalCash","totalPayments","gainPayments"
                 ];
 

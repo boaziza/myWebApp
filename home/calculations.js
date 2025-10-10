@@ -106,7 +106,7 @@ async function calculateIndex() {
 
 }
 
-let momo, momoLoss, terminal, fiche,spFuelCard, bankCard;
+let momo, momoLoss, fiche,spFuelCard, bankCard;
 let cash5000, cash2000, cash1000, cash500, totalBC, totalSFC;
 let totalCash, totalPayments, gainPayments, listBC, listSFC;
 
@@ -114,7 +114,6 @@ function payments() {
 
     momo = Number(document.getElementById("momo").value);
     momoLoss = Number(document.getElementById("momoLoss").value);
-    terminal = Number(document.getElementById("terminal").value);
     fiche = Number(document.getElementById("fiche").value);
     spFuelCard = document.getElementById("spFuelCard").value;
     bankCard = document.getElementById("bankCard").value;
@@ -132,7 +131,7 @@ function payments() {
     totalBC = listBC.reduce((sum,n) => sum + n, 0)
 
     totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-    totalPayments = momo+ momoLoss + terminal + fiche + totalSFC + totalBC + totalCash ;
+    totalPayments = momo+ momoLoss + fiche + totalSFC + totalBC + totalCash ;
     gainPayments = totalPayments - totalVente;
 
     document.getElementById("totalPayments").textContent = totalPayments;  
@@ -248,7 +247,6 @@ async function situation() {
         const dataPayments = {
             momo, 
             momoLoss, 
-            terminal, 
             fiche, 
             listBC,
             listSFC,
@@ -272,7 +270,6 @@ async function situation() {
             dataSituation = {
                 momo, 
                 momoLoss, 
-                terminal, 
                 fiche, 
                 totalSFC,
                 totalBC,
@@ -307,7 +304,6 @@ async function situation() {
 
             momo += doc.momo;
             momoLoss += doc.momoLoss;
-            terminal += doc.terminal;
             fiche += doc.fiche;
             totalSFC += doc.totalSFC;
             totalBC += doc.totalBC;
@@ -322,8 +318,7 @@ async function situation() {
             
             dataSituation = {
                 momo, 
-                momoLoss, 
-                terminal, 
+                momoLoss,
                 fiche,
                 totalSFC,
                 totalBC,
@@ -351,7 +346,6 @@ async function situation() {
 
             momo += doc.momo;
             momoLoss += doc.momoLoss;
-            terminal += doc.terminal;
             fiche += doc.fiche;
             totalSFC += doc.totalSFC;
             totalBC += doc.totalBC;
@@ -367,7 +361,6 @@ async function situation() {
             dataSituation = {
                 momo, 
                 momoLoss, 
-                terminal, 
                 fiche, 
                 totalSFC,
                 totalBC,
@@ -655,7 +648,6 @@ async function fetchSituation() {
         document.getElementById("gainFuelPms").textContent = doc.gainFuelPms || "0";
         document.getElementById("momo").textContent = doc.momo || "0";
         document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
-        document.getElementById("terminal").textContent = doc.terminal || "0";
         document.getElementById("fiche").textContent = doc.fiche || "0";
         document.getElementById("totalSFC").textContent = doc.totalSFC || "0";
         document.getElementById("totalBC").textContent = doc.totalBC || "0";

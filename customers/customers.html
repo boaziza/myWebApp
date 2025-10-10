@@ -37,7 +37,9 @@
             </li>
             <li><a href="customers">Customers&nbsp;&nbsp;&nbsp;</a></li>
         </ul>
-    </nav><br>
+    </nav>
+    <button style="display: flex; right:210px; position: absolute;" onclick="addCustomer()">Add A Customer</button><br><br><br>
+    <div id="inputContainer"></div>
     <main class="sheet">
         
         <section class="indices">
@@ -163,9 +165,10 @@
     <br><br>
     <button onclick="logoutBlock()" id="logoutBtn">Logout</button>
 </footer>
+    <script src="customers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
     <!-- <script type="module" src="gainLoss.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
     <script type="module" src="../home/fuelPrices.js"></script>
     <script src="../home/logout.js"></script>
     <script src="../home/checkUser.js"></script>

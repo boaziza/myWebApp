@@ -115,3 +115,44 @@ async function displayGain() {
 
 
 window.displayGain = displayGain;
+
+
+
+async function addCustomer() {
+  const container = document.getElementById("inputContainer");
+  container.innerHTML = "";
+
+  const res = await fetch("http://localhost:4000/api/attributes");
+  const data = await res.json();
+  const attributes = data.attributes;
+
+  for (let i = 0; i < attributes.length; i++) {
+
+    const div = document.createElement("div");    
+
+    div.innerHTML = `
+      <label for="${attributes[i].key}"> ${attributes[i].key}: &nbsp;</label>
+      <input type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
+    `;
+
+    container.appendChild(div);    
+  }
+}
+
+function mapTypeToInput(appwriteType) {
+  switch (appwriteType) {
+    case "integer":
+    case "float":
+      return "number";
+    case "boolean":
+      return "checkbox";
+    case "email":
+      return "email";
+    case "url":
+      return "url";
+    case "datetime":
+      return "datetime-local";
+    default:
+      return "text"; // for string, enum, etc.
+  }
+}
