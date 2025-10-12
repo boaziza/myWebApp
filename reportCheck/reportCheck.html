@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="reportCheck.css">
+    <title>Report Check</title>
+</head>
+<body>    
+    <div class="fuel-prices">
+        <h2>Live Fuel Prices</h2>
+        <p>ESSENCE: <span id="pmsPrice"></span></p>
+        <p>MAZOUT: <span id="agoPrice"></span></p>
+    </div>
+
+    <header>
+        <div style="justify-content: center; display: flex;">
+        <h1>Report Check</h1>
+        </div>
+
+        <div>
+        <div><strong>Date: &nbsp;&nbsp;<input type="date" name="logDate" id="logDate"></strong></div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../index">Rapport&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../home/stock">Stock&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../home/situation">Situation&nbsp;&nbsp;&nbsp;</a></li>
+            <li class="dropdown">
+                <a href="#"> Reports </a>
+                <ul class="dropdown-menu">                
+                    <li><a href="../employeeCheck/logsDetail">Pompiste's Report</a></li>
+                    <li><a href="../gain/gain">Gain/Loss Report</a></li>
+                    <li><a href="reportCheck">Report Check</a></li>
+                </ul>
+            </li>
+            <li><a href="../customers/customers">Customers&nbsp;&nbsp;&nbsp;</a></li>
+        </ul>
+    </nav><br>
+    <main class="sheet">
+        
+        <section class="indices">
+            
+            <table class="indices-table">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Name</th>
+                        <th>Total Vente</th>
+                        <th>Total Cash</th>
+                        <th>MoMo</th>
+                        <th>MoMo Loss</th>
+                        <th>SP Fuel Card</th>
+                        <th>Bank Card</th>
+                        <th>GAIN/LOSS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>     
+                        <td>1</td>         
+                        <td><span id="username0"></span></td>
+                        <td><span id="totalPayments0"></span></td>
+                        <td><span id="totalCash0"></span></td>
+                        <td><span id="momo0"></span></td>
+                        <td><span id="momoLoss0"></span></td>
+                        <td><span id="totalSFC0"></span></td>
+                        <td><span id="totalBC0"></span></td>
+                        <td><span id="gainPayments0"></span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>            
+                        <td><span id="username1"></span></td>
+                        <td><span id="totalPayments1"></span></td>
+                        <td><span id="totalCash1"></span></td>
+                        <td><span id="momo1"></span></td>
+                        <td><span id="momoLoss1"></span></td>
+                        <td><span id="totalSFC1"></span></td>
+                        <td><span id="totalBC1"></span></td>
+                        <td><span id="gainPayments1"></span></td>
+                    </tr>
+                    <tr> 
+                        <td>3</td>             
+                        <td><span id="username2"></span></td>
+                        <td><span id="totalPayments2"></span></td>
+                        <td><span id="totalCash2"></span></td>
+                        <td><span id="momo2"></span></td>
+                        <td><span id="momoLoss2"></span></td>
+                        <td><span id="totalSFC2"></span></td>
+                        <td><span id="totalBC2"></span></td>
+                        <td><span id="gainPayments2"></span></td>
+                    </tr>
+                    <tr>  
+                        <td>4</td>            
+                        <td><span id="username3"></span></td>
+                        <td><span id="totalPayments3"></span></td>
+                        <td><span id="totalCash3"></span></td>
+                        <td><span id="momo3"></span></td>
+                        <td><span id="momoLoss3"></span></td>
+                        <td><span id="totalSFC3"></span></td>
+                        <td><span id="totalBC3"></span></td>
+                        <td><span id="gainPayments3"></span></td>
+                    </tr>
+                    <tr>    
+                        <td>5</td>          
+                        <td><span id="username4"></span></td>
+                        <td><span id="totalPayments4"></span></td>
+                        <td><span id="totalCash4"></span></td>
+                        <td><span id="momo4"></span></td>
+                        <td><span id="momoLoss4"></span></td>
+                        <td><span id="totalSFC4"></span></td>
+                        <td><span id="totalBC4"></span></td>
+                        <td><span id="gainPayments4"></span></td>
+                    </tr>
+                    <tr>    
+                        <td>6</td>          
+                        <td><span id="username5"></span></td>
+                        <td><span id="totalPayments5"></span></td>
+                        <td><span id="totalCash5"></span></td>
+                        <td><span id="momo5"></span></td>
+                        <td><span id="momoLoss5"></span></td>
+                        <td><span id="totalSFC5"></span></td>
+                        <td><span id="totalBC5"></span></td>
+                        <td><span id="gainPayments5"></span></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>TOTAL</td>
+                        <td><span id="totalPayments"></span></td>
+                        <td><span id="totalCash"></span></td>
+                        <td><span id="momo"></span></td>
+                        <td><span id="momoLoss"></span></td>
+                        <td><span id="totalSFC"></span></td>
+                        <td><span id="totalBC"></span></td>
+                        <td><span id="totalGainPayments"></span></td>
+                    </tr>
+                </tbody>
+            </table>  
+        </section>
+
+    </main>  
+    <div id="logoutPopup" class="popup">
+        <div class="popup-content">
+            <p>Are you done ?</p>
+            <button id="confirmLogout">Yes, Logout</button>
+            <button id="cancelLogout">Cancel</button>
+        </div>
+    </div>
+</body>
+<footer>
+    <button onclick="displayReport()">Fetch Gain/Loss Report</button>
+    <button onclick="downloadReport();">Download Report</button>
+    <br><br>
+    <button onclick="logout() ">Logout</button>
+</footer>
+    <script type="module" src="reportCheck.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script type="module" src="../home/fuelPrices.js"></script>
+    <script src="../home/logout.js"></script>
+    <script src="../home/checkUser.js"></script>
+    <script src="../utils/welcomeMessage.js"></script>
+    <script src="../home/pageAccess.js"> </script>
+</html>
