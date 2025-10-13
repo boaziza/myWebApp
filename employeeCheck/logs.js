@@ -27,9 +27,11 @@ export async function displayDetails() {
     try {
         const responseIndex = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", logDate)]);
         console.log("Here are the dates", responseIndex);
+        let id;
 
         for (let i = 0; i < responseIndex.documents.length; i++) {
             const doc = responseIndex.documents[i];
+            id = doc.id;
 
             if ( doc.email === email ) {
                 document.getElementById("pms1").textContent = doc.pms1 || "0";
@@ -68,7 +70,7 @@ export async function displayDetails() {
         for (let i = 0; i < responsePayments.documents.length; i++) {
             const doc = responsePayments.documents[i];
 
-            if ( doc.email === email ) {
+            if ( doc.email === email && id === doc.id) {
                 const fields = [
                     "momo","momoLoss","fiche","totalSFC","totalBC","listSFC","listBC",
                     "totalCash","totalPayments","gainPayments"

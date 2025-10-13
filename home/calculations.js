@@ -159,7 +159,14 @@ async function situation() {
         const user = await account.get();
         console.log("Logged in as:", user.email);
         const email = await user.email;
-        console.log("Email", email);
+        console.log("Email", email);           
+        const username = user.name;
+
+        function generateShiftId(username, logDate) {
+            return `${username}_${logDate}_${crypto.randomUUID()}`;
+        }
+
+        const id = generateShiftId(username,logDate);
 
         const selectedDate = new Date(logDate);
         selectedDate.setDate(selectedDate.getDate() - 1);
@@ -176,8 +183,6 @@ async function situation() {
 
 
         if ( doc.length === 0) {
-            
-            const username = user.name;
             
             console.log("Code",gainPayments);
 
@@ -197,8 +202,7 @@ async function situation() {
             );
 
         } else {
-            
-            const username = user.name;
+
             const docId = doc[0].$id;
             const newGain = gainPayments + doc[0].gainPayments;
             
@@ -242,6 +246,8 @@ async function situation() {
             email,
             logDate,
             shift,
+            username,
+            id,
         };
 
         const dataPayments = {
@@ -262,6 +268,8 @@ async function situation() {
             email,
             logDate,
             shift,
+            username,
+            id,
         };
 
         const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
@@ -297,7 +305,7 @@ async function situation() {
                 dataSituation
             )
 
-        } else if (shift === "Afternoon" || shift === "Morning") {
+        } else if ( (shift === "Afternoon" || shift === "Morning") && response.documents.length !== 0) {
             const doc = response.documents[0];
 
             const docId = doc.$id;
@@ -338,7 +346,7 @@ async function situation() {
             docId,
             dataSituation)
             
-        } else if(shift === "Evening"){
+        } else if(shift === "Evening" && response.documents.length !== 0 ){
             const doc = response.documents[0];
 
             const docId = doc.$id;

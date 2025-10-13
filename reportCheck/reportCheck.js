@@ -61,14 +61,10 @@ async function displayReport() {
         const logDate = document.getElementById("logDate").value;
 
         const paymentsDocuments = await databases.listDocuments(databaseId, paymentsId, [Appwrite.Query.equal("logDate", logDate)]);
-        const gainPaymentsDocuments = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("logDate", logDate)]);
 
         const doc = paymentsDocuments.documents;
-        const gainDoc = gainPaymentsDocuments.documents;
 
         let totalGainPayments = 0;
-        let gain;
-        let username;
 
         if (doc.length === 0 ) {
             alert("No documents found in that month")
@@ -79,27 +75,16 @@ async function displayReport() {
 
             const tempDoc = doc[i];
 
-            for (let i = 0; i < gainDoc.length; i++) {
-                if (gainDoc[i].email === tempDoc.email  ) {
-                    username = gainDoc[i].username;
-                    gain = gainDoc[i].gainPayments;
-                    console.log("gain", gain);
-                    
-                }
-            }
+            totalGainPayments += tempDoc.gainPayments;
 
-            totalGainPayments += gain;
-            
-            console.log("gain", totalGainPayments);
-            
-            document.getElementById(`username${i}`).textContent = username;
+            document.getElementById(`username${i}`).textContent = tempDoc.username;
             document.getElementById(`totalPayments${i}`).textContent = tempDoc.totalPayments;
             document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;
             document.getElementById(`momo${i}`).textContent = tempDoc.momo;
             document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
             document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
             document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
-            document.getElementById(`gainPayments${i}`).textContent = gain;
+            document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;
             
         }
 
