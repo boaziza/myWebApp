@@ -154,7 +154,7 @@ async function addCustomer(event) {
     const container = document.getElementById("inputContainer");
     container.innerHTML = "";
 
-    const res = await fetch("http://localhost:4000/api/attributes");
+    const res = await fetch("https://mywebapp-backend.onrender.com/api/attributes");
     const data = await res.json();
     const attributes = data.attributes;
 
