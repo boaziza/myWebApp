@@ -12,7 +12,8 @@ app.use(express.json());
 // Allow limited origins
 const allowedOrigins = [
   "https://boaziza.github.io/myWebApp",
-  "http://localhost:5500"
+  "http://localhost:4000",
+  "http://127.0.0.1:5501"
 ];
 app.use(cors({
   origin(origin, callback) {
@@ -47,5 +48,5 @@ app.get("/api/attributes", async (req, res) => {
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
-const port = process.env.PORT || 5500;
+const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`✅ Server running on http://localhost:${port} and https://boaziza.github.io/myWebApp`));
