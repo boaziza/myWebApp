@@ -1,4 +1,10 @@
-async function logout() {
+async function logout(event) {
+  const btn = event.currentTarget;   
+  const originalText = btn.textContent;
+
+  btn.disabled = true;
+  btn.textContent = "Loading..."; 
+
   try {
     const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
@@ -12,7 +18,12 @@ async function logout() {
     
   } catch (error) {
     console.log("error for page access",error);
-    }
+  } finally {
+
+    btn.disabled = false;
+    btn.textContent = originalText;
+        
+  }
 }
 
 function logoutBlock() {  

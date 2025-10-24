@@ -1,29 +1,51 @@
-// npm install node-appwrite express cors
+// utils/server.js
 import express from "express";
 import cors from "cors";
 import * as sdk from "node-appwrite";
+import dotenv from "dotenv";
+
+dotenv.config(); // Load .env if present
 
 const app = express();
-app.use(cors());
+app.use(express.json());
 
+// Allow limited origins
+const allowedOrigins = [
+  "https://your-frontend-domain.com",
+  "http://localhost:5500"
+];
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (!allowedOrigins.includes(origin)) {
+      return callback(new Error("CORS not allowed"), false);
+    }
+    return callback(null, true);
+  }
+}));
+
+// Appwrite client
 const client = new sdk.Client()
-  .setEndpoint("https://cloud.appwrite.io/v1") // or your Appwrite endpoint
-  .setProject("68c3ec870024955539b0")
-  .setKey("standard_4fff087f78f4cfe655cbcfb57b7f74c7e8bc1e5424bec781fa16215f2419d24f5f6e015c27ae7f08e604291da1a4b42e571500a329394c7b24f4f7d077238e8b68549d11a14867adb9a808060d2eed2ccae52668ac5cc4ed3bb00f34bf0b4b79429d596d17d5ab5647594165611a0cc52e4b0606f98759db58347ff54dedec15"); // 🚫 never expose this to frontend
+  .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1")
+  .setProject(process.env.APPWRITE_PROJECT_ID)
+  .setKey(process.env.APPWRITE_API_KEY);
 
 const databases = new sdk.Databases(client);
 
-// API route your frontend can call
 app.get("/api/attributes", async (req, res) => {
   try {
-    const databaseId = "68c3f10d002b0dfc0b2d";
-    const customersId = "68e8e147003313b6e8c3";
-    const response = await databases.listAttributes(databaseId, customersId);
+    const response = await databases.listAttributes(
+      process.env.APPWRITE_DATABASE_ID,
+      process.env.APPWRITE_CUSTOMERS_ID
+    );
     res.json(response);
   } catch (err) {
-    console.error(" Error while fetching attributes:", err);
+    console.error("Error fetching attributes:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-app.listen(4000, () => console.log("✅ Server running on http://localhost:4000"));
+app.get("/health", (req, res) => res.json({ status: "ok" }));
+
+const port = process.env.PORT || 4000;
+app.listen(port, () => console.log(`✅ Server running on http://localhost:${port}`));

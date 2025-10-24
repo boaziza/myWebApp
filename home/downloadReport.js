@@ -1,4 +1,10 @@
-function download() {
+function download(event) {
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+   
     try {
         // Ensure data is up to date
         // If your displayDetails() fetches/fills data, call it here or make sure it's already run
@@ -24,6 +30,11 @@ function download() {
 
     } catch (error) {
         console.log("This is the error ", error);
+        
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
         
     }
 }

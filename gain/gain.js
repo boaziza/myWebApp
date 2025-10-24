@@ -1,4 +1,10 @@
-async function downloadGain() {
+async function downloadGain(event) {
+  const btn = event.currentTarget;   
+  const originalText = btn.textContent;
+
+  btn.disabled = true;
+  btn.textContent = "Loading..."; 
+ 
   try {
     const client = new Appwrite.Client()
       .setEndpoint("https://cloud.appwrite.io/v1") 
@@ -38,6 +44,11 @@ async function downloadGain() {
     alert("Error:",error)
     console.log("error:",error);
     
+  } finally {
+
+    btn.disabled = false;
+    btn.textContent = originalText;
+      
   }
 
 }
@@ -45,7 +56,13 @@ async function downloadGain() {
 
 window.downloadGain = downloadGain;
 
-async function displayGain() {
+async function displayGain(event) {
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+    
     try {
         const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
@@ -86,6 +103,11 @@ async function displayGain() {
         
     } catch (error) {
         console.log("Error at the display gain:",error);
+        
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
         
     }
 }

@@ -69,7 +69,7 @@
                 <br><br>
 
             </form>
-            <button onclick="calculateIndex()"> Calculate </button>
+            <button class="action-btn"  onclick="calculateIndex(event)"> Calculate </button>
 
             <p>Total Pms Vente: <span class="output" id="resultpms"></span></p>
             <p>Total Ago Vente: <span class="output" id="resultago"></span></p>
@@ -113,16 +113,16 @@
                 <p>Total Cash: &nbsp;<span class="output" id="totalCash"></span></p>
 
             </form>
-            <button onclick="payments()">Calculate payments</button>
+            <button class="action-btn"  onclick="payments(event)">Calculate payments</button>
 
             <p>Total Payments: &nbsp;<span class="output" id="totalPayments"></span></p>
             <p>Gain/Loss: &nbsp;<span class="output" id="gainPayments"></span></p>
         </div>
 
     </div>
-    <button onclick="situation()">Store Report</button><br><br>
+    <button class="action-btn" onclick="situation(event)">Store Report</button><br><br>
 
-    <footer><button onclick="logout()">Log Out</button></footer>
+    <footer><button class="action-btn" onclick="logout(event)">Log Out</button></footer>
 
     <div id="logoutPopup" class="popup">
         <div class="popup-content">

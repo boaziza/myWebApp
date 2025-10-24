@@ -39,7 +39,7 @@
             <li><a href="customers">Customers&nbsp;&nbsp;&nbsp;</a></li>
         </ul>
     </nav>
-    <button style="display: flex; right:210px; position: absolute;" onclick="addCustomer()">Add A Customer</button><br><br><br>
+    <button class="action-btn" style="display: flex; right:210px; position: absolute;" onclick="addCustomer(event)">Add A Customer</button><br><br><br>
     <div id="inputContainer"></div>
     <main class="sheet">
         
@@ -167,10 +167,10 @@
     </div>
 </body>
 <footer>
-    <button onclick="">Fetch Customers Report</button>
-    <button onclick="">Download Report</button>
+    <button class="action-btn" onclick="">Fetch Customers Report</button>
+    <button class="action-btn" onclick="">Download Report</button>
     <br><br>
-    <button onclick="logout()">Logout</button>
+    <button class="action-btn" onclick="logout(event)">Logout</button>
 </footer>
     <script src="customers.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>

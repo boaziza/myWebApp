@@ -3,7 +3,7 @@ import { setField } from "../utils/utils.js";
 let logDate, email;
 
 
-export async function displayDetails() {
+export async function displayDetails(event) {
     const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
         .setProject("68c3ec870024955539b0");
@@ -21,6 +21,11 @@ export async function displayDetails() {
     if (!logDate && !email) {
         return alert("Choose a date and an employee")
     }
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
 
     
 
@@ -83,6 +88,11 @@ export async function displayDetails() {
 
     } catch (error) {
         console.log("Error is this", error);        
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
     }
 
 }

@@ -67,7 +67,7 @@
         <p>ESSENCE:&nbsp;<span class="output" id="gainFuelPms"></span></p>
         <p>MAZOUT:&nbsp;<span class="output" id="gainFuelAgo"></span></p>
     </form>
-    <button onclick="stock()">Calculate Stock</button>
+    <button class="action-btn" onclick="stock(event)">Calculate Stock</button>
 
     <div id="logoutPopup" class="popup">
       <div class="popup-content">
@@ -77,8 +77,8 @@
       </div>
     </div>
     
-    <button onclick="storeStock()">Store Stock</button><br><br>
-    <button onclick="logout()"> Log Out</button>
+    <button class="action-btn" onclick="storeStock(event)">Store Stock</button><br><br>
+    <button class="action-btn" onclick="logout(event)"> Log Out</button>
 
     <script src="calculations.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>

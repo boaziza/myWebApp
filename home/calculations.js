@@ -5,7 +5,7 @@ let totalVente,pms1,pms2,pms3,pms4,ago1,ago2,ago3,ago4;
 let venteLitresPms, totalPms, venteLitresAgo, totalAgo;
 let pmsPrice, agoPrice, logDate, shift;
 
-async function calculateIndex() {
+async function calculateIndex(event) {
     const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
         .setProject("68c3ec870024955539b0");
@@ -15,6 +15,12 @@ async function calculateIndex() {
 
     const databaseId = "68c3f10d002b0dfc0b2d";
     const indexId = "68cd1987002bae34ea4b";
+
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading...";
 
 
     pmsPrice = parseInt(document.getElementById("pmsPrice").textContent.replace(/[^\d]/g, ''), 10) || 1862;
@@ -102,6 +108,11 @@ async function calculateIndex() {
     } catch (error) {
         console.log("The error is ", error);
         
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
     }
 
 }
@@ -110,37 +121,53 @@ let momo, momoLoss, fiche,spFuelCard, bankCard;
 let cash5000, cash2000, cash1000, cash500, totalBC, totalSFC;
 let totalCash, totalPayments, gainPayments, listBC, listSFC;
 
-function payments() {
+async function payments(event) {
+    
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
 
-    momo = Number(document.getElementById("momo").value);
-    momoLoss = Number(document.getElementById("momoLoss").value);
-    fiche = Number(document.getElementById("fiche").value);
-    spFuelCard = document.getElementById("spFuelCard").value;
-    bankCard = document.getElementById("bankCard").value;
-    cash5000 = Number(document.getElementById("5000").value);
-    cash2000 = Number(document.getElementById("2000").value);
-    cash1000 = Number(document.getElementById("1000").value);
-    cash500 = Number(document.getElementById("500").value);
-    logDate= document.getElementById("logDate").value;
-    shift = document.getElementById("shift").value;
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
 
-    listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
-    listBC =  bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+    try {
+        
+    
+        momo = Number(document.getElementById("momo").value);
+        momoLoss = Number(document.getElementById("momoLoss").value);
+        fiche = Number(document.getElementById("fiche").value);
+        spFuelCard = document.getElementById("spFuelCard").value;
+        bankCard = document.getElementById("bankCard").value;
+        cash5000 = Number(document.getElementById("5000").value);
+        cash2000 = Number(document.getElementById("2000").value);
+        cash1000 = Number(document.getElementById("1000").value);
+        cash500 = Number(document.getElementById("500").value);
+        logDate= document.getElementById("logDate").value;
+        shift = document.getElementById("shift").value;
 
-    totalSFC = listSFC.reduce((sum,n) => sum + n, 0)
-    totalBC = listBC.reduce((sum,n) => sum + n, 0)
+        listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+        listBC =  bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
 
-    totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-    totalPayments = momo+ momoLoss + fiche + totalSFC + totalBC + totalCash ;
-    gainPayments = totalPayments - totalVente;
+        totalSFC = listSFC.reduce((sum,n) => sum + n, 0)
+        totalBC = listBC.reduce((sum,n) => sum + n, 0)
 
-    document.getElementById("totalPayments").textContent = totalPayments;  
-    document.getElementById("gainPayments").textContent = gainPayments;
-    document.getElementById("totalCash").textContent = totalCash;
+        totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
+        totalPayments = momo+ momoLoss + fiche + totalSFC + totalBC + totalCash ;
+        gainPayments = totalPayments - totalVente;
+
+        document.getElementById("totalPayments").textContent = totalPayments;  
+        document.getElementById("gainPayments").textContent = gainPayments;
+        document.getElementById("totalCash").textContent = totalCash;
+    } catch (error) {
+        console.log(error)  
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+
 }
 
 let dataSituation; 
-async function situation() {
+async function situation(event) {
     const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
         .setProject("68c3ec870024955539b0");
@@ -152,7 +179,11 @@ async function situation() {
     const indexId = "68cd1987002bae34ea4b";
     const paymentsId = "68cd19990006cbb33843";
     const situationId = "68cd6b7f00330a840d96";
-    const employeeLogsId = "68c82cf90024f35d491a";
+    const employeeLogsId = "68c82cf90024f35d491a";const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
 
     try {
         
@@ -440,6 +471,11 @@ async function situation() {
         } else {
             alert("Error: " + err.message);
         }
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
     }
     
 }
@@ -449,7 +485,13 @@ let receivedPms, receivedAgo, physicalStockPms;
 let physicalStockAgo, theoryStockPms, theoryStockAgo;
 let gainFuelPms, gainFuelAgo;
 
-async function stock() {
+async function stock(event) {
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+   
     const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
         .setProject("68c3ec870024955539b0");
@@ -477,7 +519,12 @@ async function stock() {
     }
   } catch (err) {
     console.error("Error fetching:", err);
-  }
+  } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
+    }
 
     initialPms = parseInt(document.getElementById("initialPms").value);
     initialAgo = parseInt(document.getElementById("initialAgo").value);
@@ -501,7 +548,7 @@ async function stock() {
     
 }
 
-async function storeStock() {
+async function storeStock(event) {
     const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
         .setProject("68c3ec870024955539b0");
@@ -514,6 +561,12 @@ async function storeStock() {
     const stockPmsId = "68cd197e002096e31ed8";
     const situationId = "68cd6b7f00330a840d96";
 
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+   
     
     try {
         
@@ -578,7 +631,13 @@ async function storeStock() {
     } catch (err) {
       console.error("Error:", err.message);
       alert("Error: " + err.message);
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
     }
+
 
     try {
         // 1. Find the document by attribute
@@ -620,11 +679,17 @@ async function storeStock() {
 
     } catch (error) {
         alert("Error updating:", error);
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
     }
+
 
 }
 
-async function fetchSituation() {
+async function fetchSituation(event) {
   const client = new Appwrite.Client()
         .setEndpoint("https://cloud.appwrite.io/v1") 
         .setProject("68c3ec870024955539b0");
@@ -634,68 +699,78 @@ async function fetchSituation() {
 
     const databaseId = "68c3f10d002b0dfc0b2d";
     const situationId = "68cd6b7f00330a840d96";
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
 
-  try {
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+  
+    try {
 
-    const logDate = document.getElementById("logDate").value;     
-    const user = await account.get();    
-    const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
+        const logDate = document.getElementById("logDate").value;     
+        const user = await account.get();    
+        const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
 
-    if (response.documents.length > 0) {
-        const doc = response.documents[0]; 
+        if (response.documents.length > 0) {
+            const doc = response.documents[0]; 
 
-        document.getElementById("receivedAgo").textContent = doc.receivedAgo || "0";
-        document.getElementById("receivedPms").textContent = doc.receivedPms || "0";
-        document.getElementById("initialPms").textContent = doc.initialPms || "0";
-        document.getElementById("initialAgo").textContent = doc.initialAgo || "0";
-        document.getElementById("physicalStockAgo").textContent = doc.physicalStockAgo || "0";
-        document.getElementById("physicalStockPms").textContent = doc.physicalStockPms || "0";
-        document.getElementById("theoryStockAgo").textContent = doc.theoryStockAgo || "0";
-        document.getElementById("theoryStockPms").textContent = doc.theoryStockPms || "0";
-        document.getElementById("gainFuelAgo").textContent = doc.gainFuelAgo || "0";
-        document.getElementById("gainFuelPms").textContent = doc.gainFuelPms || "0";
-        document.getElementById("momo").textContent = doc.momo || "0";
-        document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
-        document.getElementById("fiche").textContent = doc.fiche || "0";
-        document.getElementById("totalSFC").textContent = doc.totalSFC || "0";
-        document.getElementById("totalBC").textContent = doc.totalBC || "0";
-        document.getElementById("totalCash").textContent = doc.totalCash || "0";
-        document.getElementById("totalPayments").textContent = doc.totalPayments || "0";
-        document.getElementById("gainPayments").textContent = doc.gainPayments || "0";
-        document.getElementById("pms1").textContent = doc.pms1 || "0";
-        document.getElementById("pms2").textContent = doc.pms2 || "0";
-        document.getElementById("pms3").textContent = doc.pms3 || "0";
-        document.getElementById("pms4").textContent = doc.pms4 || "0";
-        document.getElementById("ago1").textContent = doc.ago1 || "0";
-        document.getElementById("ago2").textContent = doc.ago2 || "0";
-        document.getElementById("ago3").textContent = doc.ago3 || "0";
-        document.getElementById("ago4").textContent = doc.ago4 || "0";
-        document.getElementById("pmsPrice").textContent = doc.pmsPrice || "0";
-        document.getElementById("agoPrice").textContent = doc.agoPrice || "0";
-        document.getElementById("totalAgo").textContent = doc.totalAgo || "0";
-        document.getElementById("totalPms").textContent = doc.totalPms || "0";
-        document.getElementById("totalVente").textContent = doc.totalVente || "0";
-        document.getElementById("venteLitresAgo").textContent = (doc.venteLitresAgo).toFixed(2) || "0";
-        document.getElementById("venteLitresPms").textContent = (doc.venteLitresPms).toFixed(2) || "0";
-        document.getElementById("done").textContent = doc.done || false;
+            document.getElementById("receivedAgo").textContent = doc.receivedAgo || "0";
+            document.getElementById("receivedPms").textContent = doc.receivedPms || "0";
+            document.getElementById("initialPms").textContent = doc.initialPms || "0";
+            document.getElementById("initialAgo").textContent = doc.initialAgo || "0";
+            document.getElementById("physicalStockAgo").textContent = doc.physicalStockAgo || "0";
+            document.getElementById("physicalStockPms").textContent = doc.physicalStockPms || "0";
+            document.getElementById("theoryStockAgo").textContent = doc.theoryStockAgo || "0";
+            document.getElementById("theoryStockPms").textContent = doc.theoryStockPms || "0";
+            document.getElementById("gainFuelAgo").textContent = doc.gainFuelAgo || "0";
+            document.getElementById("gainFuelPms").textContent = doc.gainFuelPms || "0";
+            document.getElementById("momo").textContent = doc.momo || "0";
+            document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
+            document.getElementById("fiche").textContent = doc.fiche || "0";
+            document.getElementById("totalSFC").textContent = doc.totalSFC || "0";
+            document.getElementById("totalBC").textContent = doc.totalBC || "0";
+            document.getElementById("totalCash").textContent = doc.totalCash || "0";
+            document.getElementById("totalPayments").textContent = doc.totalPayments || "0";
+            document.getElementById("gainPayments").textContent = -Number(doc.gainPayments) || "0";
+            document.getElementById("pms1").textContent = doc.pms1 || "0";
+            document.getElementById("pms2").textContent = doc.pms2 || "0";
+            document.getElementById("pms3").textContent = doc.pms3 || "0";
+            document.getElementById("pms4").textContent = doc.pms4 || "0";
+            document.getElementById("ago1").textContent = doc.ago1 || "0";
+            document.getElementById("ago2").textContent = doc.ago2 || "0";
+            document.getElementById("ago3").textContent = doc.ago3 || "0";
+            document.getElementById("ago4").textContent = doc.ago4 || "0";
+            document.getElementById("pmsPrice").textContent = doc.pmsPrice || "0";
+            document.getElementById("agoPrice").textContent = doc.agoPrice || "0";
+            document.getElementById("totalAgo").textContent = doc.totalAgo || "0";
+            document.getElementById("totalPms").textContent = doc.totalPms || "0";
+            document.getElementById("totalVente").textContent = -Number(doc.totalVente) || "0";
+            document.getElementById("venteLitresAgo").textContent = (doc.venteLitresAgo).toFixed(2) || "0";
+            document.getElementById("venteLitresPms").textContent = (doc.venteLitresPms).toFixed(2) || "0";
+            document.getElementById("done").textContent = doc.done || false;
 
-        if (doc.done === true) {            
-            document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
-            document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
-            document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
-            document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
+            if (doc.done === true) {            
+                document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
+                document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
+                document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
+                document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
+            }
+            
+            document.getElementById("pmsPrices").textContent = doc.pmsPrice || "0";
+            document.getElementById("agoPrices").textContent = doc.agoPrice || "0";
+        } else {
+        console.log("No documents found for date:", logDate);
         }
-        
-        document.getElementById("pmsPrices").textContent = doc.pmsPrice || "0";
-        document.getElementById("agoPrices").textContent = doc.agoPrice || "0";
-    } else {
-      console.log("No documents found for date:", logDate);
+
+        alert("Data fetched successfully");
+
+    } catch (err) {
+        console.error("Error fetching:", err);
+    }  finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+
     }
-
-    alert("Data fetched successfully");
-
-  } catch (err) {
-    console.error("Error fetching:", err);
-  }
 }
 
