@@ -181,6 +181,7 @@ async function addCustomer(event) {
 function mapTypeToInput(appwriteType) {
   switch (appwriteType) {
     case "integer":
+      return "number";
     case "float":
       return "number";
     case "boolean":
