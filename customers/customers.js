@@ -154,32 +154,17 @@ async function addCustomer(event) {
     const container = document.getElementById("inputContainer");
     container.innerHTML = "";
 
-    const resC = await fetch("https://mywebapp-backend.onrender.com/api/attributes/customers");
-    const resL = await fetch("https://mywebapp-backend.onrender.com/api/attributes/loans");
-    const dataC = await resC.json();
-    const dataL = await resL.json();
-    const attributesC = dataC.attributes;
-    const attributesL = dataL.attributes;
+    const res = await fetch("https://mywebapp-backend.onrender.com/api/attributes/customers");
+    const data = await res.json();
+    const attributes = data.attributes;
 
-    for (let i = 0; i < attributesC.length; i++) {
+    for (let i = 0; i < attributes.length; i++) {
 
       const div = document.createElement("div");    
 
       div.innerHTML = `
-        <label for="${attributesC[i].key}"> ${(attributesC[i].key).toUpperCase()}: &nbsp;</label>
-        <input type="${mapTypeToInput(attributesC[i].type)}" id="${attributesC[i].key}" placeholder="Enter the ${attributesC[i].key}">
-      `;
-
-      container.appendChild(div);    
-    }
-
-    for (let i = 0; i < attributesL.length; i++) {
-
-      const div = document.createElement("div");    
-
-      div.innerHTML = `
-        <label for="${attributesL[i].key}"> ${(attributesL[i].key).toUpperCase()}: &nbsp;</label>
-        <input type="${mapTypeToInput(attributesL[i].type)}" id="${attributesL[i].key}" placeholder="Enter the ${attributesL[i].key}">
+        <label for="${attributes[i].key}"> ${(attributes[i].key).toUpperCase()}: &nbsp;</label>
+        <input type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
       `;
 
       container.appendChild(div);    

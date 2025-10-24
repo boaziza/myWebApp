@@ -104,7 +104,8 @@ span {
     }
 
     input[type="number"],
-    input[type="text"] {
+    input[type="text"],
+    input[type="datetime"] {
         width: 80px;
     }
 
