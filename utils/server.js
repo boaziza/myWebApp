@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Allow limited origins
 const allowedOrigins = [
-  "https://boaziza.github.io/myWebApp",
+  "https://boaziza.github.io",
   "http://localhost:4000",
   "http://127.0.0.1:5501"
 ];
