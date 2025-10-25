@@ -33,6 +33,7 @@ async function addLoan(event) {
 
         const submit = document.createElement("button");
         submit.type = "button"; 
+        submit.className = "action-btn";
         submit.textContent = "Save Loan";
         submit.onclick = (e) => storeLoan(e);
         container.appendChild(submit);
