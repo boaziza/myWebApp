@@ -14,8 +14,8 @@
     <nav>
       <ul>
         <li><a href="index">Rapport</a>&nbsp;&nbsp;&nbsp;</li>
-        <li><a href="home/stock">Stock</a>&nbsp;&nbsp;&nbsp;</li>
-        <li><a href="home/situation">Situation</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="stock/stock">Stock</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="situation/situation">Situation</a>&nbsp;&nbsp;&nbsp;</li>
 
         <li class="dropdown">
             <a href="#"> Reports </a>
@@ -93,6 +93,9 @@
                 <label for="fiche"> Fiche: &nbsp;</label>
                 <input type="number" name="fiche" id="fiche"><br><br>
                 
+                <label for="bon"> Bon: &nbsp;</label>
+                <input type="number" name="bon" id="bon"><br><br>
+                
                 <label for="bankCard"> Bank Card: &nbsp;</label>
                 <input type="text" name="bankCard" id="bankCard" placeholder="Example: 10000,10000"><br><br>
 
@@ -110,9 +113,10 @@
                 <label for="500" style="margin-left: 20px;">500 x</label>
                 <input type="number" name="cash500" id="500"><br>
 
-                <p>Total Cash: &nbsp;<span class="output" id="totalCash"></span></p>
+                <p>Total Cash : &nbsp;<span class="output" id="totalCash"></span></p>
 
                 <button id="action-btn" onclick="addLoan(event)">Add Loan</button>
+                <p>Total Loans : &nbsp;<span id="totalLoans" class="output"></span></p>
 
                 <div id="loanContainer"></div>
 
@@ -136,12 +140,11 @@
         </div>
     </div>
 
-    <script src="home/calculations.js"></script>
     <script src="home/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
     <script src="utils/welcomeMessage.js"></script>
-    <script src="home/fuelPrices.js"></script>
-    <script src="home/checkUser.js"></script>
-    <script src="home/logout.js"></script>
+    <script src="utils/fuelPrices.js"></script>
+    <script src="utils/checkUser.js"></script>
+    <script src="utils/logout.js"></script>
 </body>
 </html>

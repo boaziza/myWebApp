@@ -14,7 +14,7 @@
       <ul>
         <li><a href="../index">Rapport</a>&nbsp;&nbsp;&nbsp;</li>
         <li><a href="stock">Stock</a>&nbsp;&nbsp;&nbsp;</li>
-        <li><a href="situation">Situation</a>&nbsp;&nbsp;&nbsp;</li>
+        <li><a href="../situation/situation">Situation</a>&nbsp;&nbsp;&nbsp;</li>
         <li class="dropdown">
             <a href="#"> Reports </a>
             <ul class="dropdown-menu">                
@@ -66,8 +66,8 @@
         <h2>Gain\Loss</h2>
         <p>ESSENCE:&nbsp;<span class="output" id="gainFuelPms"></span></p>
         <p>MAZOUT:&nbsp;<span class="output" id="gainFuelAgo"></span></p>
+        <button type="button" class="action-btn" onclick="stock(event)">Calculate Stock</button>
     </form>
-    <button class="action-btn" onclick="stock(event)">Calculate Stock</button>
 
     <div id="logoutPopup" class="popup">
       <div class="popup-content">
@@ -77,15 +77,17 @@
       </div>
     </div>
     
-    <button class="action-btn" onclick="storeStock(event)">Store Stock</button><br><br>
+    <button class="action-btn" onclick="storeStock(event)">Store Stock</button>
+    <button class="action-btn" onclick="download(event)"> Download Stock</button><br><br>
     <button class="action-btn" onclick="logout(event)"> Log Out</button>
 
-    <script src="calculations.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="stock.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
     <script src="../utils/welcomeMessage.js"></script>
-    <script src="fuelPrices.js"></script>
-    <script src="logout.js"></script>
-    <script src="pageAccess.js"></script>
-    <script src="checkUser.js"></script>
+    <script src="../utils/fuelPrices.js"></script>
+    <script src="../utils/logout.js"></script>
+    <script src="../utils/pageAccess.js"></script>
+    <script src="../utils/checkUser.js"></script>
 </body>
 </html>

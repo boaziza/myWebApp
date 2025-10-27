@@ -75,15 +75,19 @@ export async function displayDetails(event) {
         for (let i = 0; i < responsePayments.documents.length; i++) {
             const doc = responsePayments.documents[i];
 
+            const loans = JSON.parse(doc.loans);
+
             if ( doc.email === email && id === doc.id) {
                 const fields = [
-                    "momo","momoLoss","fiche","totalSFC","totalBC","listSFC","listBC",
-                    "totalCash","totalPayments","gainPayments"
+                    "momo","momoLoss","fiche","bon","totalSFC","totalBC","listSFC","listBC",
+                    "totalCash","totalPayments","gainPayments","totalLoans"
                 ];
 
                 fields.forEach(f => setField(f, doc[f]));
             } 
-            
+
+            document.getElementById(`loans`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ");
+
         }
 
     } catch (error) {
@@ -98,3 +102,46 @@ export async function displayDetails(event) {
 }
 
 window.displayDetails = displayDetails;
+
+export function download(event) {
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+   
+    try {
+        // Ensure data is up to date
+        // If your displayDetails() fetches/fills data, call it here or make sure it's already run
+        // displayDetails();
+
+        // Choose the section to export: body, main, or a wrapper
+
+        const logDate = document.getElementById("logDate").value;
+        const email = document.getElementById("email").value;
+
+        const element = document.body;
+
+        const opt = {
+        margin:       0.4,
+        filename:      email + logDate + ".pdf",
+        image:        { type: "jpeg", quality: 0.98 },
+        html2canvas:  { scale: 4, useCORS: true, scrollY: 0 },        
+        jsPDF:        { unit: "px", format: [element.scrollWidth, element.scrollHeight], orientation: "portrait" },
+        pagebreak:    { mode: ['css', 'legacy'] } 
+        };
+
+        html2pdf().set(opt).from(element).save();
+
+    } catch (error) {
+        console.log("This is the error ", error);
+        
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
+    }
+}
+
+window.download = download; 

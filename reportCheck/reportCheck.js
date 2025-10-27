@@ -93,6 +93,9 @@ async function displayReport(event) {const btn = event.currentTarget;
 
             totalGainPayments += tempDoc.gainPayments;
 
+            const loans = JSON.parse(tempDoc.loans);
+            
+
             document.getElementById(`username${i}`).textContent = tempDoc.username;
             document.getElementById(`totalPayments${i}`).textContent = tempDoc.totalPayments;
             document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;
@@ -100,6 +103,8 @@ async function displayReport(event) {const btn = event.currentTarget;
             document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
             document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
             document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
+            document.getElementById(`loans${i}`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ");
+            document.getElementById(`totalLoans${i}`).textContent = tempDoc.totalLoans;
             document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;
             
         }
@@ -119,3 +124,46 @@ async function displayReport(event) {const btn = event.currentTarget;
 }
 
 window.displayReport = displayReport;
+
+function download(event) {
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+   
+    try {
+        // Ensure data is up to date
+        // If your displayDetails() fetches/fills data, call it here or make sure it's already run
+        // displayDetails();
+
+        // Choose the section to export: body, main, or a wrapper
+
+        const logDate = document.getElementById("logDate").value;
+        // const email = document.getElementById("email").value;
+
+        const element = document.body;
+
+        const opt = {
+        margin:       0.4,
+        filename:     "Daily Report "+logDate + ".pdf",
+        image:        { type: "jpeg", quality: 0.98 },
+        html2canvas:  { scale: 4, useCORS: true, scrollY: 0 },        
+        jsPDF:        { unit: "px", format: [element.scrollWidth, element.scrollHeight], orientation: "portrait" },
+        pagebreak:    { mode: ['css', 'legacy'] } 
+        };
+
+        html2pdf().set(opt).from(element).save();
+
+    } catch (error) {
+        console.log("This is the error ", error);
+        
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
+    }
+}
+
+window.download = download;

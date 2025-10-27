@@ -13,7 +13,7 @@
 
     <header>
         <div style="justify-content: center; display: flex;">
-        <h1>Report Check</h1>
+        <h1>Daily Report Check</h1>
         </div>
 
         <div>
@@ -24,8 +24,8 @@
     <nav>
         <ul>
             <li><a href="../index">Rapport&nbsp;&nbsp;&nbsp;</a></li>
-            <li><a href="../home/stock">Stock&nbsp;&nbsp;&nbsp;</a></li>
-            <li><a href="../home/situation">Situation&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../stock/stock">Stock&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../situation/situation">Situation&nbsp;&nbsp;&nbsp;</a></li>
             <li class="dropdown">
                 <a href="#"> Reports </a>
                 <ul class="dropdown-menu">                
@@ -52,6 +52,8 @@
                         <th>MoMo Loss</th>
                         <th>SP Fuel Card</th>
                         <th>Bank Card</th>
+                        <th>Loans</th>
+                        <th>Total Loans</th>
                         <th>GAIN/LOSS</th>
                     </tr>
                 </thead>
@@ -65,6 +67,8 @@
                         <td><span id="momoLoss0"></span></td>
                         <td><span id="totalSFC0"></span></td>
                         <td><span id="totalBC0"></span></td>
+                        <td><span id="loans0"></span></td>
+                        <td><span id="totalLoans0"></span></td>
                         <td><span id="gainPayments0"></span></td>
                     </tr>
                     <tr>
@@ -76,6 +80,8 @@
                         <td><span id="momoLoss1"></span></td>
                         <td><span id="totalSFC1"></span></td>
                         <td><span id="totalBC1"></span></td>
+                        <td><span id="loans1"></span></td>
+                        <td><span id="totalLoans1"></span></td>
                         <td><span id="gainPayments1"></span></td>
                     </tr>
                     <tr> 
@@ -87,6 +93,8 @@
                         <td><span id="momoLoss2"></span></td>
                         <td><span id="totalSFC2"></span></td>
                         <td><span id="totalBC2"></span></td>
+                        <td><span id="loans2"></span></td>
+                        <td><span id="totalLoans2"></span></td>
                         <td><span id="gainPayments2"></span></td>
                     </tr>
                     <tr>  
@@ -98,6 +106,8 @@
                         <td><span id="momoLoss3"></span></td>
                         <td><span id="totalSFC3"></span></td>
                         <td><span id="totalBC3"></span></td>
+                        <td><span id="loans3"></span></td>
+                        <td><span id="totalLoans3"></span></td>
                         <td><span id="gainPayments3"></span></td>
                     </tr>
                     <tr>    
@@ -109,6 +119,8 @@
                         <td><span id="momoLoss4"></span></td>
                         <td><span id="totalSFC4"></span></td>
                         <td><span id="totalBC4"></span></td>
+                        <td><span id="loans4"></span></td>
+                        <td><span id="totalLoans4"></span></td>
                         <td><span id="gainPayments4"></span></td>
                     </tr>
                     <tr>    
@@ -120,6 +132,8 @@
                         <td><span id="momoLoss5"></span></td>
                         <td><span id="totalSFC5"></span></td>
                         <td><span id="totalBC5"></span></td>
+                        <td><span id="loans5"></span></td>
+                        <td><span id="totalLoans5"></span></td>
                         <td><span id="gainPayments5"></span></td>
                     </tr>
                     <tr>
@@ -131,6 +145,8 @@
                         <td><span id="momoLoss"></span></td>
                         <td><span id="totalSFC"></span></td>
                         <td><span id="totalBC"></span></td>
+                        <td><span id="loans"></span></td>
+                        <td><span id="totalLoans"></span></td>
                         <td><span id="totalGainPayments"></span></td>
                     </tr>
                 </tbody>
@@ -148,7 +164,7 @@
 </body>
 <footer>
     <button class="action-btn" onclick="displayReport(event)">Fetch Gain/Loss Report</button>
-    <button class="action-btn" id="downloadReport">Download Report</button>
+    <button class="action-btn" onclick="download(event)">Download Report</button>
     <br><br>
     <button class="action-btn" onclick="logout(event) ">Logout</button>
 </footer>
@@ -156,50 +172,9 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
     <script type="module" src="../home/fuelPrices.js"></script>
-    <script src="../home/logout.js"></script>
+    <script src="../utils/logout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script>
-        document.getElementById("downloadReport").addEventListener("click", async function (event) {
-        
-        const btn = event.currentTarget;
-        const originalText = btn.textContent;
-
-        btn.disabled = true;
-        btn.textContent = "Loading...";
-
-        // Ensure data is up to date
-        // If your displayDetails() fetches/fills data, call it here or make sure it's already run
-        // displayDetails();
-
-        // Choose the section to export: body, main, or a wrapper
-
-        try {
-            
-        
-            const logDate = document.getElementById("logDate").value;
-
-            const element = document.body;
-
-            const opt = {
-            margin:       0.4,
-            filename:     logDate + ".pdf",
-            image:        { type: "jpeg", quality: 0.98 },
-            html2canvas:  { scale: 4, useCORS: true, scrollY: 0 },        
-            jsPDF:        { unit: "px", format: [element.scrollWidth, element.scrollHeight], orientation: "portrait" },
-            pagebreak:    { mode: ['css', 'legacy'] } 
-            };
-
-            await html2pdf().set(opt).from(element).save();
-        } catch (error) {
-            console.log(error);
-            
-        } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
-        }
-        });
-    </script>
-    <script src="../home/checkUser.js"></script>
+    <script src="../utils/checkUser.js"></script>
     <script src="../utils/welcomeMessage.js"></script>
-    <script src="../home/pageAccess.js"> </script>
+    <script src="../utils/pageAccess.js"> </script>
 </html>
