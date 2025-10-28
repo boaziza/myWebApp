@@ -42,6 +42,7 @@ const databaseId = process.env.APPWRITE_DATABASE_ID;
 const collections = {
   customers: process.env.APPWRITE_CUSTOMERS_ID,
   loans: process.env.APPWRITE_LOANS_ID,
+  fiche: process.env.APPWRITE_FICHE_ID,
 };
 
 // ✅ Route 1: Get attributes (fields) for one collection
@@ -67,10 +68,11 @@ app.get("/api/attributes", async (req, res) => {
   try {
     const [customers, loans] = await Promise.all([
       databases.listAttributes(databaseId, collections.customers),
+      databases.listAttributes(databaseId, collections.fiche),
       databases.listAttributes(databaseId, collections.loans)
     ]);
 
-    res.json({ customers, loans });
+    res.json({ customers, loans, fiche });
   } catch (err) {
     console.error("Error fetching both customers and loans attributes:", err);
     res.status(500).json({ error: err.message });

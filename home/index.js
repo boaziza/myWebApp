@@ -114,7 +114,7 @@ async function calculateIndex(event) {
 
 }
 
-let momo, momoLoss, fiche, bon, spFuelCard, bankCard;
+let momo, momoLoss, totalFiche, bon, spFuelCard, bankCard;
 let cash5000, cash2000, cash1000, cash500, totalBC, totalSFC;
 let totalCash, totalPayments, gainPayments, listBC, listSFC, totalLoans;
 
@@ -131,7 +131,6 @@ async function payments(event) {
     
         momo = Number(document.getElementById("momo").value);
         momoLoss = Number(document.getElementById("momoLoss").value);
-        fiche = Number(document.getElementById("fiche").value);
         bon = Number(document.getElementById("bon").value);
         spFuelCard = document.getElementById("spFuelCard").value;
         bankCard = document.getElementById("bankCard").value;
@@ -149,13 +148,15 @@ async function payments(event) {
         totalBC = listBC.reduce((sum,n) => sum + n, 0);
 
         totalLoans = loans.reduce((sum, loan) => sum + loan.amount, 0);
+        totalFiche = fiche.reduce((sum, item) => sum + item.amount, 0);
 
         totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-        totalPayments = momo+ momoLoss + fiche + bon + totalSFC + totalBC + totalCash + totalLoans ;
+        totalPayments = momo+ momoLoss + totalFiche + bon + totalSFC + totalBC + totalCash + totalLoans ;
         gainPayments = totalPayments - totalVente;
 
         
         document.getElementById("totalLoans").textContent = totalLoans;
+        document.getElementById("totalFiche").textContent = totalFiche;
         document.getElementById("totalPayments").textContent = totalPayments;  
         document.getElementById("gainPayments").textContent = gainPayments;
         document.getElementById("totalCash").textContent = totalCash;
@@ -284,7 +285,7 @@ async function situation(event) {
         const dataPayments = {
             momo, 
             momoLoss, 
-            fiche,
+            totalFiche,
             bon, 
             listBC,
             listSFC,
@@ -303,6 +304,7 @@ async function situation(event) {
             username,
             id,
             loans : JSON.stringify(loans),
+            fiche : JSON.stringify(fiche),
             totalLoans
         };
 
@@ -312,7 +314,7 @@ async function situation(event) {
             dataSituation = {
                 momo, 
                 momoLoss, 
-                fiche, 
+                totalFiche, 
                 bon,
                 totalSFC,
                 totalBC,
@@ -348,7 +350,7 @@ async function situation(event) {
 
             momo += doc.momo;
             momoLoss += doc.momoLoss;
-            fiche += doc.fiche;
+            totalFiche += doc.totalFiche;
             bon += doc.bon;
             totalSFC += doc.totalSFC;
             totalBC += doc.totalBC;
@@ -365,7 +367,7 @@ async function situation(event) {
             dataSituation = {
                 momo, 
                 momoLoss,
-                fiche,
+                totalFiche,
                 bon,
                 totalSFC,
                 totalBC,
@@ -394,7 +396,7 @@ async function situation(event) {
 
             momo += doc.momo;
             momoLoss += doc.momoLoss;
-            fiche += doc.fiche;
+            totalFiche += doc.totalFiche;
             bon += doc.bon;
             totalSFC += doc.totalSFC;
             totalBC += doc.totalBC;
@@ -411,7 +413,7 @@ async function situation(event) {
             dataSituation = {
                 momo, 
                 momoLoss, 
-                fiche,
+                totalFiche,
                 bon, 
                 totalSFC,
                 totalBC,
@@ -631,6 +633,175 @@ async function storeLoan(event) {
 
 
     loans.push({company,amount});
+    
+    
+
+    // try {
+    //     // 1. Find the document by attribute
+    //     const docs = await databases.listDocuments(
+    //         databaseId,
+    //         paymentsId,
+    //         [ Appwrite.Query.equal("logDate", logDate) ] // filter by your known attribute
+    //     );
+
+    //     if (docs.total === 0) {
+    //         console.log("No document found!");
+    //         return;
+    //     }
+
+    //     const docId = docs.documents[0].$id; // get the first match
+
+    //     // 2. Update the null fields
+    //     const updated = await databases.updateDocument(
+    //         databaseId,
+    //         situationId,
+    //         docId,
+    //         {
+    //             initialAgo: initialAgo,
+    //             receivedAgo: receivedAgo,
+    //             physicalStockAgo: physicalStockAgo,
+    //             theoryStockAgo: theoryStockAgo,
+    //             gainFuelAgo: gainFuelAgo,
+    //             initialPms: initialPms,
+    //             receivedPms: receivedPms,
+    //             physicalStockPms: physicalStockPms,
+    //             theoryStockPms: theoryStockPms,
+    //             gainFuelPms: gainFuelPms,
+    //         }
+    //     );
+
+    //     console.log("Updated document:", updated);
+
+    //     alert("Data saved successfully");
+
+    // } catch (error) {
+    //     alert("Error updating:", error);
+    // } finally {
+
+    //     btn.disabled = false;
+    //     btn.textContent = originalText;
+        
+    // }
+
+
+}
+async function addFiche(event) {
+  const btn = event.currentTarget;   
+  const originalText = btn.textContent;
+
+  btn.disabled = true;
+  btn.textContent = "Loading..."; 
+
+    try {
+    
+    
+        const container = document.getElementById("ficheContainer");
+        container.innerHTML = "";
+
+        const res = await fetch("https://mywebapp-backend.onrender.com/api/attributes/fiche");
+        const data = await res.json();
+        const attributes = data.attributes;
+
+        for (let i = 0; i < attributes.length; i++) {
+
+        const div = document.createElement("div");
+        
+        if (attributes[i].key === "employee" || attributes[i].key === "logDate" ) {
+            continue;
+        }
+
+        div.innerHTML = `
+            <label for="${attributes[i].key}"> ${(attributes[i].key).toUpperCase()}: &nbsp;</label>
+            <input class="loan" type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
+        `;
+
+        container.appendChild(div);    
+        }
+
+        const submit = document.createElement("button");
+        submit.type = "button"; 
+        submit.className = "action-btn";
+        submit.textContent = "Save Fiche";
+        submit.onclick = (e) => storeFiche(e);
+        container.appendChild(submit);
+
+
+    } catch (error) {
+        console.log(error);    
+    } finally {      
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+
+let fiche = [];
+async function storeFiche(event) {
+    const client = new Appwrite.Client()
+    .setEndpoint("https://cloud.appwrite.io/v1") 
+    .setProject("68c3ec870024955539b0");
+    
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+
+    const databaseId = "68c3f10d002b0dfc0b2d";
+    const ficheId = "69007206001aed40d6f4";
+
+    const btn = event.currentTarget;   
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = "Loading..."; 
+
+    const user = await account.get();        
+    const employee = user.name;  
+    
+    const today = new Date();
+
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-11
+    const day = String(today.getDate()).padStart(2, '0');        // Days 1-31
+    const year = today.getFullYear();
+
+    const logDate = `${month}/${day}/${year}`;
+
+    const plate = document.getElementById("plate").value;
+    const amount = parseInt(document.getElementById("amount").value);
+    const company = document.getElementById("company").value;
+    
+    try {
+
+        const ficheData = {
+            plate,
+            company,
+            logDate, 
+            employee,
+            amount
+ 
+        };
+
+        await databases.createDocument(
+        databaseId,
+        ficheId,
+        "unique()", // Appwrite generates an ID
+        ficheData
+        );
+
+        alert("Data saved successfully");        
+        
+    } catch (err) {
+      console.error("Error:", err.message);
+      alert("Error: " + err.message);
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+        
+    }
+    const container = document.getElementById("ficheContainer");
+    container.innerHTML = "";
+
+
+    fiche.push({company,amount});
     
     
 

@@ -90,9 +90,6 @@
                 <label for="spFuelCard"> SP Fuel Card: &nbsp;</label>
                 <input type="text" name="spFuelCard" id="spFuelCard" placeholder="Example: 10000,10000"><br><br>
                 
-                <label for="fiche"> Fiche: &nbsp;</label>
-                <input type="number" name="fiche" id="fiche"><br><br>
-                
                 <label for="bon"> Bon: &nbsp;</label>
                 <input type="number" name="bon" id="bon"><br><br>
                 
@@ -114,6 +111,11 @@
                 <input type="number" name="cash500" id="500"><br>
 
                 <p>Total Cash : &nbsp;<span class="output" id="totalCash"></span></p>
+
+                <button class="action-btn" onclick="addFiche(event)">Add Fiche</button>
+                <p>Total Fiche : &nbsp;<span id="totalFiche" class="output"></span></p>
+
+                <div id="ficheContainer"></div>
 
                 <button class="action-btn" onclick="addLoan(event)">Add Loan</button>
                 <p>Total Loans : &nbsp;<span id="totalLoans" class="output"></span></p>

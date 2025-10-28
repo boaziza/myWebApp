@@ -76,10 +76,11 @@ export async function displayDetails(event) {
             const doc = responsePayments.documents[i];
 
             const loans = JSON.parse(doc.loans);
+            const fiche = JSON.parse(doc.fiche);
 
             if ( doc.email === email && id === doc.id) {
                 const fields = [
-                    "momo","momoLoss","fiche","bon","totalSFC","totalBC","listSFC","listBC",
+                    "momo","momoLoss","totalFiche","bon","totalSFC","totalBC","listSFC","listBC",
                     "totalCash","totalPayments","gainPayments","totalLoans"
                 ];
 
@@ -87,7 +88,8 @@ export async function displayDetails(event) {
             } 
 
             document.getElementById(`loans`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ");
-
+            document.getElementById(`fiche`).textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ");
+            
         }
 
     } catch (error) {

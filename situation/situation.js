@@ -34,13 +34,14 @@ async function fetchSituation(event) {
             document.getElementById("gainFuelPms").textContent = doc.gainFuelPms || "0";
             document.getElementById("momo").textContent = doc.momo || "0";
             document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
-            document.getElementById("fiche").textContent = doc.fiche || "0";
+            document.getElementById("totalFiche").textContent = doc.totalFiche || "0";
             document.getElementById("bon").textContent = doc.bon || "0";
             document.getElementById("totalSFC").textContent = doc.totalSFC || "0";
             document.getElementById("totalBC").textContent = doc.totalBC || "0";
             document.getElementById("totalCash").textContent = doc.totalCash || "0";
+            document.getElementById("totalLoans").textContent = doc.totalLoans || "0";
             document.getElementById("totalPayments").textContent = doc.totalPayments || "0";
-            document.getElementById("gainPayments").textContent = -Number(doc.gainPayments) || "0";
+            document.getElementById("gainPayments").textContent = Number(doc.gainPayments) || "0";
             document.getElementById("pms1").textContent = doc.pms1 || "0";
             document.getElementById("pms2").textContent = doc.pms2 || "0";
             document.getElementById("pms3").textContent = doc.pms3 || "0";
@@ -53,7 +54,7 @@ async function fetchSituation(event) {
             document.getElementById("agoPrice").textContent = doc.agoPrice || "0";
             document.getElementById("totalAgo").textContent = doc.totalAgo || "0";
             document.getElementById("totalPms").textContent = doc.totalPms || "0";
-            document.getElementById("totalVente").textContent = -Number(doc.totalVente) || "0";
+            document.getElementById("totalVente").textContent = Number(doc.totalVente) || "0";
             document.getElementById("venteLitresAgo").textContent = (doc.venteLitresAgo).toFixed(2) || "0";
             document.getElementById("venteLitresPms").textContent = (doc.venteLitresPms).toFixed(2) || "0";
             document.getElementById("done").textContent = doc.done || false;
