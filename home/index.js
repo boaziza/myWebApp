@@ -516,7 +516,7 @@ async function addLoan(event) {
 
         const div = document.createElement("div");
         
-        if (attributes[i].key === "employee" || attributes[i].key === "logDate" ) {
+        if (attributes[i].key === "employee" || attributes[i].key === "logDate" || attributes[i].key === "monthYear" ) {
             continue;
         }
 
@@ -594,6 +594,7 @@ async function storeLoan(event) {
     const year = today.getFullYear();
 
     const logDate = `${month}/${day}/${year}`;
+    const monthYear = `${year}-${month}`;
 
     const plate = document.getElementById("plate").value;
     const amount = parseInt(document.getElementById("amount").value);
@@ -604,7 +605,8 @@ async function storeLoan(event) {
         const loanData = {
             plate,
             company,
-            logDate, 
+            logDate,
+            monthYear, 
             employee,
             amount
  
