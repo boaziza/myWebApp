@@ -27,7 +27,7 @@ async function display() {
                 
         }
 
-        for (let i = 0; i < combinedDoc.length; i++) {
+        for (let i = 0; i < rows.length; i++) {
             const tr = document.createElement("tr");
 
             for (let j = 0; j < attributes.length; j++) {
@@ -45,5 +45,3 @@ async function display() {
         console.log("Error at the display gain:",error);        
     }
 }
-
-display();
