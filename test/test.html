@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="test.css">
+    <title>Loan Check</title>  
+    <div class="fuel-prices">
+        <h2>Live Fuel Prices</h2>
+        <p>ESSENCE: <span id="pmsPrice"></span></p>
+        <p>MAZOUT: <span id="agoPrice"></span></p>
+    </div>
+</head>
+<body>  
+    <header>
+        <div style="justify-content: center; display: flex;"></div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../index">Rapport&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../stock/stock">Stock&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="../situation/situation">Situation&nbsp;&nbsp;&nbsp;</a></li>
+            <li class="dropdown">
+                <a href="#"> Reports </a>
+                <ul class="dropdown-menu">                
+                    <li><a href="../employeeCheck/logsDetail">Pompiste's Report</a></li>
+                    <li><a href="../gain/gain">Gain/Loss Report</a></li>
+                    <li><a href="../reportCheck/reportCheck">Daily Report Check</a></li>
+                    <li><a href="loan">Loan Check</a></li>
+                </ul>
+            </li>
+            <li><a href="../customers/customers">Customers&nbsp;&nbsp;&nbsp;</a></li>
+        </ul>
+    </nav><br>
+    <div>
+        <select name="check" id="check" on>
+            <option value="loans">Loan Report</option>
+            <option value="pompisteReport">Pompiste Report</option>
+            <option value="gain">Gain Report</option>
+            <option value="payments">Daily Report</option>
+            <option value="loan">Loan Report</option>
+        </select>
+    </div>
+
+    <main class="sheet">        
+        <section class="indices">            
+            <table class="indices-table">
+                <thead>
+                    <tr id="headers"></tr>
+                </thead>
+                <tbody id="body"></tbody>
+            </table>  
+        </section>
+
+    </main>
+</body>
+<footer>
+    <button class="action-btn" onclick="displayLoan(event)">Fetch Gain/Loss Report</button>
+    <button class="action-btn" onclick="downloadGain(event);">Download Report</button>
+    <br><br>
+    <button class="action-btn" onclick="logout(event) ">Logout</button>
+</footer>
+    <script src="test.js"></script>
+    <!-- <script src="loan.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script type="module" src="../home/fuelPrices.js"></script>
+    <script src="../utils/logout.js"></script>
+    <script src="../utils/checkUser.js"></script>
+    <script src="../utils/welcomeMessage.js"></script>
+    <script src="../utils/pageAccess.js"> </script> -->
+</html>
+

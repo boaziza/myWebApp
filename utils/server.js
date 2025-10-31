@@ -79,6 +79,27 @@ app.get("/api/attributes", async (req, res) => {
   }
 });
 
+// GET documents from a collection
+app.get("/api/documents/:collection", async (req, res) => {
+  const { collection } = req.params;
+  const collectionId = collections[collection];
+
+  if (!collectionId) {
+    return res.status(400).json({ error: `Collection '${collection}' not found` });
+  }
+
+  try {
+    const response = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID,
+      collectionId
+    );
+    res.json(response);
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ✅ Health check
 app.get("/health", (req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
 
