@@ -62,8 +62,6 @@
       account.create("unique()", email, password, name)
         .then(() => {
           alert("Account created successfully! Now go to login page.");
-          // You could also redirect automatically:
-          window.location.replace("../index.html");
         })
         .catch(err => {
           alert("Error: " + err.message);
@@ -85,6 +83,9 @@
         "unique()", // Appwrite generates an ID
         data
       );
+      
+      // You could also redirect automatically:
+      window.location.replace("../index.html");
     });
   </script>
   <script src="../home/pageAccess.js"></script>
