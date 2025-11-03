@@ -2,6 +2,11 @@ let initialPms, initialAgo;
 let receivedPms, receivedAgo, physicalStockPms;
 let physicalStockAgo, theoryStockPms, theoryStockAgo;
 let gainFuelPms, gainFuelAgo;
+let totalGainFuelPms, totalGainFuelAgo;
+let totalReceivedPms, totalReceivedAgo;
+let logDate, venteLitresAgo, venteLitresPms;
+let totalVenteLitresAgo, totalVenteLitresPms;
+
 
 async function stock(event) {
     const btn = event.currentTarget;   
@@ -83,6 +88,14 @@ async function storeStock(event) {
     const stockAgoId = "68cbf2bb0017a7b210b1";
     const stockPmsId = "68cd197e002096e31ed8";
     const situationId = "68cd6b7f00330a840d96";
+    const stockId = "6908ab260012e0412ca8";
+
+    const selectedDate = new Date(logDate);
+    
+    const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const yyyy = selectedDate.getFullYear();
+
+    const monthYear = `${yyyy}-${mm}`;
 
     const btn = event.currentTarget;   
     const originalText = btn.textContent;
@@ -90,7 +103,6 @@ async function storeStock(event) {
     btn.disabled = true;
     btn.textContent = "Loading..."; 
    
-    
     try {
         
         const user = await account.get();
@@ -119,6 +131,65 @@ async function storeStock(event) {
             logDate,  
         };
 
+        const response = await databases.listDocuments(databaseId, stockId,[ Appwrite.Query.equal("monthYear", monthYear) ]);
+
+        
+        totalGainFuelPms = gainFuelPms; 
+        totalGainFuelAgo = gainFuelAgo;
+        totalReceivedPms = receivedPms;
+        totalReceivedAgo = receivedAgo;
+        totalVenteLitresPms = venteLitresPms;
+        totalVenteLitresAgo = venteLitresAgo;       
+
+        if (response.documents.length > 0) {
+            const stockDoc = response.documents[0];       
+
+            const docId = stockDoc.$id;
+
+            totalGainFuelPms += stockDoc.totalGainFuelPms;
+            totalGainFuelAgo += stockDoc.totalGainFuelAgo;
+            totalReceivedPms += stockDoc.totalReceivedPms;
+            totalReceivedAgo += stockDoc.totalReceivedAgo;
+            totalVenteLitresPms += stockDoc.totalVenteLitresPms;
+            totalVenteLitresAgo += stockDoc.totalVenteLitresAgo;
+
+            const stockData = {
+                totalGainFuelPms, 
+                totalGainFuelAgo,
+                totalReceivedPms,
+                totalReceivedAgo,
+                totalVenteLitresPms,
+                totalVenteLitresAgo                     
+            }
+
+            await databases.updateDocument(
+                databaseId,
+                stockId,
+                docId,
+                stockData
+            );
+    
+        } else {
+
+            const stockData = {
+                totalGainFuelPms, 
+                totalGainFuelAgo,
+                totalReceivedPms,
+                totalReceivedAgo,
+                totalVenteLitresPms,
+                totalVenteLitresAgo,
+                monthYear                    
+            }
+
+            await databases.createDocument(
+                databaseId,
+                stockId,
+                "unique()",
+                stockData
+            );
+
+        }
+
         const res = await databases.listDocuments(databaseId,stockAgoId);
         console.log(res);
         
@@ -138,16 +209,6 @@ async function storeStock(event) {
         );
 
         alert("Data saved successfully");
-
-        function clearOutputs() {
-
-            const outputs = document.querySelectorAll(".output");
-            outputs.forEach(el => {
-                el.textContent = "0";
-            });
-        }
-
-        clearOutputs();
         
         document.getElementById("stockForm").reset();
 
@@ -199,6 +260,16 @@ async function storeStock(event) {
         console.log("Updated document:", updated);
 
         alert("Data saved successfully");
+
+        function clearOutputs() {
+
+            const outputs = document.querySelectorAll(".output");
+            outputs.forEach(el => {
+                el.textContent = "0";
+            });
+        }
+
+        clearOutputs();
 
     } catch (error) {
         alert("Error updating:", error);
