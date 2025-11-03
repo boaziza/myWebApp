@@ -8,6 +8,7 @@ async function fetchSituation(event) {
 
     const databaseId = "68c3f10d002b0dfc0b2d";
     const situationId = "68cd6b7f00330a840d96";
+    const stockId = "6908ab260012e0412ca8"
     const btn = event.currentTarget;   
     const originalText = btn.textContent;
 
@@ -17,10 +18,20 @@ async function fetchSituation(event) {
     try {
 
         const logDate = document.getElementById("logDate").value;
+
+        const selectedDate = new Date(logDate);
+        
+        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const yyyy = selectedDate.getFullYear();
+
+        const monthYear = `${yyyy}-${mm}`;
+
         const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
+        const responseStock = await databases.listDocuments(databaseId, stockId, [Appwrite.Query.equal("monthYear", monthYear)]);
 
         if (response.documents.length > 0) {
             const doc = response.documents[0]; 
+            const stockDoc = responseStock.documents[0];
 
             document.getElementById("receivedAgo").textContent = doc.receivedAgo || "0";
             document.getElementById("receivedPms").textContent = doc.receivedPms || "0";
@@ -62,10 +73,14 @@ async function fetchSituation(event) {
             if (doc.done === true) {            
                 document.getElementById("p1_essence").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
                 document.getElementById("p2_essence").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
-                document.getElementById("p3_gasoil").textContent = (doc.pms2 - doc.pms1).toFixed(2) || "0";
-                document.getElementById("p4_gasoil").textContent = (doc.pms4 - doc.pms3).toFixed(2) || "0";
+                document.getElementById("p3_gasoil").textContent = (doc.ago2 - doc.ago1).toFixed(2) || "0";
+                document.getElementById("p4_gasoil").textContent = (doc.ago4 - doc.ago3).toFixed(2) || "0";
             }
-            
+
+            document.getElementById("venteLitresPmsStock").textContent = parseInt(doc.venteLitresPms) || "0";
+            document.getElementById("venteLitresAgoStock").textContent = parseInt(doc.venteLitresAgo) || "0";
+            document.getElementById("totalGainFuelPms").textContent = stockDoc.totalGainFuelPms;
+            document.getElementById("totalGainFuelAgo").textContent = stockDoc.totalGainFuelAgo;           
             document.getElementById("pmsPrices").textContent = doc.pmsPrice || "0";
             document.getElementById("agoPrices").textContent = doc.agoPrice || "0";
         } else {

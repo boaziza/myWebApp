@@ -160,11 +160,11 @@
       <div class="payments">
         <h3>Payments</h3>
         <div class="pay-row"><label>MoMo:</label><span id="momo"></span></div>
+        <div class="pay-row"><label>MoMo Loss:</label><span id="momoLoss"></span></div>
         <div class="pay-row"><label>SP Fuel Card:</label><span id="totalSFC"></span></div>
         <div class="pay-row"><label>Bank Card:</label><span id="totalBC"></span></div>
         <div class="pay-row"><label>Total Fiche: </label><span id="totalFiche"></span></div>
         <div class="pay-row"><label>Bon: </label><span id="bon"></span></div>
-        <div class="pay-row"><label>MoMo Loss:</label><span id="momoLoss"></span></div>
         <div class="pay-row"><label>Total Cash:</label><span id="totalCash"></span></div>
         <div class="pay-row"><label>Total Loans:</label><span id="totalLoans"></span></div>
         <div class="pay-row"><label>Total Sales:</label><span id="totalPayments"></span></div>
@@ -186,6 +186,7 @@
             <th>Theory Stock Z</th>
             <th>Physical Stock Q</th>
             <th>Gain/Loss</th>
+            <th>Overall Gain/Loss</th>
           </tr>
         </thead>
         <tbody>
@@ -193,22 +194,24 @@
             <td>ESSENCE</td>
             <td><span id="initialPms"></span></td>
             <td><span id="receivedPms"></span></td>
-            <td><span id="venteLitresPms"></span></td>
+            <td><span id="venteLitresPmsStock"></span></td>
             <td><span id="transferedPms">-</span></td>
             <td><span id="theoryStockPms"></span></td>
             <td><span id="physicalStockPms"></span></td>
             <td><span id="gainFuelPms"></span></td>
+            <td><span id="totalGainFuelPms"></span></td>
           </tr>
 
           <tr>
             <td>MAZOUT</td>
             <td><span id="initialAgo"></span></td>
             <td><span id="receivedAgo"></span></td>
-            <td><span id="venteLitresAgo"></span></td>
+            <td><span id="venteLitresAgoStock"></span></td>
             <td><span id="transferedAgo">-</span></td>
             <td><span id="theoryStockAgo"></span></td>
             <td><span id="physicalStockAgo"></span></td>
             <td><span id="gainFuelAgo"></span></td>
+            <td><span id="totalGainFuelAgo"></span></td>
           </tr>
         </tbody>
       </table>
