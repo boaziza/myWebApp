@@ -58,34 +58,33 @@
       const email = document.getElementById("email").value; // using email for login
       const password = document.getElementById("password").value;
 
-      // Create user in Appwrite
-      account.create("unique()", email, password, name)
-        .then(() => {
-          alert("Account created successfully! Now go to login page.");
-        })
-        .catch(err => {
-          alert("Error: " + err.message);
-        });
+      try {
+        // Create user in Appwrite
+        await account.create("unique()", email, password, name);
 
-      // Step 1: Login
-      await account.createEmailSession(email, password);
+        // Step 1: Login
+        await account.createEmailSession(email, password);
 
-      // Step 2: Save employee data immediately
-      const data = {
-        employeeId: parseInt(document.getElementById("employeeId").value),
-        emailAddress: document.getElementById("email").value,
-        logDate: new Date().toISOString(), 
-      };
+        // Step 2: Save employee data immediately
+        const data = {
+          employeeId: parseInt(document.getElementById("employeeId").value),
+          emailAddress: document.getElementById("email").value,
+          logDate: new Date().toISOString(), 
+        };
 
-      await databases.createDocument(
-        databaseId,
-        collectionId,
-        "unique()", // Appwrite generates an ID
-        data
-      );
-      
-      // You could also redirect automatically:
-      window.location.replace("../index.html");
+        await databases.createDocument(
+          databaseId,
+          collectionId,
+          "unique()", // Appwrite generates an ID
+          data
+        );
+        
+        // You could also redirect automatically:
+        window.location.replace("../index.html");
+        
+      } catch (error) {
+        console.log("Error",error);
+      }
     });
   </script>
   <script src="../home/pageAccess.js"></script>
