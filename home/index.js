@@ -203,7 +203,6 @@ async function situation(event) {
         const id = generateShiftId(username,logDate);
 
         const selectedDate = new Date(logDate);
-        selectedDate.setDate(selectedDate.getDate() - 1);
         
         const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
         const yyyy = selectedDate.getFullYear();
