@@ -44,9 +44,13 @@
       .setProject("68c3ec870024955539b0"); // paste your Appwrite project ID here
 
     const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+
+    const databaseId = "68c3f10d002b0dfc0b2d";
+    const collectionId = "68c82cf90024f35d491a";
 
     // Handle Sign Up
-    document.getElementById("signupForm").addEventListener("submit", function(e) {
+    document.getElementById("signupForm").addEventListener("submit", async function(e) {
       e.preventDefault(); // stop form from refreshing page
 
       const name = document.getElementById("name").value;
@@ -64,6 +68,23 @@
         .catch(err => {
           alert("Error: " + err.message);
         });
+
+      // Step 1: Login
+      await account.createEmailSession(email, password);
+
+      // Step 2: Save employee data immediately
+      const data = {
+        employeeId: parseInt(document.getElementById("employeeId").value),
+        emailAddress: document.getElementById("email").value,
+        logDate: new Date().toISOString(), 
+      };
+
+      await databases.createDocument(
+        databaseId,
+        collectionId,
+        "unique()", // Appwrite generates an ID
+        data
+      );
     });
   </script>
   <script src="../home/pageAccess.js"></script>
