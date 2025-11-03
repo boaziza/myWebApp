@@ -22,15 +22,6 @@
             <input type="text" id="employeeId" name="employeeId" required>
           </div>
           <div class="input-group">
-            <label for="shift">Shift:</label>
-              <select id="shift">
-                <option value=""></option>
-                <option value="Morning">Morning</option>
-                <option value="Afternoon">Afternoon</option>
-                <option value="Evening">Evening</option>
-              </select><br><br>
-          </div>
-          <div class="input-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
           </div>
@@ -80,7 +71,6 @@
           employeeId: parseInt(document.getElementById("employeeId").value),
           emailAddress: document.getElementById("email").value,
           logDate: new Date().toISOString(), 
-          shift: document.getElementById("shift").value,
         };
 
         await databases.createDocument(

@@ -48,6 +48,7 @@ async function display() {
         div.appendChild(searchWith);
 
         const select = document.createElement("select");
+        select.id = "searchWith";
 
         const optionStart = document.createElement("option");        
         optionStart.textContent = `Search With`
@@ -63,7 +64,7 @@ async function display() {
 
         div.appendChild(document.createElement("br"));
 
-        const input = document.createElement("input");  
+        const input = document.createElement("input"); 
         input.type = "text"; 
         input.id = "searchValue"   
         input.textContent = ``
@@ -75,7 +76,7 @@ async function display() {
         submit.type = "button"; 
         submit.className = "action-btn";
         submit.textContent = "Search";
-        submit.onclick = search();
+        submit.onclick = search;
         div.appendChild(submit);
 
         div.appendChild(document.createElement("br"));
@@ -107,9 +108,40 @@ async function search() {
         for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
 
-            if (row[searchWith] === searchValue) {
+            if (row[searchWith] == searchValue) {
                 filteredRows.push(row);
             }
+        }
+
+        console.log("filteredrows",filteredRows);
+        
+
+        const headers = document.getElementById("headers");
+        const body = document.getElementById("body");
+
+        headers.innerHTML = "";
+        body.innerHTML = "";
+
+        for (let i = 0; i < attributes.length; i++) {
+
+            const theader = document.createElement("th");
+            theader.textContent = `${attributes[i].key.toUpperCase()}`;
+            headers.appendChild(theader);   
+                
+        }
+
+        for (let i = 0; i < filteredRows.length; i++) {
+            
+            const tr = document.createElement("tr");
+
+            for (let j = 0; j < attributes.length; j++) {
+                const key = attributes[j].key;
+                const td = document.createElement("td");
+                td.textContent = filteredRows[i][key] || ""; 
+                tr.appendChild(td);
+            }
+
+            body.appendChild(tr);
         }
 
         
