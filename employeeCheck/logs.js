@@ -30,15 +30,31 @@ export async function displayDetails(event) {
     
 
     try {
+
+        function clearSheetOutputs() {
+            // Select all spans inside <main class="sheet">
+            const spans = document.querySelectorAll("main.sheet span");
+
+            // Loop through each span and clear its content
+            spans.forEach(span => {
+                span.textContent = "";
+            });
+        }
+
+        clearSheetOutputs();
+
+
         const responseIndex = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", logDate)]);
         console.log("Here are the dates", responseIndex);
         let id;
 
         for (let i = 0; i < responseIndex.documents.length; i++) {
             const doc = responseIndex.documents[i];
-            id = doc.id;
 
             if ( doc.email === email ) {
+
+                id = doc.id;
+
                 document.getElementById("pms1").textContent = doc.pms1 || "0";
                 document.getElementById("pms2").textContent = doc.pms2 || "0";
                 document.getElementById("pms3").textContent = doc.pms3 || "0";
@@ -75,20 +91,23 @@ export async function displayDetails(event) {
         for (let i = 0; i < responsePayments.documents.length; i++) {
             const doc = responsePayments.documents[i];
 
-            const loans = JSON.parse(doc.loans);
-            const fiche = JSON.parse(doc.fiche);
+            if ( id === doc.id) {
 
-            if ( doc.email === email && id === doc.id) {
+                const loans = JSON.parse(doc.loans);
+                const fiche = JSON.parse(doc.fiche);
+                
                 const fields = [
                     "momo","momoLoss","totalFiche","bon","totalSFC","totalBC","listSFC","listBC",
                     "totalCash","totalPayments","gainPayments","totalLoans"
                 ];
 
-                fields.forEach(f => setField(f, doc[f]));
+                fields.forEach(f => setField(f, doc[f]));      
+
+                document.getElementById("loans").textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ");
+                document.getElementById("fiche").textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ");          
             } 
 
-            document.getElementById(`loans`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ");
-            document.getElementById(`fiche`).textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ");
+            document.getElementById("")
             
         }
 
