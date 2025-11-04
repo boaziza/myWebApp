@@ -304,7 +304,8 @@ async function situation(event) {
             id,
             loans : JSON.stringify(loans),
             fiche : JSON.stringify(fiche),
-            totalLoans
+            totalLoans,
+            totalVente
         };
 
         const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);

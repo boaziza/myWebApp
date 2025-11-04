@@ -391,3 +391,48 @@ nav ul li a {
 #reportTable th:hover {
   background-color: #e8eaed;
 }
+
+.month-header {
+  margin: 16px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+#monthTitle {
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+}
+
+.days-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.day-block {
+  width: 70px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.day-block:hover {
+  background-color: #dce3f3;
+}
+
+.day-block.active {
+  background-color: #4285f4;
+  color: white;
+  font-weight: bold;
+  border: none;
+}

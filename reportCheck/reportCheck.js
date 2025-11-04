@@ -56,6 +56,7 @@ async function downloadGain(event) {
 
 window.downloadGain = downloadGain;
 
+let totalVente;
 async function displayReport(event) {const btn = event.currentTarget;   
     const originalText = btn.textContent;
 
@@ -77,7 +78,7 @@ async function displayReport(event) {const btn = event.currentTarget;
         const logDate = document.getElementById("logDate").value;
 
         const paymentsDocuments = await databases.listDocuments(databaseId, paymentsId, [Appwrite.Query.equal("logDate", logDate)]);
-
+        
         const doc = paymentsDocuments.documents;
 
         let totalGainPayments = 0;
@@ -89,7 +90,7 @@ async function displayReport(event) {const btn = event.currentTarget;
 
         for (let i = 0; i < doc.length; i++) {
 
-            const tempDoc = doc[i];
+        const tempDoc = doc[i];
 
             totalGainPayments += tempDoc.gainPayments;
 
@@ -98,6 +99,7 @@ async function displayReport(event) {const btn = event.currentTarget;
             
 
             document.getElementById(`username${i}`).textContent = tempDoc.username;
+            document.getElementById(`totalVente${i}`).textContent = tempDoc.totalVente;
             document.getElementById(`totalPayments${i}`).textContent = tempDoc.totalPayments;
             document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;
             document.getElementById(`momo${i}`).textContent = tempDoc.momo;

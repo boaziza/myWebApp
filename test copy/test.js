@@ -186,3 +186,41 @@ function showReportForDay(day, month, year) {
 
 // Example usage:
 generateReportHeader(2025, 10); // November 2025
+
+
+function generateMonthBlocks(year, month) {
+  const daysContainer = document.getElementById("daysContainer");
+  const monthTitle = document.getElementById("monthTitle");
+
+  daysContainer.innerHTML = ""; // Clear any existing days
+  const date = new Date(year, month, 1);
+
+  const monthName = date.toLocaleString("en", { month: "long" }).toUpperCase(); // "NOVEMBER"
+  monthTitle.textContent = `${monthName} ${year}`;
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const block = document.createElement("div");
+    block.classList.add("day-block");
+    block.textContent = `${String(day).padStart(2, "0")}.${String(month + 1).padStart(2, "0")}`;
+
+    block.onclick = () => {
+      // Clear old active blocks
+      document.querySelectorAll(".day-block").forEach(b => b.classList.remove("active"));
+      block.classList.add("active");
+
+      // Call your custom logic here
+      showDailyReport(day, month + 1, year);
+    };
+
+    daysContainer.appendChild(block);
+  }
+}
+
+function showDailyReport(day, month, year) {
+  alert(`Showing report for ${day}/${month}/${year}`);
+}
+
+// Example usage:
+generateMonthBlocks(2025, 10); // November 2025
