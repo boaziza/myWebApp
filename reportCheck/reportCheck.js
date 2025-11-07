@@ -57,7 +57,8 @@ async function downloadGain(event) {
 window.downloadGain = downloadGain;
 
 let totalVente;
-async function displayReport(event) {const btn = event.currentTarget;   
+async function displayReport(event) {
+    const btn = event.currentTarget;   
     const originalText = btn.textContent;
 
     btn.disabled = true;
@@ -95,15 +96,7 @@ async function displayReport(event) {const btn = event.currentTarget;
           totalGainPayments += tempDoc.gainPayments;
 
           const loans = JSON.parse(tempDoc.loans || "[]");
-          const fiche = JSON.parse(tempDoc.fiche || "[]");                    
-
-          if (loans.every(loan => loan.company === "Versement")) {
-            document.getElementById(`versement${i}`).textContent = loans.map(loan => `${loan.amount}`);
-            continue;
-          }
-          
-
-             
+          const fiche = JSON.parse(tempDoc.fiche || "[]");  
 
           document.getElementById(`username${i}`).textContent = tempDoc.username;
           document.getElementById(`totalVente${i}`).textContent = tempDoc.totalVente;
@@ -113,11 +106,19 @@ async function displayReport(event) {const btn = event.currentTarget;
           document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
           document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
           document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
+
           document.getElementById(`fiche${i}`).textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ") || "0";
-          document.getElementById(`totalFiche${i}`).textContent = tempDoc.totalFiche;
+          document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;                    
+
+          if (loans.some(loan => loan.company === "Versement")) {
+            document.getElementById(`versement${i}`).textContent = loans.map(loan => `${loan.amount}`).join(', ');
+            document.getElementById(`loans${i}`).textContent = "0";
+            continue;
+          } else { 
+            document.getElementById(`versement${i}`).textContent = "0"
+          }
+
           document.getElementById(`loans${i}`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ") || "0";
-          document.getElementById(`totalLoans${i}`).textContent = tempDoc.totalLoans || "0";
-          document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;
           
         }
 
