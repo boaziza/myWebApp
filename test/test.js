@@ -74,6 +74,17 @@ async function display() {
                     continue;
 
                 }
+
+                if (key === "logDate") {
+
+                    const formattedDate = new Date(rows[i][key]).toISOString().split("T")[0];
+
+                    td.textContent = formattedDate;
+                    
+                    tr.appendChild(td);
+                    continue;
+
+                }
                 
                 td.textContent = rows[i][key] || ""; 
                 tr.appendChild(td);                                     
@@ -145,9 +156,9 @@ async function search() {
         const searchWith = document.getElementById("searchWith").value;
         let searchValue = document.getElementById("searchValue").value;
 
-        // if (searchWith === "logDate") {
-        //    searchValue = `${searchValue}T00:00:00.000+00:00`
-        // }
+        if (searchWith === "logDate") {
+           searchValue = `${searchValue}T00:00:00.000+00:00`
+        }
 
         for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
@@ -181,6 +192,18 @@ async function search() {
             for (let j = 0; j < attributes.length; j++) {
                 const key = attributes[j].key;
                 const td = document.createElement("td");
+
+                if (key === "logDate") {
+
+                    const formattedDate = new Date(filteredRows[i][key]).toISOString().split("T")[0];
+
+                    td.textContent = formattedDate;
+                    
+                    tr.appendChild(td);
+                    continue;
+
+                };
+
                 td.textContent = filteredRows[i][key] || ""; 
                 tr.appendChild(td);
             }
