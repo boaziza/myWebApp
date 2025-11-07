@@ -1,7 +1,9 @@
 async function display() {
     
     try {
-        const check = document.getElementById("check").value;        
+        const check = document.getElementById("check").value;   
+        
+        document.getElementById("title").textContent = `${(check).toUpperCase()} Report`
 
         const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
         const data = await res.json();
@@ -151,76 +153,126 @@ async function search() {
     }
 }
 
-function generateReportHeader(year, month) {
-  const headerRow = document.getElementById("headerRow");
-  headerRow.innerHTML = ""; // Clear any existing headers
+// function generateReportHeader(year, month) {
+//   const headerRow = document.getElementById("headerRow");
+//   headerRow.innerHTML = ""; // Clear any existing headers
 
-  // Example: month = 10 for November (JS months are 0-based)
-  const date = new Date(year, month, 1);
+//   // Example: month = 10 for November (JS months are 0-based)
+//   const date = new Date(year, month, 1);
 
-  const monthName = date.toLocaleString("en", { month: "short" }).toUpperCase(); // e.g., "NOV"
-  const yearStr = year;
+//   const monthName = date.toLocaleString("en", { month: "short" }).toUpperCase(); // e.g., "NOV"
+//   const yearStr = year;
 
-  // Add the month+year header
-  const monthHeader = document.createElement("th");
-  monthHeader.textContent = `${monthName} ${yearStr}`;
-  monthHeader.style.background = "#f1f3f4";
-  headerRow.appendChild(monthHeader);
+//   // Add the month+year header
+//   const monthHeader = document.createElement("th");
+//   monthHeader.textContent = `${monthName} ${yearStr}`;
+//   monthHeader.style.background = "#f1f3f4";
+//   headerRow.appendChild(monthHeader);
 
-  // Get number of days in that month
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+//   // Get number of days in that month
+//   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Add day headers (e.g., 01.11, 02.11, ...)
-  for (let day = 1; day <= 12; day++) {
-    const th = document.createElement("th");
-    th.textContent = `${String(day).padStart(2, "0")}.${String(month + 1).padStart(2, "0")}`;
-    th.style.cursor = "pointer";
-    th.onclick = () => showReportForDay(day, month + 1, year); // Example click function
-    headerRow.appendChild(th);
+//   // Add day headers (e.g., 01.11, 02.11, ...)
+//   for (let day = 1; day <= 12; day++) {
+//     const th = document.createElement("th");
+//     th.textContent = `${String(day).padStart(2, "0")}.${String(month + 1).padStart(2, "0")}`;
+//     th.style.cursor = "pointer";
+//     th.onclick = () => showReportForDay(day, month + 1, year); // Example click function
+//     headerRow.appendChild(th);
+//   }
+// }
+
+// function showReportForDay(day, month, year) {
+//   alert(`Showing report for ${day}/${month}/${year}`);
+// }
+
+
+// function generateMonthBlocks(year, month) {
+//   const daysContainer = document.getElementById("daysContainer");
+//   const monthTitle = document.getElementById("monthTitle");
+
+//   daysContainer.innerHTML = ""; // Clear any existing days
+//   const date = new Date(year, month, 1);
+
+//   const monthName = date.toLocaleString("en", { month: "long" }).toUpperCase(); // "NOVEMBER"
+//   monthTitle.textContent = `${monthName} ${year}`;
+
+//   const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+//   for (let day = 1; day <= daysInMonth; day++) {
+//     const block = document.createElement("div");
+//     block.classList.add("day-block");
+//     block.textContent = `${String(day).padStart(2, "0")}.${String(month + 1).padStart(2, "0")}`;
+
+//     block.onclick = () => {
+//       // Clear old active blocks
+//       document.querySelectorAll(".day-block").forEach(b => b.classList.remove("active"));
+//       block.classList.add("active");
+
+//       // Call your custom logic here
+//       showDailyReport(day, month + 1, year);
+//     };
+
+//     daysContainer.appendChild(block);
+//   }
+// }
+
+// function showDailyReport(day, month, year) {
+//   alert(`Showing report for ${day}/${month}/${year}`);
+// }
+
+
+let reportChart; // store current chart to update later
+
+function renderChart(type, labels, data, title) {
+  const ctx = document.getElementById("reportChart").getContext("2d");
+
+  // Destroy old chart if it exists (important when switching)
+  if (reportChart) {
+    reportChart.destroy();
   }
+
+  reportChart = new Chart(ctx, {
+    type: type, // 'bar', 'line', 'pie', etc.
+    data: {
+      labels: labels,
+      datasets: [{
+        label: title,
+        data: data,
+        borderWidth: 2,
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)"
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: title,
+          color: "#333",
+          font: { size: 16 }
+        }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
 }
 
-function showReportForDay(day, month, year) {
-  alert(`Showing report for ${day}/${month}/${year}`);
+async function loadReport() {
+    
+  const check = document.getElementById("check").value;
+
+    const res = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
+    const data = await res.json();
+
+    const rows = data.documents;
+
+    const labels = rows.map(r => r.monthYear); // or r.logDate
+    const values = rows.map(r => r.gainPayments || r.amount || r.company);
+
+    renderChart("pie", labels, values, "Daily Gain Over Time");
 }
-
-// Example usage:
-generateReportHeader(2025, 10); // November 2025
-
-
-function generateMonthBlocks(year, month) {
-  const daysContainer = document.getElementById("daysContainer");
-  const monthTitle = document.getElementById("monthTitle");
-
-  daysContainer.innerHTML = ""; // Clear any existing days
-  const date = new Date(year, month, 1);
-
-  const monthName = date.toLocaleString("en", { month: "long" }).toUpperCase(); // "NOVEMBER"
-  monthTitle.textContent = `${monthName} ${year}`;
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const block = document.createElement("div");
-    block.classList.add("day-block");
-    block.textContent = `${String(day).padStart(2, "0")}.${String(month + 1).padStart(2, "0")}`;
-
-    block.onclick = () => {
-      // Clear old active blocks
-      document.querySelectorAll(".day-block").forEach(b => b.classList.remove("active"));
-      block.classList.add("active");
-
-      // Call your custom logic here
-      showDailyReport(day, month + 1, year);
-    };
-
-    daysContainer.appendChild(block);
-  }
-}
-
-function showDailyReport(day, month, year) {
-  alert(`Showing report for ${day}/${month}/${year}`);
-}
-
-// Example usage:
-generateMonthBlocks(2025, 10); // November 2025

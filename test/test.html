@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="test.css">
-    <title>Loan Check</title>  
+    <title>Reports</title>  
     <div class="fuel-prices">
         <h2>Live Fuel Prices</h2>
         <p>ESSENCE: <span id="pmsPrice"></span></p>
@@ -11,7 +11,7 @@
 </head>
 <body>  
     <header>
-        <div style="justify-content: center; display: flex;"></div>
+        <h2 style="justify-content: center; display: flex;" id="title"></h2>
     </header>
 
     <nav>
@@ -36,12 +36,13 @@
             <option value=""></option>
             <option value="loans">Loan Report</option>
             <option value="gain">Gain Report</option>
-            <option value="payments">Daily Report</option>
             <option value="fiche">Fiche Report</option>
         </select>
     </div>
 
     <div id="search"></div>
+    <div id="inputSection"></div>
+    <div id="searchButton"></div>
 
     <main class="sheet">        
         <section class="indices">            

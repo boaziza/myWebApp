@@ -797,6 +797,8 @@ async function storeFiche(event) {
 
         btn.disabled = false;
         btn.textContent = originalText;
+        const container = document.getElementById("ficheContainer");
+        container.innerHTML = "";
         
     }
     const container = document.getElementById("ficheContainer");

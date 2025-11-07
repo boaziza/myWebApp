@@ -90,28 +90,35 @@ async function displayReport(event) {const btn = event.currentTarget;
 
         for (let i = 0; i < doc.length; i++) {
 
-        const tempDoc = doc[i];
+          const tempDoc = doc[i];
 
-            totalGainPayments += tempDoc.gainPayments;
+          totalGainPayments += tempDoc.gainPayments;
 
-            const loans = JSON.parse(tempDoc.loans || "[]");
-            const fiche = JSON.parse(tempDoc.fiche || "[]");
-            
+          const loans = JSON.parse(tempDoc.loans || "[]");
+          const fiche = JSON.parse(tempDoc.fiche || "[]");                    
 
-            document.getElementById(`username${i}`).textContent = tempDoc.username;
-            document.getElementById(`totalVente${i}`).textContent = tempDoc.totalVente;
-            document.getElementById(`totalPayments${i}`).textContent = tempDoc.totalPayments;
-            document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;
-            document.getElementById(`momo${i}`).textContent = tempDoc.momo;
-            document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
-            document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
-            document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
-            document.getElementById(`fiche${i}`).textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ") || "0";
-            document.getElementById(`totalFiche${i}`).textContent = tempDoc.totalFiche;
-            document.getElementById(`loans${i}`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ") || "0";
-            document.getElementById(`totalLoans${i}`).textContent = tempDoc.totalLoans || "0";
-            document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;
-            
+          if (loans.every(loan => loan.company === "Versement")) {
+            document.getElementById(`versement${i}`).textContent = loans.map(loan => `${loan.amount}`);
+            continue;
+          }
+          
+
+             
+
+          document.getElementById(`username${i}`).textContent = tempDoc.username;
+          document.getElementById(`totalVente${i}`).textContent = tempDoc.totalVente;
+          document.getElementById(`totalPayments${i}`).textContent = tempDoc.totalPayments;
+          document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;
+          document.getElementById(`momo${i}`).textContent = tempDoc.momo;
+          document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
+          document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
+          document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
+          document.getElementById(`fiche${i}`).textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ") || "0";
+          document.getElementById(`totalFiche${i}`).textContent = tempDoc.totalFiche;
+          document.getElementById(`loans${i}`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ") || "0";
+          document.getElementById(`totalLoans${i}`).textContent = tempDoc.totalLoans || "0";
+          document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;
+          
         }
 
         document.getElementById(`totalGainPayments`).textContent = totalGainPayments;

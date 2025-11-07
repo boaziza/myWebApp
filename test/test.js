@@ -1,11 +1,32 @@
+let el;
+
+function getElementValue(el) {
+    if (!el) return "";
+    if (el.tagName === "SELECT") {
+        return el.value; // current selected option value
+    }
+    if ("value" in el && el.value !== undefined) {
+        return el.value;
+    }
+    return el.textContent.trim();
+}
+
 async function display() {
     
     try {
-        const check = document.getElementById("check").value;        
+        
+        el = document.getElementById("check"); 
+        const check = getElementValue(el)
+        
+        document.getElementById("title").textContent = `${check.toUpperCase()} Report`;
+        
+        const hidden = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"]
 
         const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
         const data = await res.json();
-        const attributes = data.attributes;
+        const rawAtributes = data.attributes;
+
+        const attributes = rawAtributes.filter(attr => !hidden.includes(attr.key))
 
         const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
         const docData = await resDocs.json();
@@ -20,6 +41,15 @@ async function display() {
         for (let i = 0; i < attributes.length; i++) {
 
             const theader = document.createElement("th");
+
+            if (attributes[i].key === "loans") {
+
+                theader.textContent = `VERSEMENT`;
+                headers.appendChild(theader);
+                continue;
+
+            }
+
             theader.textContent = `${attributes[i].key.toUpperCase()}`;
             headers.appendChild(theader);   
                 
@@ -29,16 +59,33 @@ async function display() {
             const tr = document.createElement("tr");
 
             for (let j = 0; j < attributes.length; j++) {
+
                 const key = attributes[j].key;
                 const td = document.createElement("td");
+
+                if (key === "loans") {                    
+
+                    const loans = JSON.parse(rows[i][key]);
+                    if (loans.every(loan => loan.company === "Versement")) {
+                        td.textContent = loans.map(loan => `${loan.amount}`);
+                    }
+                    
+                    tr.appendChild(td);
+                    continue;
+
+                }
+                
                 td.textContent = rows[i][key] || ""; 
-                tr.appendChild(td);
+                tr.appendChild(td);                                     
+                
             }
 
             body.appendChild(tr);
         }
                     
-        const div = document.getElementById("search")
+        const div = document.getElementById("search");
+        const inputSection = document.getElementById("inputSection");
+        inputSection.innerHTML = ``;
 
         div.innerHTML = "";
 
@@ -48,6 +95,7 @@ async function display() {
         div.appendChild(searchWith);
 
         const select = document.createElement("select");
+        select.onchange = changeType;
         select.id = "searchWith";
 
         const optionStart = document.createElement("option");        
@@ -64,33 +112,25 @@ async function display() {
 
         div.appendChild(document.createElement("br"));
 
-        const input = document.createElement("input"); 
-        input.type = "text"; 
-        input.id = "searchValue"   
-        input.textContent = ``
-        div.appendChild(input);
-
-        div.appendChild(document.createElement("br"));
+        const searchButton = document.getElementById("searchButton");
+        searchButton.innerHTML = ``;
         
         const submit = document.createElement("button");
         submit.type = "button"; 
         submit.className = "action-btn";
         submit.textContent = "Search";
         submit.onclick = search;
-        div.appendChild(submit);
-
-        div.appendChild(document.createElement("br"));
-        div.appendChild(document.createElement("br"));
+        searchButton.appendChild(submit);
         
     } catch (error) {
-        console.log("Error at the display gain:",error);        
+        console.log("Error ",error);        
     }
 }
 
 async function search() {
-    try {
-
-        const check = document.getElementById("check").value;        
+    try {       
+        el = document.getElementById("check"); 
+        const check = getElementValue(el);        
 
         const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
         const data = await res.json();
@@ -103,7 +143,11 @@ async function search() {
         let filteredRows = [];
 
         const searchWith = document.getElementById("searchWith").value;
-        const searchValue = document.getElementById("searchValue").value;
+        let searchValue = document.getElementById("searchValue").value;
+
+        // if (searchWith === "logDate") {
+        //    searchValue = `${searchValue}T00:00:00.000+00:00`
+        // }
 
         for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
@@ -147,42 +191,64 @@ async function search() {
         
     } catch (error) {
         console.log(error);
-        
+        display();        
     }
 }
-
-function generateReportHeader(year, month) {
-  const headerRow = document.getElementById("headerRow");
-  headerRow.innerHTML = ""; // Clear any existing headers
-
-  // Example: month = 10 for November (JS months are 0-based)
-  const date = new Date(year, month, 1);
-
-  const monthName = date.toLocaleString("en", { month: "short" }).toUpperCase(); // e.g., "NOV"
-  const yearStr = year;
-
-  // Add the month+year header
-  const monthHeader = document.createElement("th");
-  monthHeader.textContent = `${monthName} ${yearStr}`;
-  monthHeader.style.background = "#f1f3f4";
-  headerRow.appendChild(monthHeader);
-
-  // Get number of days in that month
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  // Add day headers (e.g., 01.11, 02.11, ...)
-  for (let day = 1; day <= 12; day++) {
-    const th = document.createElement("th");
-    th.textContent = `${String(day).padStart(2, "0")}.${String(month + 1).padStart(2, "0")}`;
-    th.style.cursor = "pointer";
-    th.onclick = () => showReportForDay(day, month + 1, year); // Example click function
-    headerRow.appendChild(th);
+function mapTypeToInput(appwriteType) {
+  switch (appwriteType) {
+    case "integer":
+      return "number";
+    case "float":
+      return "number";
+    case "boolean":
+      return "checkbox";
+    case "email":
+      return "email";
+    case "url":
+      return "url";
+    case "datetime":
+      return "datetime-local";
+    default:
+      return "text"; // for string, enum, etc.
   }
 }
 
-function showReportForDay(day, month, year) {
-  alert(`Showing report for ${day}/${month}/${year}`);
+async function changeType() {
+
+    try {        
+        el = document.getElementById("check"); 
+        const check = getElementValue(el);        
+
+        const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
+        const data = await res.json();
+        const attributes = data.attributes;
+        
+        const inputSection = document.getElementById("inputSection");
+        inputSection.innerHTML = ``;
+
+        const selectedKey = document.getElementById("searchWith").value;
+        const selectedAttr = attributes.find(attr => attr.key === selectedKey);
+
+        const input = document.createElement("input");
+        input.innerHTML = ``
+        input.id = "searchValue"   
+        input.textContent = `` 
+
+        if (selectedKey === "monthYear") {
+            input.type = "month"
+        } else if (selectedKey === "logDate"){
+            input.type = "date"
+        } else if (selectedAttr) {
+            input.type = mapTypeToInput(selectedAttr.type);
+        }else {
+            input.type = "text"; 
+        }
+        inputSection.appendChild(input);
+    } catch (error) {
+        console.log("Error:",error);        
+    }
 }
 
-// Example usage:
-generateReportHeader(2025, 10); // November 2025
+async function recent() {
+    
+}
