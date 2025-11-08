@@ -27,18 +27,35 @@ async function display() {
                 
         }
 
+        const totals = Array(attributes.length).fill(0);
+
         for (let i = 0; i < rows.length; i++) {
-            const tr = document.createElement("tr");
+          const tr = document.createElement("tr");
 
-            for (let j = 0; j < attributes.length; j++) {
-                const key = attributes[j].key;
-                const td = document.createElement("td");
-                td.textContent = rows[i][key] || ""; 
-                tr.appendChild(td);
+          for (let j = 0; j < attributes.length; j++) {
+            const key = attributes[j].key;
+            const td = document.createElement("td");
+            td.textContent = rows[i][key] || ""; 
+            tr.appendChild(td);
+
+            const numValue = Number(rows[i][key]);
+            if (!isNaN(numValue)) {
+              totals[j] += numValue;
             }
+          }
 
-            body.appendChild(tr);
+          body.appendChild(tr);
         }
+        const totalRow = document.createElement("tr");
+
+        for (let j = 0; j < attributes.length; j++) {
+          const td = document.createElement("td");
+          // Only show total if it’s numeric (not 0)
+          td.textContent = totals[j] !== 0 ? totals[j].toLocaleString() : "";
+          totalRow.appendChild(td);
+        }
+
+        body.appendChild(totalRow);
                     
         const div = document.getElementById("search")
 

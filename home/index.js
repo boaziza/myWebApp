@@ -858,3 +858,9 @@ async function storeFiche(event) {
 
 
 }
+
+async function MomoLoss() {
+    const momo = document.getElementById("momo").value;
+
+    document.getElementById("tempMomoLoss").textContent = parseInt((momo/100)*0.5) ;
+}

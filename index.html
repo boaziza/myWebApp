@@ -83,10 +83,14 @@
             <h1 style="text-align: center; ">Payments</h1>
             <form action="" id="paymentsForm">
                 <label for="momo"> MoMo: &nbsp;</label>
-                <input type="number" name="momo" id="momo"><br><br>
+                <input type="number" name="momo" id="momo" onchange="MomoLoss()"><br><br>
 
                 <label for="momoLoss"> MoMo Loss: &nbsp;</label>
-                <input type="number" name="momoLoss" id="momoLoss"><br><br>
+                <input type="number" name="momoLoss" id="momoLoss">
+                
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="tempMomoLoss"></span>&nbsp;&nbsp;RWF</label>
+                
+                <br><br>
                 
                 <label for="spFuelCard"> SP Fuel Card: &nbsp;</label>
                 <input type="text" name="spFuelCard" id="spFuelCard" placeholder="Example: 10000,10000"><br><br>
