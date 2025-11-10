@@ -20,8 +20,8 @@ async function calculateIndex(event) {
     btn.textContent = "Loading...";
 
 
-    pmsPrice = parseInt(document.getElementById("pmsPrice").textContent.replace(/[^\d]/g, ''), 10) || 1862;
-    agoPrice = parseInt(document.getElementById("agoPrice").textContent.replace(/[^\d]/g, ''), 10) || 1808;
+    pmsPrice = 1989;
+    agoPrice = 1900;
 
     pms1 =Number(document.getElementById("pms1").value);
     pms2 =Number(document.getElementById("pms2").value);
