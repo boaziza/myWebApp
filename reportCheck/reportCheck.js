@@ -84,6 +84,21 @@ async function displayReport(event) {
 
         let totalGainPayments = 0;
 
+        function clearSheetTable() {
+            // Select the main container
+            const sheet = document.querySelector("main.sheet");
+            if (!sheet) return;
+
+            // Select all span elements inside tables in the sheet
+            const spans = sheet.querySelectorAll("table span");
+            
+            // Clear each span's content
+            spans.forEach(span => span.textContent = "");
+        }
+
+        // Call the function
+        clearSheetTable();
+
         if (doc.length === 0 ) {
             alert("No documents found in that month")
             return
