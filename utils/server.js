@@ -102,6 +102,14 @@ app.get("/api/documents/:collection", async (req, res) => {
   }
 });
 
+app.get("/api/tables", (req, res) => {
+  // You can return both the collection names and their IDs
+  res.json({
+    databaseId,
+    availableTables: collections,
+  });
+});
+
 // ✅ Health check
 app.get("/health", (req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
 
