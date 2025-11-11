@@ -121,8 +121,7 @@ async function displayReport(event) {
           document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
           document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
           document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
-
-          document.getElementById(`fiche${i}`).textContent = fiche.map(item => `${item.company}: ${item.amount}`).join(", ") || "0";
+          document.getElementById(`fiche${i}`).textContent = fiche.reduce((sum, item) => sum + Number(item.amount || 0), 0);
           document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;                    
 
           if (loans.some(loan => loan.company === "Versement")) {
@@ -133,7 +132,7 @@ async function displayReport(event) {
             document.getElementById(`versement${i}`).textContent = "0"
           }
 
-          document.getElementById(`loans${i}`).textContent = loans.map(loan => `${loan.company}: ${loan.amount}`).join(", ") || "0";
+          document.getElementById(`loans${i}`).textContent = loans.reduce((sum, item) => sum + Number(item.amount || 0), 0);
           
         }
 
