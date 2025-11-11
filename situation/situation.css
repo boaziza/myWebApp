@@ -148,6 +148,7 @@ body {
   padding: 6px 0;
   font-size: 13px;
   border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+  margin-left: 300px;
 }
 
 .tot-row:last-child,
