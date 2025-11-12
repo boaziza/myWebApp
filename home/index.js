@@ -115,7 +115,7 @@ async function calculateIndex(event) {
 }
 
 let momo, momoLoss, totalFiche, bon, spFuelCard, bankCard;
-let cash5000, cash2000, cash1000, cash500, bankCard, spFuelCard;
+let cash5000, cash2000, cash1000, cash500;
 let totalCash, totalPayments, gainPayments, listBC, listSFC, totalLoans;
 
 async function payments(event) {
