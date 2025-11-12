@@ -295,34 +295,51 @@ async function blocks() {
 
   try{
 
-    const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/gain`);
-    const data = await res.json();
-    const attributes = data.attributes;
+    const divs = document.querySelectorAll(".metric");
 
-    const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/gain`);
-    const docData = await resDocs.json();
-    const rows = docData.documents;
-
-    console.log(docData);
-    console.log(data);
-    
-
-    let totalGain= 0
-
-    for (let i = 0; i < rows.length; i++) {
-      for (let j = 0; j < attributes.length; j++) {       
+    for (let r = 0; r < divs.length; r++) {        
       
-        const key = attributes[j].key
+      const div = divs[r];
 
-        if (key === "gainPayments") {
-          totalGain += rows[i][key];
-        } else {
-          continue;
+      const p = div.querySelector("p");
+
+      let check = p.id;
+
+      console.log("check", check);
+      
+
+      if (check === "gainPms" || check === "gainAgo") {
+        check = "stock"
+      }
+
+      const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
+      const data = await res.json();
+      const attributes = data.attributes;
+
+      const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
+      const docData = await resDocs.json();
+      const rows = docData.documents;
+
+      let totalGain = 0;
+
+      for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < attributes.length; j++) {       
+        
+          const key = attributes[j].key
+
+          if (key === "gainPayments") {
+            totalGain += rows[i][key];
+          } else if (key === "totalGainFuelAgo") {
+            document.getElementById("gainAgo").textContent = `${rows[i][key]} L`;
+            // continue;
+          } else if (key === "totalGainFuelPms") {
+            document.getElementById("gainPms").textContent = `${rows[i][key]} L`;
+            // break;
+          }
         }
+        document.getElementById("gain").textContent = `${totalGain} RWF`;
       }
     }
-
-    document.getElementById("metric1").textContent = `${totalGain} RWF`;
   } catch(error) {
     console.log("Error", error);
     
