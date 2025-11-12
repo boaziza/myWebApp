@@ -1,82 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="test.css">
-    <title></title>  
-    <div class="fuel-prices">
-        <h2>Live Fuel Prices</h2>
-        <p>ESSENCE: <span id="pmsPrice"></span></p>
-        <p>MAZOUT: <span id="agoPrice"></span></p>
-    </div>
+    <link rel="stylesheet" href="/report_dashboard/report.css">
+    <title></title>
 </head>
-<body>  
-    <header>
-        <div style="justify-content: center; display: flex;"></div>
-        
-        <div>
-            <select name="check" id="check" onchange="loadReport()">
-                <option value=""></option>
-                <option value="loans">Loan Report</option>
-                <option value="gain">Gain Report</option>
-                <option value="fiche">Fiche Report</option>
-            </select>
-        </div>
-    </header>
-    <main class="dashboard">
-    <h1>📊 Reports Dashboard</h1>
-    <p class="subtitle">Select a report type below to view detailed insights.</p>
-
-    <section class="summary">
-        <div class="metric">
-        <h2>₣25,400</h2>
-        <p>Total Sales Today</p>
-        </div>
-        <div class="metric">
-        <h2>₣4,800</h2>
-        <p>Total Gain This Month</p>
-        </div>
-        <div class="metric">
-        <h2>3</h2>
-        <p>Pending Loan Records</p>
-        </div>
-    </section>
-
-    <section class="reports">
-        <div class="report-card" onclick="loadReport('daily')">
-        <h3>📅 Daily Report</h3>
-        <p>View today’s transactions and sales summary</p>
-        </div>
-        <div class="report-card" onclick="loadReport('gain')">
-        <h3>💰 Gain/Loss Report</h3>
-        <p>Analyze your profit and loss trends</p>
-        </div>
-        <div class="report-card" onclick="loadReport('loans')">
-        <h3>🏦 Loan Report</h3>
-        <p>Track outstanding and paid loans</p>
-        </div>
-    </section>
-    <div class="chart-container">
-        <canvas id="reportChart"></canvas>
+<body>
+<div class="app" id="app">
+  <aside class="sidebar" aria-label="Reports Sidebar">
+    <div class="brand">
+      <div class="logo">R</div>
+      <div>
+        <h1>Reports</h1>
+        <p>Pick a report to view</p>
+      </div>
     </div>
 
-    </main>
+    <select name="report" id="report" >
+        <option value="loans">Loan Report</option>
+        <option value="gain">Gain Report</option>
+        <option value="fiche">Fiche Report</option>
+    </select>
 
+    <div class="reports-list" id="reportsList">
+      <!-- items injected by JS -->
+    </div>
 
-<footer>
-    <button class="action-btn" onclick="displayLoan(event)">Fetch Report</button>
-    <button class="action-btn" onclick="downloadGain(event);">Download Report</button>
-    <br><br>
-    <button class="action-btn" onclick="logout(event) ">Logout</button>
-</footer>
-    <script src="test.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- <script src="loan.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-    <script type="module" src="../home/fuelPrices.js"></script>
-    <script src="../utils/logout.js"></script>
-    <script src="../utils/checkUser.js"></script>
-    <script src="../utils/welcomeMessage.js"></script>
-    <script src="../utils/pageAccess.js"> </script> -->
+    <div style="margin-top:auto;font-size:13px;color:var(--muted)">
+      <p style="margin:0 0 6px 0">Hosting suggestions:</p>
+      <p style="margin:0">GitHub Pages · Vercel · Netlify</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:12px">
+          <h2 id="reportTitle" style="margin:0">Select a report</h2>
+          <div style="color:var(--muted);font-size:13px" id="reportSubtitle">Overview</div>
+        </div>
+
+        <div class="metrics" style="margin-top:12px">
+          <div class="metric">
+            <h3>Key Metric</h3>
+            <p id="metric1">—</p>
+          </div>
+          <div class="metric">
+            <h3>Change (30d)</h3>
+            <p id="metric2">—</p>
+          </div>
+          <div class="metric">
+            <h3>Active Items</h3>
+            <p id="metric3">—</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:260px">
+        <div class="panel" style="display:flex;gap:8px;flex-direction:column">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:13px;color:var(--muted)">View</div>
+            <select id="timeRange">
+              <option value="30">Last 30 days</option>
+              <option value="7">Last 7 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">Tip: select a report to load data</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <section class="panel" id="mainPanel">
+        <h3 style="margin-top:0">Charts</h3>
+        <canvas id="lineChart"></canvas>
+
+        <div style="margin-top:12px;display:flex;gap:12px">
+          <div style="flex:1">
+            <h4 style="margin:8px 0 6px 0">Breakdown</h4>
+            <canvas id="barChart" class="small-chart"></canvas>
+          </div>
+
+          <div style="width:220px">
+            <h4 style="margin:8px 0 6px 0">Summary</h4>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between">
+                <div>Completed</div><div id="sumCompleted" class="badge">—</div>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <div>Pending</div><div id="sumPending" class="badge">—</div>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <div>Avg Time</div><div id="sumAvg" class="badge">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0" />
+        <h4 style="margin:6px 0 12px 0">Data Table</h4>
+        <div class="table-wrap">
+          <input id="tableSearch" placeholder="Search table..." style="width:100%;padding:8px;margin-bottom:8px;border-radius:8px;background:var(--glass);border:0;color:var(--white)" />
+          <table id="dataTable" aria-label="Report table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <h4 style="margin-top:0">Report Details</h4>
+        <div id="reportDetails" style="color:var(--muted);font-size:14px">
+          Choose a report from the left to see details here.
+        </div>
+
+        <footer>
+          <div style="margin-top:12px">Generated sample data. Replace <code>DATA</code> in script with your API or CSV fetch.</div>
+        </footer>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/report_dashboard/report.js"></script>
+</body>
 </html>
 

@@ -45,6 +45,7 @@ const collections = {
   fiche: process.env.APPWRITE_FICHE_ID,
   gain: process.env.APPWRITE_GAIN_ID,
   payments: process.env.APPWRITE_PAYMENTS_ID,
+  stock: process.env.APPWRITE_STOCK_ID
 };
 
 // ✅ Route 1: Get attributes (fields) for one collection

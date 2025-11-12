@@ -29,15 +29,15 @@
     <main class="main">
       <header class="topbar">
         <div>
-          <h2 id="reportTitle">Select a report</h2>
+          <h2 id="reportTitle">Report Dashboard</h2>
           <div id="reportSubtitle" class="subtitle">Overview</div>
         </div>
       </header>
 
       <section class="metrics">
-        <div class="metric"><h3>Key Metric</h3><p id="metric1">—</p></div>
-        <div class="metric"><h3>Change (30d)</h3><p id="metric2">—</p></div>
-        <div class="metric"><h3>Active Items</h3><p id="metric3">—</p></div>
+        <div class="metric"><h3>Total Gain</h3><p id="metric1">—</p></div>
+        <div class="metric"><h3>Gain PMS</h3><p id="metric2">—</p></div>
+        <div class="metric"><h3>Gain AGO</h3><p id="metric3">—</p></div>
       </section>
 
       <section class="content">
@@ -48,6 +48,7 @@
             <div class="controls">
                 <label for="timeRange">Range</label><br>
                 <select id="timeRange" class="select">
+                  <option value=""></option>
                     <option value="30">Last 30 days</option>
                     <option value="7">Last 7 days</option>
                     <option value="90">Last 90 days</option>
@@ -56,7 +57,7 @@
               <select id="searchWith"></select><br>
             </div><br>
             <label for="Search">Search</label>
-            <input id="search" placeholder="Search table..." class="table-search" />
+            <input id="search" class="table-search" />
 
             <div id="searchButton"></div>
 

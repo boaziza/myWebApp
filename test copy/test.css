@@ -450,7 +450,8 @@ nav ul li a {
 
 .summary {
   display: flex;
-  justify-content: space-around;
+  gap: 10px;
+  justify-content: baseline;
   margin-bottom: 2rem;
 }
 

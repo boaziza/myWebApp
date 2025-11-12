@@ -10,7 +10,8 @@ async function tables() {
 
     for (let i = 0; i < tables.length; i++) {
       const div = document.createElement("div");
-      div.textContent = tables[i];
+      div.textContent = tables[i].toUpperCase();
+      div.className = "report-item"
       div.onclick = () => display(tables[i]);
       
       reportslist.appendChild(div);
@@ -40,7 +41,10 @@ async function display(check) {
 
         const headers = document.getElementById("headers");
         const body = document.getElementById("body");
-
+        const div = document.getElementById("search");
+        // div.onchange = () => display(check);
+        
+        div.innerHTML = ``;
         headers.innerHTML = "";
         body.innerHTML = "";
 
@@ -117,12 +121,7 @@ async function display(check) {
         }
 
         body.appendChild(totalRow);
-                    
-        const div = document.getElementById("search");
-        // div.onchange = () => display(check);
-        div.innerHTML = ``;
-
-
+                  
         const searchWith = document.getElementById("searchWith");
         searchWith.innerHTML = ``;
         searchWith.onchange = () => changeType(check);
@@ -292,6 +291,43 @@ async function changeType(check) {
     }
 }
 
-async function recent() {
+async function blocks() {
+
+  try{
+
+    const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/gain`);
+    const data = await res.json();
+    const attributes = data.attributes;
+
+    const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/gain`);
+    const docData = await resDocs.json();
+    const rows = docData.documents;
+
+    console.log(docData);
+    console.log(data);
     
+
+    let totalGain= 0
+
+    for (let i = 0; i < rows.length; i++) {
+      for (let j = 0; j < attributes.length; j++) {       
+      
+        const key = attributes[j].key
+
+        if (key === "gainPayments") {
+          totalGain += rows[i][key];
+        } else {
+          continue;
+        }
+      }
+    }
+
+    document.getElementById("metric1").textContent = `${totalGain} RWF`;
+  } catch(error) {
+    console.log("Error", error);
+    
+  }
+
 }
+
+blocks();
