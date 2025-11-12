@@ -29,7 +29,7 @@ async function downloadGain(event) {
 
       totalGain += tempDoc.gainPayments
 
-      output.push({ "N°":  `${i++}`, "Name": tempDoc.username, "Email": tempDoc.email, "Month/Year": tempDoc.monthYear, "Gain/Loss": tempDoc.gainPayments });
+      output.push({ "N°":  `${i++}`, "Name": tempDoc.employee, "Email": tempDoc.email, "Month/Year": tempDoc.monthYear, "Gain/Loss": tempDoc.gainPayments });
     }
 
     output.push({ "N°": "", "Name": "", "Email": "", "Month/Year": "Total Gain/Loss:", "Gain/Loss": totalGain });
@@ -94,7 +94,7 @@ async function displayGain(event) {
             document.getElementById(`email${i}`).textContent = tempDoc.email;
             document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;
             document.getElementById(`monthYear${i}`).textContent = tempDoc.monthYear;
-            document.getElementById(`username${i}`).textContent = tempDoc.username;
+            document.getElementById(`employee${i}`).textContent = tempDoc.employee;
             
         }
 

@@ -29,7 +29,7 @@ async function downloadGain(event) {
 
       totalGain += tempDoc.gainPayments
 
-      output.push({ "N°":  `${i+1}`, "Name": tempDoc.username, "Email": tempDoc.email, "Month/Year": tempDoc.monthYear, "Gain/Loss": tempDoc.gainPayments });
+      output.push({ "N°":  `${i+1}`, "Name": tempDoc.employee, "Email": tempDoc.email, "Month/Year": tempDoc.monthYear, "Gain/Loss": tempDoc.gainPayments });
     }
 
     output.push({ "N°": "", "Name": "", "Email": "", "Month/Year": "Total Gain/Loss:", "Gain/Loss": totalGain });
@@ -113,7 +113,7 @@ async function displayReport(event) {
           const loans = JSON.parse(tempDoc.loans || "[]");
           const fiche = JSON.parse(tempDoc.fiche || "[]");  
 
-          document.getElementById(`username${i}`).textContent = tempDoc.username;
+          document.getElementById(`employee${i}`).textContent = tempDoc.employee;
           document.getElementById(`totalVente${i}`).textContent = tempDoc.totalVente;
           document.getElementById(`totalPayments${i}`).textContent = tempDoc.totalPayments;
           document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;

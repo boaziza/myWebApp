@@ -27,7 +27,9 @@ async function display(check) {
     
     try {
         
-        const hidden = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"]
+        const hidden = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
+        const preferredOrder = ["company","plate", "employee", "amount", "logDate","monthYear"];
+
 
         const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
         const data = await res.json();

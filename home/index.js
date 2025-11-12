@@ -194,13 +194,13 @@ async function situation(event) {
         console.log("Logged in as:", user.email);
         const email = await user.email;
         console.log("Email", email);           
-        const username = user.name;
+        const employee = user.name;
 
-        function generateShiftId(username, logDate) {
-            return `${username}_${logDate}_${crypto.randomUUID()}`;
+        function generateShiftId(employee, logDate) {
+            return `${employee}_${logDate}_${crypto.randomUUID()}`;
         }
 
-        const id = generateShiftId(username,logDate);
+        const id = generateShiftId(employee,logDate);
 
         const selectedDate = new Date(logDate);
         
@@ -218,7 +218,7 @@ async function situation(event) {
         if ( doc.length === 0) {
 
             const newData = {
-               username,
+               employee,
                email,
                gainPayments,
                logDate,
@@ -241,7 +241,7 @@ async function situation(event) {
             
             
             const oldData = {
-               username,
+               employee,
                email,
                gainPayments: newGain,
                logDate,
@@ -277,7 +277,7 @@ async function situation(event) {
             email,
             logDate,
             shift,
-            username,
+            employee,
             id,
         };
 
@@ -300,7 +300,7 @@ async function situation(event) {
             email,
             logDate,
             shift,
-            username,
+            employee,
             id,
             loans : JSON.stringify(loans),
             fiche : JSON.stringify(fiche),
