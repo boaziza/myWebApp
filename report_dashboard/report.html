@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Report Dashboard — Light Theme</title>
+  <link rel="stylesheet" href="report.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-text">
+          <h1>Reports</h1>
+          <p>Choose a report</p>
+        </div>
+      </div>
+
+      <div class="reports-list" id="reportsList"></div>
+
+      <div class="sidebar-footer">
+        <small>© 2025 My Dashboard</small>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="reportTitle">Select a report</h2>
+          <div id="reportSubtitle" class="subtitle">Overview</div>
+        </div>
+      </header>
+
+      <section class="metrics">
+        <div class="metric"><h3>Key Metric</h3><p id="metric1">—</p></div>
+        <div class="metric"><h3>Change (30d)</h3><p id="metric2">—</p></div>
+        <div class="metric"><h3>Active Items</h3><p id="metric3">—</p></div>
+      </section>
+
+      <section class="content">
+
+        <div class="bottom-left panel table-panel">
+          <h4>Report Table</h4>
+          <div class="table-wrap">
+            <div class="controls">
+                <label for="timeRange">Range</label><br>
+                <select id="timeRange" class="select">
+                    <option value="30">Last 30 days</option>
+                    <option value="7">Last 7 days</option>
+                    <option value="90">Last 90 days</option>
+                </select>
+              <label for="Search">Search By</label><br>
+              <select id="searchWith"></select><br>
+            </div><br>
+            <label for="Search">Search</label>
+            <input id="search" placeholder="Search table..." class="table-search" />
+
+            <div id="searchButton"></div>
+
+
+            <main class="sheet">        
+              <section class="indices">            
+                  <table class="indices-table">
+                      <thead>
+                          <tr id="headers"></tr>
+                      </thead>
+                      <tbody id="body"></tbody>
+                  </table>  
+              </section>
+
+            </main>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+  </div>
+
+  <script src="report.js"> </script>
+</body>
+</html>

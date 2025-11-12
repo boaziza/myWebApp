@@ -1,0 +1,187 @@
+:root {
+  --bg: #f9fafb;
+  --panel: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #007bff;
+}
+
+/* base reset */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* layout */
+.app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* sidebar */
+.sidebar {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+.brand-text h1 {
+  margin: 0;
+  font-size: 16px;
+}
+.brand-text p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.controls select,
+.search {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+}
+.report-item {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.report-item:hover {
+  background: #f3f4f6;
+}
+.report-item.active {
+  background: #e0f2fe;
+  border-color: #bae6fd;
+}
+.sidebar-footer {
+  margin-top: auto;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* main area */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topbar h2 { margin: 0; }
+.subtitle { color: var(--muted); font-size: 13px; }
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.btn:hover { opacity: 0.9; }
+
+/* metrics */
+.metrics {
+  display: flex;
+  gap: 10px;
+}
+.metric {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px 16px;
+  width: 150px;
+}
+.metric h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.metric p {
+  margin: 6px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* grid content */
+.content {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 16px;
+}
+
+/* panels */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.panel h4 {
+  margin-top: 0;
+  font-size: 15px;
+  color: var(--text);
+}
+
+/* table */
+.table-wrap { overflow: auto; }
+.table-search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.indices-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.indices-table th, .indices-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 8px;
+  text-align: left;
+}
+.indices-table th {
+  background: #f9fafb;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+/* footer */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 10px;
+}
