@@ -131,8 +131,9 @@ button:hover {
 
 /* metrics */
 .metrics {
+  margin-left: 150px;
   display: flex;
-  gap: 10px;
+  gap: 80px;
 }
 .metric {
   background: var(--panel);
@@ -173,7 +174,10 @@ button:hover {
 }
 
 /* table */
-.table-wrap { overflow: auto; }
+.table-wrap { 
+  /* overflow: auto; */
+  width: 1150px;
+ }
 .table-search {
   width: 100%;
   padding: 8px;
