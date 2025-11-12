@@ -115,7 +115,7 @@ async function calculateIndex(event) {
 }
 
 let momo, momoLoss, totalFiche, bon, spFuelCard, bankCard;
-let cash5000, cash2000, cash1000, cash500, totalBC, totalSFC;
+let cash5000, cash2000, cash1000, cash500, bankCard, spFuelCard;
 let totalCash, totalPayments, gainPayments, listBC, listSFC, totalLoans;
 
 async function payments(event) {
@@ -144,14 +144,14 @@ async function payments(event) {
         listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
         listBC =  bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
 
-        totalSFC = listSFC.reduce((sum,n) => sum + n, 0);
-        totalBC = listBC.reduce((sum,n) => sum + n, 0);
+        spFuelCard = listSFC.reduce((sum,n) => sum + n, 0);
+        bankCard = listBC.reduce((sum,n) => sum + n, 0);
 
         totalLoans = loans.reduce((sum, loan) => sum + loan.amount, 0);
         totalFiche = fiche.reduce((sum, item) => sum + item.amount, 0);
 
         totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-        totalPayments = momo+ momoLoss + totalFiche + bon + totalSFC + totalBC + totalCash + totalLoans ;
+        totalPayments = momo+ momoLoss + totalFiche + bon + spFuelCard + bankCard + totalCash + totalLoans ;
         gainPayments = totalPayments - totalVente;
 
         
@@ -288,8 +288,8 @@ async function situation(event) {
             bon, 
             listBC,
             listSFC,
-            totalBC,
-            totalSFC,
+            bankCard,
+            spFuelCard,
             cash5000, 
             cash2000, 
             cash1000, 
@@ -316,8 +316,8 @@ async function situation(event) {
                 momoLoss, 
                 totalFiche, 
                 bon,
-                totalSFC,
-                totalBC,
+                spFuelCard,
+                bankCard,
                 totalCash, 
                 totalLoans,
                 totalPayments, 
@@ -352,8 +352,8 @@ async function situation(event) {
             momoLoss += doc.momoLoss;
             totalFiche += doc.totalFiche;
             bon += doc.bon;
-            totalSFC += doc.totalSFC;
-            totalBC += doc.totalBC;
+            spFuelCard += doc.spFuelCard;
+            bankCard += doc.bankCard;
             totalCash += doc.totalCash;
             totalLoans += doc.totalLoans;
             totalPayments += doc.totalPayments;
@@ -369,8 +369,8 @@ async function situation(event) {
                 momoLoss,
                 totalFiche,
                 bon,
-                totalSFC,
-                totalBC,
+                spFuelCard,
+                bankCard,
                 totalCash, 
                 totalLoans,
                 totalPayments, 
@@ -398,8 +398,8 @@ async function situation(event) {
             momoLoss += doc.momoLoss;
             totalFiche += doc.totalFiche;
             bon += doc.bon;
-            totalSFC += doc.totalSFC;
-            totalBC += doc.totalBC;
+            spFuelCard += doc.spFuelCard;
+            bankCard += doc.bankCard;
             totalCash += doc.totalCash;
             totalLoans += doc.totalLoans;
             totalPayments += doc.totalPayments;
@@ -415,8 +415,8 @@ async function situation(event) {
                 momoLoss, 
                 totalFiche,
                 bon, 
-                totalSFC,
-                totalBC,
+                spFuelCard,
+                bankCard,
                 totalCash, 
                 totalLoans,
                 totalPayments, 

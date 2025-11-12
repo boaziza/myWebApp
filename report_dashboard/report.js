@@ -28,14 +28,31 @@ async function display(check) {
     try {
         
         const hidden = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
-        const preferredOrder = ["company","plate", "employee", "amount", "logDate","monthYear"];
-
+        const preferredOrder = ["company","plate",  "amount", "employee","totalVente","totalPayments","totalCash","gainPayments", ];
+        const renameMap = {
+          email: "User Email",
+          name: "Full Name",
+          age: "User Age",
+          createdAt: "Date Created"
+        };
 
         const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
         const data = await res.json();
         const rawAtributes = data.attributes;
 
-        const attributes = rawAtributes.filter(attr => !hidden.includes(attr.key))
+        const rearranged = [
+          ...preferredOrder
+            .map(key => rawAtributes.find(attr => attr.key === key))
+            .filter(Boolean),
+          ...rawAtributes.filter(attr => !preferredOrder.includes(attr.key))
+        ];
+
+        const renamed = rearranged.map(attr => ({
+          ...attr,
+          displayName: renameMap[attr.key] || attr.key // fallback to original name
+        }));
+
+        const attributes = rearranged.filter(attr => !hidden.includes(attr.key))
 
         const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
         const docData = await resDocs.json();

@@ -47,8 +47,8 @@ async function fetchSituation(event) {
             document.getElementById("momoLoss").textContent = doc.momoLoss || "0";
             document.getElementById("totalFiche").textContent = doc.totalFiche || "0";
             document.getElementById("bon").textContent = doc.bon || "0";
-            document.getElementById("totalSFC").textContent = doc.totalSFC || "0";
-            document.getElementById("totalBC").textContent = doc.totalBC || "0";
+            document.getElementById("spFuelCard").textContent = doc.spFuelCard || "0";
+            document.getElementById("bankCard").textContent = doc.bankCard || "0";
             document.getElementById("totalCash").textContent = (doc.totalCash + doc.totalLoans + Math.abs(doc.gainPayments)) || "0";
             document.getElementById("totalPayments").textContent = doc.totalPayments || "0";
             document.getElementById("pms1").textContent = doc.pms1 || "0";

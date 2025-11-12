@@ -106,6 +106,8 @@ async function displayReport(event) {
 
         for (let i = 0; i < doc.length; i++) {
 
+          let versement = 0;
+
           const tempDoc = doc[i];
 
           totalGainPayments += tempDoc.gainPayments;
@@ -119,20 +121,22 @@ async function displayReport(event) {
           document.getElementById(`totalCash${i}`).textContent = tempDoc.totalCash;
           document.getElementById(`momo${i}`).textContent = tempDoc.momo;
           document.getElementById(`momoLoss${i}`).textContent = tempDoc.momoLoss;
-          document.getElementById(`totalSFC${i}`).textContent = tempDoc.totalSFC;
-          document.getElementById(`totalBC${i}`).textContent = tempDoc.totalBC;
+          document.getElementById(`spFuelCard${i}`).textContent = tempDoc.spFuelCard;
+          document.getElementById(`bankCard${i}`).textContent = tempDoc.bankCard;
           document.getElementById(`fiche${i}`).textContent = fiche.reduce((sum, item) => sum + Number(item.amount || 0), 0);
           document.getElementById(`gainPayments${i}`).textContent = tempDoc.gainPayments;                    
 
           if (loans.some(loan => loan.company === "Versement")) {
-            document.getElementById(`versement${i}`).textContent = loans.map(loan => `${loan.amount}`).join(', ');
+            versement = loans
+            .filter(loan => loan.company === "Versement")
+            .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+            document.getElementById(`versement${i}`).textContent = versement
             document.getElementById(`loans${i}`).textContent = "0";
-            continue;
           } else { 
             document.getElementById(`versement${i}`).textContent = "0"
           }
 
-          document.getElementById(`loans${i}`).textContent = loans.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+          document.getElementById(`loans${i}`).textContent = (loans.reduce((sum, item) => sum + Number(item.amount || 0), 0)) - versement;
           
         }
 

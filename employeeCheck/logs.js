@@ -97,7 +97,7 @@ export async function displayDetails(event) {
                 const fiche = JSON.parse(doc.fiche);
                 
                 const fields = [
-                    "momo","momoLoss","totalFiche","bon","totalSFC","totalBC","listSFC","listBC",
+                    "momo","momoLoss","totalFiche","bon","spFuelCard","bankCard","listSFC","listBC",
                     "totalCash","totalPayments","gainPayments","totalLoans"
                 ];
 
