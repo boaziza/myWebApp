@@ -10,12 +10,9 @@ const app = express();
 app.use(express.json());
 
 // ✅ Allow only trusted origins
-const allowedOrigins = [
-  "https://boaziza.github.io",  // Your GitHub Pages frontend
-  "http://localhost:5500",      // VSCode Live Server
-  "http://127.0.0.1:5501",      // Alternate local test
-  "http://localhost:4000"       // Local backend
-];
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : [];
 
 app.use(
   cors({
