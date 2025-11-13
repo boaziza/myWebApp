@@ -1,369 +1,223 @@
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+  return res.json();
+}
+
 async function tables() {
-
-  try{
-    const res = await fetch(`https://mywebapp-backend.onrender.com/api/tables`);
-    const data = await res.json();
-
+  try {
+    const data = await fetchJSON(`https://mywebapp-backend.onrender.com/api/tables`);
     const tables = Object.keys(data.availableTables);
+    const reportsList = document.getElementById("reportsList");
 
-    const reportslist = document.getElementById("reportsList");
+    reportsList.innerHTML = ""; // clear old
 
-    for (let i = 0; i < tables.length; i++) {
+    tables.forEach(table => {
       const div = document.createElement("div");
-      div.textContent = tables[i].toUpperCase();
-      div.className = "report-item"
-      div.onclick = () => display(tables[i]);
-      
-      reportslist.appendChild(div);
-    }
-  } catch(error) {
-    console.log("Error",error);    
+      div.textContent = table.toUpperCase();
+      div.className = "report-item";
+      div.onclick = () => display(table);
+      reportsList.appendChild(div);
+    });
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+tables();
+
+// --- Utilities ---
+const hiddenKeys = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
+const preferredOrder = ["company","plate","amount","employee","totalVente","totalPayments","totalCash","gainPayments"];
+const renameMap = {
+  email: "User Email",
+  name: "Full Name",
+  age: "User Age",
+  createdAt: "Date Created"
+};
+
+function rearrangeAndRename(attrs) {
+  const ordered = [
+    ...preferredOrder.map(k => attrs.find(a => a.key === k)).filter(Boolean),
+    ...attrs.filter(a => !preferredOrder.includes(a.key))
+  ];
+
+  return ordered
+    .filter(a => !hiddenKeys.includes(a.key))
+    .map(a => ({ ...a, displayName: renameMap[a.key] || a.key }));
+}
+
+function formatValue(key, value) {
+  if (key === "logDate" && value) {
+    return new Date(value).toISOString().split("T")[0];
+  }
+  return value || "";
+}
+
+function mapTypeToInput(type) {
+  const typeMap = {
+    integer: "number",
+    float: "number",
+    boolean: "checkbox",
+    email: "email",
+    url: "url",
+    datetime: "datetime-local"
+  };
+  return typeMap[type] || "text";
+}
+
+// --- Main display ---
+async function display(check) {
+  try {
+    const [attrData, docData] = await Promise.all([
+      fetchJSON(`https://mywebapp-backend.onrender.com/api/attributes/${check}`),
+      fetchJSON(`https://mywebapp-backend.onrender.com/api/documents/${check}`)
+    ]);
+
+    const attributes = rearrangeAndRename(attrData.attributes);
+    const rows = docData.documents;
+    const headers = document.getElementById("headers");
+    const body = document.getElementById("body");
+    const searchWith = document.getElementById("searchWith");
+    const searchInput = document.getElementById("search");
+    const searchButton = document.getElementById("searchButton");
+
+    // Clear old
+    [headers, body, searchWith, searchInput, searchButton].forEach(el => (el.innerHTML = ""));
+
+    // Build headers
+    headers.innerHTML = attributes
+      .map(a => `<th>${a.key === "loans" ? "VERSEMENT" : a.displayName.toUpperCase()}</th>`)
+      .join("");
+
+    // Build rows
+    const totals = Array(attributes.length).fill(0);
+
+    rows.forEach(row => {
+      const tr = document.createElement("tr");
+
+      attributes.forEach((attr, j) => {
+        const td = document.createElement("td");
+        const key = attr.key;
+        const value = row[key];
+
+        if (key === "loans" && value) {
+          const loans = JSON.parse(value);
+          const versements = loans.filter(l => l.company === "Versement").map(l => l.amount);
+          td.textContent = versements.join(", ") || "0";
+        } else {
+          td.textContent = formatValue(key, value);
+        }
+
+        tr.appendChild(td);
+
+        const num = Number(value);
+        if (!isNaN(num)) totals[j] += num;
+      });
+
+      body.appendChild(tr);
+    });
+
+    // Add total row
+    const totalRow = document.createElement("tr");
+    totalRow.innerHTML = totals
+      .map(t => `<td>${t ? t.toLocaleString() : ""}</td>`)
+      .join("");
+    body.appendChild(totalRow);
+
+    // Search selector
+    attributes.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.key;
+      opt.textContent = a.displayName;
+      searchWith.appendChild(opt);
+    });
+
+    searchWith.onchange = async () => {
+      const selected = attributes.find(a => a.key === searchWith.value);
+      if (selected) searchInput.type = mapTypeToInput(selected.type);
+    };
+
+    // Search button
+    const btn = document.createElement("button");
+    btn.className = "action-btn";
+    btn.textContent = "Search";
+    btn.onclick = () => search(check);
+    searchButton.appendChild(btn);
+
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
 
-tables();
+function filterRows(rows, searchKey, searchValue) {
+  if (!searchKey || !searchValue) return rows;
 
-async function display(check) {
-    
-    try {
-        
-        const hidden = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
-        const preferredOrder = ["company","plate",  "amount", "employee","totalVente","totalPayments","totalCash","gainPayments", ];
-        const renameMap = {
-          email: "User Email",
-          name: "Full Name",
-          age: "User Age",
-          createdAt: "Date Created"
-        };
+  // Handle date type fields
+  if (searchKey === "logDate") {
+    searchValue = `${searchValue}T00:00:00.000+00:00`;
+  }
 
-        const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
-        const data = await res.json();
-        const rawAtributes = data.attributes;
+  return rows.filter(row => String(row[searchKey]) === String(searchValue));
+}
 
-        const rearranged = [
-          ...preferredOrder
-            .map(key => rawAtributes.find(attr => attr.key === key))
-            .filter(Boolean),
-          ...rawAtributes.filter(attr => !preferredOrder.includes(attr.key))
-        ];
+function renderTable(attributes, rows, tableBody, totalsRow) {
+  tableBody.innerHTML = "";
+  totalsRow.innerHTML = "";
 
-        const renamed = rearranged.map(attr => ({
-          ...attr,
-          displayName: renameMap[attr.key] || attr.key // fallback to original name
-        }));
+  const totals = Array(attributes.length).fill(0);
 
-        const attributes = rearranged.filter(attr => !hidden.includes(attr.key))
+  rows.forEach(row => {
+    const tr = document.createElement("tr");
 
-        const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
-        const docData = await resDocs.json();
-        const rows = docData.documents;
+    attributes.forEach((attr, j) => {
+      const td = document.createElement("td");
+      const key = attr.key;
+      const value = row[key];
 
-        const headers = document.getElementById("headers");
-        const body = document.getElementById("body");
-        const div = document.getElementById("search");
-        // div.onchange = () => display(check);
-        
-        div.innerHTML = ``;
-        headers.innerHTML = "";
-        body.innerHTML = "";
+      if (key === "loans" && value) {
+        const loans = JSON.parse(value);
+        const versements = loans.filter(l => l.company === "Versement").map(l => l.amount);
+        td.textContent = versements.join(", ") || "0";
+      } else {
+        td.textContent = formatValue(key, value);
+      }
 
-        for (let i = 0; i < attributes.length; i++) {
+      tr.appendChild(td);
 
-            const theader = document.createElement("th");
+      const num = Number(value);
+      if (!isNaN(num)) totals[j] += num;
+    });
 
-            if (attributes[i].key === "loans") {
+    tableBody.appendChild(tr);
+  });
 
-                theader.textContent = `VERSEMENT`;
-                headers.appendChild(theader);
-                continue;
-
-            }
-
-            theader.textContent = `${attributes[i].key.toUpperCase()}`;
-            headers.appendChild(theader);   
-                
-        }
-
-        const totals = Array(attributes.length).fill(0);
-
-        for (let i = 0; i < rows.length; i++) {
-            const tr = document.createElement("tr");
-
-            for (let j = 0; j < attributes.length; j++) {
-
-                const key = attributes[j].key;
-                const td = document.createElement("td");
-
-                if (key === "loans") {                    
-
-                    const loans = JSON.parse(rows[i][key]);
-                    if (loans.every(loan => loan.company === "Versement")) {
-                        td.textContent = loans.map(loan => `${loan.amount}`);
-                    }
-                    
-                    tr.appendChild(td);
-                    continue;
-
-                }
-
-                if (key === "logDate") {
-
-                    const formattedDate = new Date(rows[i][key]).toISOString().split("T")[0];
-
-                    td.textContent = formattedDate;
-                    
-                    tr.appendChild(td);
-                    continue;
-
-                }
-                
-                td.textContent = rows[i][key] || ""; 
-                tr.appendChild(td);       
-                
-                const numValue = Number(rows[i][key]);
-                if (!isNaN(numValue)) {
-                    totals[j] += numValue;
-                }
-                
-            }
-
-            body.appendChild(tr);
-        }
-
-        const totalRow = document.createElement("tr");
-
-        for (let j = 0; j < attributes.length; j++) {
-          const td = document.createElement("td");
-          // Only show total if it’s numeric (not 0)
-          td.textContent = totals[j] !== 0 ? totals[j].toLocaleString() : "";
-          totalRow.appendChild(td);
-        }
-
-        body.appendChild(totalRow);
-                  
-        const searchWith = document.getElementById("searchWith");
-        searchWith.innerHTML = ``;
-        searchWith.onchange = () => changeType(check);
-
-        for (let i = 0; i < attributes.length; i++) {
-          const option = document.createElement("option")
-          option.textContent = `${attributes[i].key}`
-          searchWith.appendChild(option);            
-        }
-
-        div.appendChild(document.createElement("br"));
-
-        const searchButton = document.getElementById("searchButton");
-        searchButton.innerHTML = ``;
-        
-        const submit = document.createElement("button");
-        submit.type = "button"; 
-        submit.className = "action-btn";
-        submit.textContent = "Search";
-        submit.onclick = () => search(check);
-        searchButton.appendChild(submit);
-        
-    } catch (error) {
-        console.log("Error ",error);        
-    }
+  totalsRow.innerHTML = totals.map(t => `<td>${t ? t.toLocaleString() : ""}</td>`).join("");
+  tableBody.appendChild(totalsRow);
 }
 
 async function search(check) {
-    try {      
+  try {
+    // Fetch data
+    const [attrData, docData] = await Promise.all([
+      fetchJSON(`https://mywebapp-backend.onrender.com/api/attributes/${check}`),
+      fetchJSON(`https://mywebapp-backend.onrender.com/api/documents/${check}`)
+    ]);
 
-        const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
-        const data = await res.json();
-        const attributes = data.attributes;
+    const attributes = rearrangeAndRename(attrData.attributes);
+    const rows = docData.documents;
 
-        const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
-        const docData = await resDocs.json();
-        const rows = docData.documents;
+    const searchKey = document.getElementById("searchWith").value;
+    let searchValue = document.getElementById("search").value;
 
-        let filteredRows = [];
+    // Filter
+    const filtered = filterRows(rows, searchKey, searchValue);
 
-        const searchWith = document.getElementById("searchWith").value;
-        let searchValue = document.getElementById("search").value;
+    // Render filtered results
+    const body = document.getElementById("body");
+    const totalRow = document.createElement("tr");
+    renderTable(attributes, filtered, body, totalRow);
 
-        if (searchWith === "logDate") {
-           searchValue = `${searchValue}T00:00:00.000+00:00`
-        }
-
-        for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-
-            if (row[searchWith] == searchValue) {
-                filteredRows.push(row);
-            }
-        }
-
-        console.log("filteredrows",filteredRows);
-        
-
-        const headers = document.getElementById("headers");
-        const body = document.getElementById("body");
-
-        headers.innerHTML = "";
-        body.innerHTML = "";
-
-        for (let i = 0; i < attributes.length; i++) {
-
-            const theader = document.createElement("th");
-            theader.textContent = `${attributes[i].key.toUpperCase()}`;
-            headers.appendChild(theader);   
-                
-        }
-
-        const totals = Array(attributes.length).fill(0);
-
-        for (let i = 0; i < filteredRows.length; i++) {
-            
-            const tr = document.createElement("tr");
-
-            for (let j = 0; j < attributes.length; j++) {
-                const key = attributes[j].key;
-                const td = document.createElement("td");
-
-                if (key === "logDate") {
-
-                    const formattedDate = new Date(filteredRows[i][key]).toISOString().split("T")[0];
-
-                    td.textContent = formattedDate;
-                    
-                    tr.appendChild(td);
-                    continue;
-
-                };
-
-                td.textContent = filteredRows[i][key] || ""; 
-                tr.appendChild(td);
-
-                const numValue = Number(filteredRows[i][key]);
-                if (!isNaN(numValue)) {
-                    totals[j] += numValue;
-                }
-            }
-
-            body.appendChild(tr);
-        }
-        const totalRow = document.createElement("tr");
-
-        for (let j = 0; j < attributes.length; j++) {
-          const td = document.createElement("td");
-          // Only show total if it’s numeric (not 0)
-          td.textContent = totals[j] !== 0 ? totals[j].toLocaleString() : "";
-          totalRow.appendChild(td);
-        }
-
-        body.appendChild(totalRow);
-
-        
-    } catch (error) {
-        console.log(error);
-        display();        
-    }
-}
-function mapTypeToInput(appwriteType) {
-  switch (appwriteType) {
-    case "integer":
-      return "number";
-    case "float":
-      return "number";
-    case "boolean":
-      return "checkbox";
-    case "email":
-      return "email";
-    case "url":
-      return "url";
-    case "datetime":
-      return "datetime-local";
-    default:
-      return "text"; // for string, enum, etc.
+  } catch (error) {
+    console.error("Search error:", error);
   }
 }
-
-async function changeType(check) {
-
-    try {       
-
-        const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
-        const data = await res.json();
-        const attributes = data.attributes;
-
-        const selectedKey = document.getElementById("searchWith").value;
-        const selectedAttr = attributes.find(attr => attr.key === selectedKey);
-
-        const input = document.getElementById("search");
-        input.textContent = ``;
-        
-
-        if (selectedKey === "monthYear") {
-            input.type = "month"
-        } else if (selectedKey === "logDate"){
-            input.type = "date"
-        } else if (selectedAttr) {
-            input.type = mapTypeToInput(selectedAttr.type);
-        }else {
-            input.type = "text"; 
-        }
-    } catch (error) {
-        console.log("Error:",error);        
-    }
-}
-
-async function blocks() {
-
-  try{
-
-    const divs = document.querySelectorAll(".metric");
-
-    for (let r = 0; r < divs.length; r++) {        
-      
-      const div = divs[r];
-
-      const p = div.querySelector("p");
-
-      let check = p.id;
-
-      console.log("check", check);
-      
-
-      if (check === "gainPms" || check === "gainAgo") {
-        check = "stock"
-      }
-
-      const res = await fetch(`https://mywebapp-backend.onrender.com/api/attributes/${check}`);
-      const data = await res.json();
-      const attributes = data.attributes;
-
-      const resDocs = await fetch(`https://mywebapp-backend.onrender.com/api/documents/${check}`);
-      const docData = await resDocs.json();
-      const rows = docData.documents;
-
-      let totalGain = 0;
-
-      for (let i = 0; i < rows.length; i++) {
-        for (let j = 0; j < attributes.length; j++) {       
-        
-          const key = attributes[j].key
-
-          if (key === "gainPayments") {
-            totalGain += rows[i][key];
-          } else if (key === "totalGainFuelAgo") {
-            document.getElementById("gainAgo").textContent = `${rows[i][key]} L`;
-            // continue;
-          } else if (key === "totalGainFuelPms") {
-            document.getElementById("gainPms").textContent = `${rows[i][key]} L`;
-            // break;
-          }
-        }
-        document.getElementById("gain").textContent = `${totalGain} RWF`;
-      }
-    }
-  } catch(error) {
-    console.log("Error", error);
-    
-  }
-
-}
-
-blocks();

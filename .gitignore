@@ -1,0 +1,4 @@
+# Ignore environment variables and sensitive files
+.env
+server.js
+node_modules/
