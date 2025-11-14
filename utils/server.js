@@ -99,7 +99,7 @@ app.get("/api/documents/:collection", async (req, res) => {
     const response = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID,
       collectionId,
-      1000
+      [Query.limit(1000)]
     );
     res.json(response);
   } catch (error) {
