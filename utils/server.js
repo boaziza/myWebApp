@@ -9,22 +9,29 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// ✅ Allow only trusted origins
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',')
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
   : [];
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin) return callback(null, true); // allow server-to-server calls
-      if (!allowedOrigins.includes(origin)) {
-        return callback(new Error(`CORS not allowed from origin: ${origin}`), false);
-      }
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow server-to-server or local tools (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
       return callback(null, true);
-    },
-  })
-);
+    } else {
+      console.warn(`❌ Blocked by CORS: ${origin}`);
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200, // for legacy browsers
+};
+
+// Use before your routes
+app.use(cors(corsOptions));
 
 // ✅ Appwrite client setup
 const client = new sdk.Client()
@@ -91,7 +98,8 @@ app.get("/api/documents/:collection", async (req, res) => {
   try {
     const response = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID,
-      collectionId
+      collectionId,
+      1000
     );
     res.json(response);
   } catch (error) {
