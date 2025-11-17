@@ -1,6 +1,7 @@
 // utils/server.js
 import express from "express";
 import cors from "cors";
+import { Client, Databases, ID } from "node-appwrite";
 import * as sdk from "node-appwrite";
 import dotenv from "dotenv";
 
@@ -49,7 +50,8 @@ const collections = {
   fiche: process.env.APPWRITE_FICHE_ID,
   gain: process.env.APPWRITE_GAIN_ID,
   payments: process.env.APPWRITE_PAYMENTS_ID,
-  stock: process.env.APPWRITE_STOCK_ID
+  stock: process.env.APPWRITE_STOCK_ID,
+  sample: process.env.APPWRITE_SAMPLE_ID
 };
 
 // ✅ Route 1: Get attributes (fields) for one collection
@@ -113,6 +115,29 @@ app.get("/api/tables", (req, res) => {
     databaseId,
     availableTables: collections,
   });
+});
+
+// Universal write route
+app.post("/api/create/:collection", async (req, res) => {
+  try {
+    const tableKey = req.params.collection;
+    const data = req.body;
+
+    const tableId = collections[tableKey];  
+
+    const result = await databases.createDocument(
+      process.env.APPWRITE_DATABASE_ID,
+      tableId,
+      ID.unique(),
+      data
+    );
+
+    res.json({ success: true, result });
+
+  } catch (error) {
+    console.error("Create error:", error);
+    res.status(500).json({ error: "Failed to create document" });
+  }
 });
 
 // ✅ Health check
