@@ -160,7 +160,7 @@ app.listen(port, () => {
 async function getAllDocuments(databaseId, collectionId) {
   let allDocs = [];
   let cursor = undefined;
-  const limit = 100; // safest max limit
+  const limit = 300; // safest max limit
 
   while (true) {
     const response = await databases.listDocuments(
