@@ -7,9 +7,25 @@
     "start": "node utils/server.js"
   },
   "dependencies": {
-    "express": "^4.21.0",
     "cors": "^2.8.5",
-    "node-appwrite": "^13.0.0",
-    "dotenv": "^16.0.0"
-  }
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "node-appwrite": "^13.0.0"
+  },
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boaziza/myWebApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boaziza/myWebApp/issues"
+  },
+  "homepage": "https://github.com/boaziza/myWebApp#readme"
 }

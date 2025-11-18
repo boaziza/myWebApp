@@ -1,3 +1,4 @@
 # Ignore environment variables and sensitive files
 .env
 node_modules/
+report_dashboard/oldreport.js
