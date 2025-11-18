@@ -98,11 +98,16 @@ app.get("/api/documents/:collection", async (req, res) => {
   }
 
   try {
-    const response = await databases.listDocuments(
+    // const response = await databases.listDocuments(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collectionId
+    // );
+    const documents = await getAllDocuments(
       process.env.APPWRITE_DATABASE_ID,
       collectionId
     );
-    res.json(response);
+
+    res.json(documents);
   } catch (error) {
     console.error("Error fetching documents:", error);
     res.status(500).json({ error: error.message });
@@ -150,3 +155,31 @@ app.listen(port, () => {
   console.log(`   Local:     http://localhost:${port}`);
   console.log(`   Frontend:  https://boaziza.github.io/myWebApp`);
 });
+
+
+async function getAllDocuments(databaseId, collectionId) {
+  let allDocs = [];
+  let cursor = undefined;
+  const limit = 100; // safest max limit
+
+  while (true) {
+    const response = await databases.listDocuments(
+      databaseId,
+      collectionId,
+      [
+        Appwrite.Query.limit(limit),
+        cursor ? Appwrite.Query.cursorAfter(cursor) : null
+      ].filter(Boolean)
+    );
+
+    allDocs = allDocs.concat(response.documents);
+
+    if (response.documents.length < limit) {
+      break; // no more data
+    }
+
+    cursor = response.documents[response.documents.length - 1].$id;
+  }
+
+  return allDocs;
+}
