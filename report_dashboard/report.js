@@ -30,9 +30,9 @@ tables();
 
 // --- Utilities ---
 const hiddenKeys = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
-const preferredOrder = ["company","plate","amount","employee","totalVente","totalPayments","totalCash","gainPayments"];
+const preferredOrder = ["company","plate","amount","employee","totalVente","totalPayments","totalCash","gainPayments","monthYear"];
 const renameMap = {
-  email: "User Email",
+  "monthYear": "User Email",
   name: "Full Name",
   age: "User Age",
   createdAt: "Date Created"

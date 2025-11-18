@@ -45,13 +45,13 @@ const databases = new sdk.Databases(client);
 // ✅ Shared database + collections
 const databaseId = process.env.APPWRITE_DATABASE_ID;
 const collections = {
-  customers: process.env.APPWRITE_CUSTOMERS_ID,
+  // customers: process.env.APPWRITE_CUSTOMERS_ID,
   loans: process.env.APPWRITE_LOANS_ID,
   fiche: process.env.APPWRITE_FICHE_ID,
   gain: process.env.APPWRITE_GAIN_ID,
   payments: process.env.APPWRITE_PAYMENTS_ID,
   stock: process.env.APPWRITE_STOCK_ID,
-  sample: process.env.APPWRITE_SAMPLE_ID
+  // sample: process.env.APPWRITE_SAMPLE_ID
 };
 
 // ✅ Route 1: Get attributes (fields) for one collection
