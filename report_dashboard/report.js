@@ -32,9 +32,9 @@ tables();
 const hiddenKeys = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
 const preferredOrder = ["company","plate","amount","employee","totalVente","totalPayments","totalCash","gainPayments","monthYear"];
 const renameMap = {
-  "monthYear": "User Email",
-  name: "Full Name",
-  age: "User Age",
+  "monthYear": "Month",
+  "logDate": "Date",
+  "gainPayments": "gain",
   createdAt: "Date Created"
 };
 const cap = s => s && s[0].toUpperCase() + s.slice(1).toLowerCase();
@@ -80,6 +80,8 @@ async function display(check) {
     ]);
 
     const attributes = rearrangeAndRename(attrData.attributes);
+    console.log(attributes);
+    
     const rows = docData.documents;
     const headers = document.getElementById("headers");
     const body = document.getElementById("body");
@@ -95,10 +97,10 @@ async function display(check) {
     for (let i = 0; i < attributes.length; i++) {
       const theader = document.createElement("th");
       if (attributes[i].key === "loans") {
-        theader.textContent = `VERSEMENT`;
+        theader.textContent = `Versement`;
         headers.appendChild(theader);
       } else {
-        theader.textContent = `${attributes[i].key.toUpperCase()}`;
+        theader.textContent = `${cap(attributes[i].displayName)}`;
         headers.appendChild(theader); 
       }                
     }
@@ -145,8 +147,8 @@ async function display(check) {
     // Search selector
     for (let i = 0; i < attributes.length; i++) {
       const option = document.createElement("option");
-      option.value = `${attributes[i].key}`
-      option.textContent = `${cap(attributes[i].key)}`
+      option.value = `${attributes[i].displayName}`
+      option.textContent = `${cap(attributes[i].displayName)}`
       searchWith.appendChild(option);            
     }
 
@@ -183,6 +185,36 @@ function renderTable(attributes, rows, tableBody, totalsRow) {
   totalsRow.innerHTML = "";
 
   const totals = Array(attributes.length).fill(0);
+
+  for (let i = 0; i < rows.length; i++) {
+    const tr = document.createElement("tr");
+
+    attributes.forEach((attr, j) => {
+      const td = document.createElement("td");
+      const key = attr.key;
+      const value = rows[i][key];
+
+      if (key === "loans" && value) {
+        const loans = JSON.parse(value);
+        const versements = loans.filter(l => l.company === "Versement").map(l => l.amount);
+        td.textContent = versements.join(", ") || "0";
+      } else {
+        td.textContent = formatValue(key, value);
+      }
+
+      tr.appendChild(td);
+
+      const num = Number(value);
+      if (!isNaN(num)) {
+        totals[j] += num;
+      } else if( j === 0 ){
+        totals[j] = "TOTALS"
+      }
+       
+    });
+
+    tableBody.appendChild(tr);
+  }
 
   rows.forEach(row => {
     const tr = document.createElement("tr");

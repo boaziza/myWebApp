@@ -593,7 +593,7 @@ async function storeLoan(event) {
     const day = String(today.getDate()).padStart(2, '0');        // Days 1-31
     const year = today.getFullYear();
 
-    const logDate = `${month}/${day}/${year}`;
+    logDate = document.getElementById("logDate").value;
     const monthYear = `${year}-${month}`;
 
     const plate = document.getElementById("plate").value;
@@ -757,14 +757,8 @@ async function storeFiche(event) {
 
     const user = await account.get();        
     const employee = user.name;  
-    
-    const today = new Date();
 
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-11
-    const day = String(today.getDate()).padStart(2, '0');        // Days 1-31
-    const year = today.getFullYear();
-
-    const logDate = `${month}/${day}/${year}`;
+    logDate = document.getElementById("logDate").value;
 
     const plate = document.getElementById("plate").value;
     const amount = parseInt(document.getElementById("amount").value);
