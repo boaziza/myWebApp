@@ -186,36 +186,6 @@ function renderTable(attributes, rows, tableBody, totalsRow) {
 
   const totals = Array(attributes.length).fill(0);
 
-  for (let i = 0; i < rows.length; i++) {
-    const tr = document.createElement("tr");
-
-    attributes.forEach((attr, j) => {
-      const td = document.createElement("td");
-      const key = attr.key;
-      const value = rows[i][key];
-
-      if (key === "loans" && value) {
-        const loans = JSON.parse(value);
-        const versements = loans.filter(l => l.company === "Versement").map(l => l.amount);
-        td.textContent = versements.join(", ") || "0";
-      } else {
-        td.textContent = formatValue(key, value);
-      }
-
-      tr.appendChild(td);
-
-      const num = Number(value);
-      if (!isNaN(num)) {
-        totals[j] += num;
-      } else if( j === 0 ){
-        totals[j] = "TOTALS"
-      }
-       
-    });
-
-    tableBody.appendChild(tr);
-  }
-
   rows.forEach(row => {
     const tr = document.createElement("tr");
 
