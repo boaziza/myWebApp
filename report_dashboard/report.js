@@ -7,7 +7,6 @@ async function fetchJSON(url) {
 async function tables() {
   try {
     const data = await fetchJSON(`https://mywebapp-backend.onrender.com/api/tables`);
-    console.log(data);
     
     const tables = Object.keys(data.availableTables);
     const reportsList = document.getElementById("reportsList");
@@ -34,10 +33,25 @@ const preferredOrder = ["company","plate","amount","employee","totalVente","tota
 const renameMap = {
   "monthYear": "Month",
   "logDate": "Date",
-  "gainPayments": "gain",
-  createdAt: "Date Created"
+  "gainPayments": "Gain",
+  "totalVente": "Total Vente",
+  "totalPayments": "Total Payments",
+  "totalCash": "Total Cash",
+  "totalVente": "Total Vente",
+  "momo": "MOMO",
+  "momoLoss": "MOMO Loss",
+  "bankCard": "Bank Card",
+  "totalFiche": "Fiche",
+  "spFuelCard": "SP Fuel Card",
+  "totalLoans": "Loans",
+  "totalGainFuelPms": "Total Gain (PMS)",
+  "totalGainFuelAgo": "Total Gain (AGO)",
+  "totalReceivedPms": "Total Received (PMS)",
+  "totalReceivedAgo": "Total Received (AGO)",
+  "totalVenteLitresAgo": "Total Litres Sold (AGO)",
+  "totalVenteLitresPms": "Total Litres Sold (PMS)"
+
 };
-const cap = s => s && s[0].toUpperCase() + s.slice(1).toLowerCase();
 
 function rearrangeAndRename(attrs) {
   const ordered = [
@@ -100,7 +114,7 @@ async function display(check) {
         theader.textContent = `Versement`;
         headers.appendChild(theader);
       } else {
-        theader.textContent = `${cap(attributes[i].displayName)}`;
+        theader.textContent = `${attributes[i].displayName}`;
         headers.appendChild(theader); 
       }                
     }
@@ -147,8 +161,8 @@ async function display(check) {
     // Search selector
     for (let i = 0; i < attributes.length; i++) {
       const option = document.createElement("option");
-      option.value = `${attributes[i].displayName}`
-      option.textContent = `${cap(attributes[i].displayName)}`
+      option.value = `${attributes[i].key}`
+      option.textContent = `${attributes[i].displayName}`
       searchWith.appendChild(option);            
     }
 
@@ -192,7 +206,7 @@ function renderTable(attributes, rows, tableBody, totalsRow) {
     attributes.forEach((attr, j) => {
       const td = document.createElement("td");
       const key = attr.key;
-      const value = row[key];
+      const value = row[key] || "0";
 
       if (key === "loans" && value) {
         const loans = JSON.parse(value);

@@ -1,7 +1,7 @@
 // utils/server.js
 import express from "express";
 import cors from "cors";
-import { Client, Databases, ID } from "node-appwrite";
+import { Query, Client, Databases, ID } from "node-appwrite";
 import * as sdk from "node-appwrite";
 import dotenv from "dotenv";
 
@@ -98,11 +98,15 @@ app.get("/api/documents/:collection", async (req, res) => {
   }
 
   try {
-    const response = await databases.listDocuments(
-      process.env.APPWRITE_DATABASE_ID,
-      collectionId
-    );
-    res.json(response);
+    // const response = await databases.listDocuments(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collectionId
+    // );
+    const documents = await fetchAllDocuments(collectionId);
+
+    res.json({ documents });
+
+    // res.json(response);
   } catch (error) {
     console.error("Error fetching documents:", error);
     res.status(500).json({ error: error.message });
@@ -150,3 +154,26 @@ app.listen(port, () => {
   console.log(`   Local:     http://localhost:${port}`);
   console.log(`   Frontend:  https://boaziza.github.io/myWebApp`);
 });
+
+async function fetchAllDocuments(collectionId) {
+  const databaseId = process.env.APPWRITE_DATABASE_ID;
+  const limit = 100;  
+
+  let all = [];
+  let cursor = null;
+
+  while (true) {
+    const queries = [Query.limit(limit)];
+    if (cursor) queries.push(Query.cursorAfter(cursor));
+
+    const result = await databases.listDocuments(databaseId, collectionId, queries);
+
+    all.push(...result.documents);
+
+    if (result.documents.length < limit) break;
+
+    cursor = result.documents[result.documents.length - 1].$id;
+  }
+
+  return all;
+}
