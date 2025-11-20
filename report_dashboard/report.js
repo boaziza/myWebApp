@@ -212,6 +212,8 @@ function renderTable(attributes, allRows, tableBody, totalsRow) {
 
   totalsRow.innerHTML = totals.map(t => `<td style="font-weight: bold;">${t ? t.toLocaleString() : ""}</td>`).join("");
   tableBody.appendChild(totalsRow);
+  const div = document.getElementById("pagination")
+  div.style = `margin-top: 20px; display: flex; gap: 10px; align-items: center; justify-content: center;`;
 }
 
 async function search(check) {
