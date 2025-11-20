@@ -1,3 +1,11 @@
+let allRows = [];          // all documents loaded from backend
+let filtered = null;   // search uses this
+let currentPage = 1;
+const pageSize = 20;       // rows per page
+
+// stored attributes for pagination re-render
+window.lastAttributes = [];
+
 async function fetchJSON(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch ${url}`);
@@ -29,8 +37,12 @@ tables();
 
 // --- Utilities ---
 const hiddenKeys = ["cash5000","cash2000","cash1000","cash500","id","shift","email","fiche","listSFC","listBC","bon"];
-const preferredOrder = ["company","plate","amount","employee","totalVente","totalPayments","totalCash","gainPayments","monthYear"];
+const preferredOrder = ["company","plate","amount","employee","totalVente","totalPayments","totalCash","momo","momoLoss","spFuelCard","bankCard","totalFiche","totalLoans","loans","gainPayments","logDate","monthYear"];
 const renameMap = {
+  "employee": "Employee",
+  "plate": "Plate",
+  "company": "Company",
+  "amount": "Amount",
   "monthYear": "Month",
   "logDate": "Date",
   "gainPayments": "Gain",
@@ -94,9 +106,12 @@ async function display(check) {
     ]);
 
     const attributes = rearrangeAndRename(attrData.attributes);
-    console.log(attributes);
+    window.lastAttributes = attributes;
     
-    const rows = docData.documents;
+    allRows = docData.documents;
+    filtered = null;
+    currentPage = 1;
+
     const headers = document.getElementById("headers");
     const body = document.getElementById("body");
     const searchWith = document.getElementById("searchWith");
@@ -111,6 +126,7 @@ async function display(check) {
     for (let i = 0; i < attributes.length; i++) {
       const theader = document.createElement("th");
       if (attributes[i].key === "loans") {
+        attributes[i].displayName = 'Versement'
         theader.textContent = `Versement`;
         headers.appendChild(theader);
       } else {
@@ -118,11 +134,11 @@ async function display(check) {
         headers.appendChild(theader); 
       }                
     }
-    // Build rows
-    const totals = Array(attributes.length).fill(0);
 
-    renderTable(attributes, rows, body, totalsRow);
+    // renderTable(attributes, rows, body, totalsRow);
     
+    renderCurrentPage(attributes, body);
+
     for (let i = 0; i < attributes.length; i++) {
       const option = document.createElement("option");
       option.value = `${attributes[i].key}`
@@ -147,24 +163,24 @@ async function display(check) {
   }
 }
 
-function filterRows(rows, searchKey, searchValue) {
-  if (!searchKey || !searchValue) return rows;
+function filterRows(allRows, searchKey, searchValue) {
+  if (!searchKey || !searchValue) return allRows;
 
   // Handle date type fields
   if (searchKey === "logDate") {
     searchValue = `${searchValue}T00:00:00.000+00:00`;
   }
 
-  return rows.filter(row => String(row[searchKey]) === String(searchValue));
+  return allRows.filter(row => String(row[searchKey]) === String(searchValue));
 }
 
-function renderTable(attributes, rows, tableBody, totalsRow) {
+function renderTable(attributes, allRows, tableBody, totalsRow) {
   tableBody.innerHTML = "";
   totalsRow.innerHTML = "";
 
   const totals = Array(attributes.length).fill(0);
 
-  rows.forEach(row => {
+  allRows.forEach(row => {
     const tr = document.createElement("tr");
 
     attributes.forEach((attr, j) => {
@@ -207,18 +223,21 @@ async function search(check) {
     ]);
 
     const attributes = rearrangeAndRename(attrData.attributes);
-    const rows = docData.documents;
+    window.lastAttributes = attributes;
+    
+    allRows = docData.documents;
 
     const searchKey = document.getElementById("searchWith").value;
     let searchValue = document.getElementById("search").value;
 
     // Filter
-    const filtered = filterRows(rows, searchKey, searchValue);
+    filtered = filterRows(allRows, searchKey, searchValue);
 
     // Render filtered results
     const body = document.getElementById("body");
-    const totalRow = document.createElement("tr");
-    renderTable(attributes, filtered, body, totalRow);
+    // const totalRow = document.createElement("tr");
+    // renderTable(attributes, filtered, body, totalRow);
+    renderCurrentPage(attributes, body);
 
   } catch (error) {
     console.error("Search error:", error);
@@ -245,19 +264,19 @@ async function blocks() {
       ]);
 
       const attributes = rearrangeAndRename(attrData.attributes);
-      const rows = docData.documents;
+      allRows = docData.documents;
 
       let totalGain = 0;
 
-      for (let i = 0; i < rows.length; i++) {
+      for (let i = 0; i < allRows.length; i++) {
         for (let j = 0; j < attributes.length; j++) {        
           const key = attributes[j].key
           if (key === "gainPayments") {
-            totalGain += rows[i][key];
+            totalGain += allRows[i][key];
           } else if (key === "totalGainFuelAgo") {
-            document.getElementById("gainAgo").textContent = `${rows[i][key]} L`;
+            document.getElementById("gainAgo").textContent = `${allRows[i][key]} L`;
           } else if (key === "totalGainFuelPms") {
-            document.getElementById("gainPms").textContent = `${rows[i][key]} L`;
+            document.getElementById("gainPms").textContent = `${allRows[i][key]} L`;
           }
         }
         document.getElementById("gain").textContent = `${totalGain} RWF`;
@@ -268,3 +287,42 @@ async function blocks() {
   }
 }
 blocks();
+
+function getRowsForPage() {
+  const source = filtered || allRows;
+  const start = (currentPage - 1) * pageSize;
+  const totalPages = Math.ceil(source.length / pageSize);
+
+  document.getElementById("prevPage").disabled = currentPage === 1;
+  document.getElementById("nextPage").disabled = currentPage === totalPages;
+
+  document.getElementById("pageNumber").textContent =
+    `Page ${currentPage} of ${totalPages}`;
+
+  return source.slice(start, start + pageSize);  
+}
+
+function renderCurrentPage(attributes, body) {
+  const rowsToShow = getRowsForPage();
+  const totalsRow = document.createElement("tr");
+  renderTable(attributes, rowsToShow, body, totalsRow);
+}
+
+document.getElementById("prevPage").onclick = () => {
+  if (currentPage > 1) {
+    currentPage--;
+    const attributes = window.lastAttributes;
+    const body = document.getElementById("body");
+    renderCurrentPage(attributes, body);
+  }
+};
+
+document.getElementById("nextPage").onclick = () => {
+  const source = filtered || allRows;
+  if (currentPage < Math.ceil(source.length / pageSize)) {
+    currentPage++;
+    const attributes = window.lastAttributes;
+    const body = document.getElementById("body");
+    renderCurrentPage(attributes, body);
+  }
+};
