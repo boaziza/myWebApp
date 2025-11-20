@@ -98,15 +98,10 @@ app.get("/api/documents/:collection", async (req, res) => {
   }
 
   try {
-    // const response = await databases.listDocuments(
-    //   process.env.APPWRITE_DATABASE_ID,
-    //   collectionId
-    // );
     const documents = await fetchAllDocuments(collectionId);
 
     res.json({ documents });
-
-    // res.json(response);
+    
   } catch (error) {
     console.error("Error fetching documents:", error);
     res.status(500).json({ error: error.message });

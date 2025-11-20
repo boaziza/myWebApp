@@ -122,43 +122,7 @@ async function display(check) {
     const totals = Array(attributes.length).fill(0);
 
     renderTable(attributes, rows, body, totalsRow);
-
-    // for (let i = 0; i < rows.length; i++) {
-    //   const tr = document.createElement("tr");
-
-    //   for (let j = 0; j < attributes.length; j++) {
-    //     const td = document.createElement("td");
-    //     const key = attributes[j].key;
-    //     const value = rows[i][key];
-
-    //     if (key === "loans" && value) {
-    //       const loans = JSON.parse(value);
-    //       const versements = loans.filter(l => l.company === "Versement").map(l => l.amount);
-    //       td.textContent = versements.join(", ") || "0";
-    //     } else {
-    //       td.textContent = formatValue(key, value);
-    //     }
-
-    //     tr.appendChild(td);
-
-    //     const num = Number(value);
-    //     if (!isNaN(num)) totals[j] += num;
-    //   };
-
-    //   body.appendChild(tr);
-    // };
-
-    // // Add total row
-    // const totalRow = document.createElement("tr");
-    // for (let j = 0; j < attributes.length; j++) {
-    //   const td = document.createElement("td");
-    //   // Only show total if it’s numeric (not 0)
-    //   td.textContent = totals[j] !== 0 ? totals[j].toLocaleString() : "";
-    //   totalRow.appendChild(td);
-    // }
-    // body.appendChild(totalRow);
-
-    // Search selector
+    
     for (let i = 0; i < attributes.length; i++) {
       const option = document.createElement("option");
       option.value = `${attributes[i].key}`
