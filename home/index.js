@@ -64,33 +64,55 @@ async function calculateIndex(event) {
         }
 
         const dateBefore = await getDayBefore(logDate);
-
         let match = false;
-
         
         const response = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", logDate)]);
 
-        for (let i = 0; i < response.documents.length; i++) {
-
-            const doc = response.documents[i];
-
-            if ( pms1 === doc.pms2 && pms3 === doc.pms4 || ago1 === doc.ago2 && ago3 === doc.ago4) {
+        for (const doc of response.documents) {
+            let pmsMatch = true;
+            let agoMatch = true;
+            
+            // Check PMS only if values are provided
+            if (pms1 && pms3) {  // If either PMS value is entered
+                pmsMatch = (pms1 === doc.pms2 && pms3 === doc.pms4);
+            }
+            
+            // Check AGO only if values are provided
+            if (ago1 && ago3) {  // If either AGO value is entered
+                agoMatch = (ago1 === doc.ago2 && ago3 === doc.ago4);
+            }
+            
+            // Both must be true (if both were checked, all 4 must match)
+            if (pmsMatch && agoMatch) {
                 match = true;
-            } 
+                break;
+            }
             
         }
 
-        if (match === false) {
+        if (!match) {
             
             const beforeResponse = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", dateBefore)]);
 
-            for (let i = 0; i < beforeResponse.documents.length; i++) {
-
-                const doc = beforeResponse.documents[i];
-
-                if ( pms1 === doc.pms2 && pms3 === doc.pms4 && doc.shift === "Evening" || ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Evening") {
+            for (const doc of beforeResponse.documents) {
+                let pmsMatch = true;
+                let agoMatch = true;
+                
+                // Check PMS only if values are provided
+                if (pms1 && pms3) {
+                    pmsMatch = (pms1 === doc.pms2 && pms3 === doc.pms4);
+                }
+                
+                // Check AGO only if values are provided
+                if (ago1 && ago3) {
+                    agoMatch = (ago1 === doc.ago2 && ago3 === doc.ago4);
+                }
+                
+                // Both must be true AND shift must be Evening
+                if (pmsMatch && agoMatch && doc.shift === "Evening") {
                     match = true;
-                } 
+                    break;
+                }
                 
             } 
 
