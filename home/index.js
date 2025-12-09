@@ -64,64 +64,78 @@ async function calculateIndex(event) {
         }
 
         const dateBefore = await getDayBefore(logDate);
-        let match = false;
-        
+        let pmsMatch = false;
+        let agoMatch = false;
+
         const response = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", logDate)]);
 
         for (const doc of response.documents) {
-            let pmsMatch = true;
-            let agoMatch = true;
-            
-            // Check PMS only if values are provided
-            if (pms1 && pms3) {  // If either PMS value is entered
-                pmsMatch = (pms1 === doc.pms2 && pms3 === doc.pms4);
+            // Check PMS match if values are provided
+            if (pms1 && pms3) {
+                if (pms1 === doc.pms2 && pms3 === doc.pms4) {
+                    pmsMatch = true;
+                }
+            } else {
+                // If PMS not provided, consider it as found
+                pmsMatch = true;
             }
             
-            // Check AGO only if values are provided
-            if (ago1 && ago3) {  // If either AGO value is entered
-                agoMatch = (ago1 === doc.ago2 && ago3 === doc.ago4);
+            // Check AGO match if values are provided
+            if (ago1 && ago3) {
+                if (ago1 === doc.ago2 && ago3 === doc.ago4) {
+                    agoMatch = true;
+                }
+            } else {
+                // If AGO not provided, consider it as found
+                agoMatch = true;
             }
             
-            // Both must be true (if both were checked, all 4 must match)
+            // If both are found, we can break early
             if (pmsMatch && agoMatch) {
-                match = true;
                 break;
             }
-            
         }
 
+        let match = pmsMatch && agoMatch;
+
         if (!match) {
+            pmsMatch = false;
+            agoMatch = false;
             
             const beforeResponse = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", dateBefore)]);
 
             for (const doc of beforeResponse.documents) {
-                let pmsMatch = true;
-                let agoMatch = true;
-                
-                // Check PMS only if values are provided
+                // Check PMS match if values are provided
                 if (pms1 && pms3) {
-                    pmsMatch = (pms1 === doc.pms2 && pms3 === doc.pms4);
+                    if (pms1 === doc.pms2 && pms3 === doc.pms4 && doc.shift === "Evening") {
+                        pmsMatch = true;
+                    }
+                } else {
+                    pmsMatch = true;
                 }
                 
-                // Check AGO only if values are provided
+                // Check AGO match if values are provided
                 if (ago1 && ago3) {
-                    agoMatch = (ago1 === doc.ago2 && ago3 === doc.ago4);
+                    if (ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Evening") {
+                        agoMatch = true;
+                    }
+                } else {
+                    agoMatch = true;
                 }
                 
-                // Both must be true AND shift must be Evening
-                if (pmsMatch && agoMatch && doc.shift === "Evening") {
-                    match = true;
+                // If both are found, we can break early
+                if (pmsMatch && agoMatch) {
                     break;
                 }
-                
-            } 
-
-        } 
+            }
+            
+            match = pmsMatch && agoMatch;
+        }
 
         if (match) {
-            alert("All index match")
+            alert("All index match");
         } else {
-            alert("Check Index they do not match")
+            alert("Check Index they do not match");
         }
 
     } catch (error) {

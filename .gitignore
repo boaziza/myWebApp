@@ -2,4 +2,4 @@
 .env
 node_modules/
 report_dashboard/oldreport.js
-.vscode/
+.vscode/settings.json
