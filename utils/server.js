@@ -51,6 +51,7 @@ const collections = {
   gain: process.env.APPWRITE_GAIN_ID,
   payments: process.env.APPWRITE_PAYMENTS_ID,
   stock: process.env.APPWRITE_STOCK_ID,
+  gainTesting: process.env.APPWRITE_GAINTESTING_ID,
   // sample: process.env.APPWRITE_SAMPLE_ID
 };
 
