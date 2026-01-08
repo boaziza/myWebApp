@@ -1,96 +1,115 @@
-let totalVente,pms1,pms2,pms3,pms4,ago1,ago2,ago3,ago4;
+let totalVente, pms1, pms2, pms3, pms4, ago1, ago2, ago3, ago4;
 let venteLitresPms, totalPms, venteLitresAgo, totalAgo;
 let pmsPrice, agoPrice, logDate, shift;
+let userEmail, userName;
 
-async function calculateIndex(event) {
-    const client = new Appwrite.Client()
-        .setEndpoint("https://cloud.appwrite.io/v1") 
-        .setProject("68c3ec870024955539b0");
+const API_BASE = "https://testing-projects-4ttw.onrender.com/api";
 
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
+// Helper function to save data
+async function saveData(collection, data) {
+    return fetch(`${API_BASE}/create/${collection}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    }).then(r => r.json());
+}
 
-    const databaseId = "68c3f10d002b0dfc0b2d";
-    const indexId = "68cd1987002bae34ea4b";
+// Helper function to get documents
+async function getDocuments(collection) {
+    return fetch(`${API_BASE}/documents/${collection}`)
+        .then(r => r.json());
+}
 
-    const btn = event.currentTarget;   
-    const originalText = btn.textContent;
+// Helper function to update document by field
+async function updateDocumentByField(collection, searchField, searchValue, updateData) {
+    return fetch(`${API_BASE}/update-by-field/${collection}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ searchField, searchValue, updateData }),
+    }).then(r => r.json());
+}
 
-    btn.disabled = true;
-    btn.textContent = "Loading...";
+// Initialize user session (you'll need to implement authentication separately)
+async function initUser() {
+    // You'll need to implement your own auth system
+    // For now, storing in localStorage as placeholder
+    userEmail = localStorage.getItem('userEmail');
+    userName = localStorage.getItem('userName');
+    
+    if (!userEmail || !userName) {
+        alert("Please log in first!");
+        // Redirect to login page
+        return false;
+    }
+    return true;
+}
 
-
+async function calculateIndex() {
     pmsPrice = 1989;
     agoPrice = 1900;
 
-    pms1 =Number(document.getElementById("pms1").value);
-    pms2 =Number(document.getElementById("pms2").value);
-    pms3 =Number(document.getElementById("pms3").value);
-    pms4 =Number(document.getElementById("pms4").value);
-    ago1 =Number(document.getElementById("ago1").value);
-    ago2 =Number(document.getElementById("ago2").value);
-    ago3 =Number(document.getElementById("ago3").value);
-    ago4 =Number(document.getElementById("ago4").value);
-    logDate= document.getElementById("logDate").value;
+    pms1 = Number(document.getElementById("pms1").value);
+    pms2 = Number(document.getElementById("pms2").value);
+    pms3 = Number(document.getElementById("pms3").value);
+    pms4 = Number(document.getElementById("pms4").value);
+    ago1 = Number(document.getElementById("ago1").value);
+    ago2 = Number(document.getElementById("ago2").value);
+    ago3 = Number(document.getElementById("ago3").value);
+    ago4 = Number(document.getElementById("ago4").value);
+    logDate = document.getElementById("logDate").value;
     shift = document.getElementById("shift").value;
 
     venteLitresPms = (pms2 - pms1) + (pms4 - pms3);
-    totalPms = parseInt(venteLitresPms*pmsPrice, 10);
+    totalPms = parseInt(venteLitresPms * pmsPrice, 10);
 
     venteLitresAgo = (ago2 - ago1) + (ago4 - ago3);
-    totalAgo = parseInt(venteLitresAgo*agoPrice, 10);
+    totalAgo = parseInt(venteLitresAgo * agoPrice, 10);
 
     totalVente = totalAgo + totalPms;
 
-    document.getElementById("resultpms").textContent = totalPms;
-    document.getElementById("resultago").textContent = totalAgo;
-    document.getElementById("result").textContent = totalVente;
+    document.getElementById("resultpms").textContent = `${totalPms.toLocaleString()} RWF`;
+    document.getElementById("resultago").textContent = `${totalAgo.toLocaleString()} RWF`;
+    document.getElementById("result").textContent = `${totalVente.toLocaleString()} RWF`;
 
     try {
-        
         async function getDayBefore(logDate) {
-
             if (!logDate) return alert("Select a date!");
 
             const selectedDate = new Date(logDate);
             selectedDate.setDate(selectedDate.getDate() - 1);
             
-            const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
             const dd = String(selectedDate.getDate()).padStart(2, '0');
             const yyyy = selectedDate.getFullYear();
 
             return `${mm}/${dd}/${yyyy}`;
-
         }
 
         const dateBefore = await getDayBefore(logDate);
         let pmsMatch = false;
         let agoMatch = false;
 
-        const response = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", logDate)]);
+        // Get documents for today
+        const response = await getDocuments('index');
+        const todayDocs = response.documents.filter(doc => doc.logDate === logDate);
 
-        for (const doc of response.documents) {
-            // Check PMS match if values are provided
+        for (const doc of todayDocs) {
             if (pms1 && pms3) {
                 if (pms1 === doc.pms2 && pms3 === doc.pms4) {
                     pmsMatch = true;
                 }
             } else {
-                // If PMS not provided, consider it as found
                 pmsMatch = true;
             }
             
-            // Check AGO match if values are provided
             if (ago1 && ago3) {
                 if (ago1 === doc.ago2 && ago3 === doc.ago4) {
                     agoMatch = true;
                 }
             } else {
-                // If AGO not provided, consider it as found
                 agoMatch = true;
             }
             
-            // If both are found, we can break early
             if (pmsMatch && agoMatch) {
                 break;
             }
@@ -102,28 +121,25 @@ async function calculateIndex(event) {
             pmsMatch = false;
             agoMatch = false;
             
-            const beforeResponse = await databases.listDocuments(databaseId, indexId, [Appwrite.Query.equal("logDate", dateBefore)]);
+            const beforeDocs = response.documents.filter(doc => doc.logDate === dateBefore);
 
-            for (const doc of beforeResponse.documents) {
-                // Check PMS match if values are provided
+            for (const doc of beforeDocs) {
                 if (pms1 && pms3) {
-                    if (pms1 === doc.pms2 && pms3 === doc.pms4 && doc.shift === "Evening") {
+                    if (pms1 === doc.pms2 && pms3 === doc.pms4 && doc.shift === "Night") {
                         pmsMatch = true;
                     }
                 } else {
                     pmsMatch = true;
                 }
                 
-                // Check AGO match if values are provided
                 if (ago1 && ago3) {
-                    if (ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Evening") {
+                    if (ago1 === doc.ago2 && ago3 === doc.ago4 && doc.shift === "Night") {
                         agoMatch = true;
                     }
                 } else {
                     agoMatch = true;
                 }
                 
-                // If both are found, we can break early
                 if (pmsMatch && agoMatch) {
                     break;
                 }
@@ -140,31 +156,15 @@ async function calculateIndex(event) {
 
     } catch (error) {
         console.log("The error is ", error);
-        
-    } finally {
-
-        btn.disabled = false;
-        btn.textContent = originalText;
-        
     }
-
 }
 
 let momo, momoLoss, totalFiche, bon, spFuelCard, bankCard;
 let cash5000, cash2000, cash1000, cash500;
 let totalCash, totalPayments, gainPayments, listBC, listSFC, totalLoans;
 
-async function payments(event) {
-    
-    const btn = event.currentTarget;   
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = "Loading..."; 
-
+async function payments() {
     try {
-        
-    
         momo = Number(document.getElementById("momo").value);
         momoLoss = Number(document.getElementById("momoLoss").value);
         bon = Number(document.getElementById("bon").value);
@@ -174,130 +174,82 @@ async function payments(event) {
         cash2000 = Number(document.getElementById("2000").value);
         cash1000 = Number(document.getElementById("1000").value);
         cash500 = Number(document.getElementById("500").value);
-        logDate= document.getElementById("logDate").value;
+        logDate = document.getElementById("logDate").value;
         shift = document.getElementById("shift").value;
 
         listSFC = spFuelCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
-        listBC =  bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+        listBC = bankCard.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
 
-        spFuelCard = listSFC.reduce((sum,n) => sum + n, 0);
-        bankCard = listBC.reduce((sum,n) => sum + n, 0);
+        spFuelCard = listSFC.reduce((sum, n) => sum + n, 0);
+        bankCard = listBC.reduce((sum, n) => sum + n, 0);
 
         totalLoans = loans.reduce((sum, loan) => sum + loan.amount, 0);
         totalFiche = fiche.reduce((sum, item) => sum + item.amount, 0);
 
-        totalCash = (cash5000*5000) + (cash2000*2000) + (cash1000*1000) + (cash500*500);
-        totalPayments = momo+ momoLoss + totalFiche + bon + spFuelCard + bankCard + totalCash + totalLoans ;
+        totalCash = (cash5000 * 5000) + (cash2000 * 2000) + (cash1000 * 1000) + (cash500 * 500);
+        totalPayments = momo + momoLoss + totalFiche + bon + spFuelCard + bankCard + totalCash + totalLoans;
         gainPayments = totalPayments - totalVente;
 
-        
-        document.getElementById("totalLoans").textContent = totalLoans;
-        document.getElementById("totalFiche").textContent = totalFiche;
-        document.getElementById("totalPayments").textContent = totalPayments;  
-        document.getElementById("gainPayments").textContent = gainPayments;
-        document.getElementById("totalCash").textContent = totalCash;
+        document.getElementById("totalLoans").textContent = `${totalLoans.toLocaleString()} RWF`;
+        document.getElementById("totalFiche").textContent = `${totalFiche.toLocaleString()} RWF`;
+        document.getElementById("totalPayments").textContent = `${totalPayments.toLocaleString()} RWF`;
+        document.getElementById("gainPayments").textContent = `${gainPayments.toLocaleString()} RWF`;
+        document.getElementById("totalCash").textContent = `${totalCash.toLocaleString()} RWF`;
     } catch (error) {
-        console.log(error)  
-    } finally {
-        btn.disabled = false;
-        btn.textContent = originalText;
+        console.log(error);
     }
-
 }
 
-let dataSituation; 
-async function situation(event) {
-    const client = new Appwrite.Client()
-        .setEndpoint("https://cloud.appwrite.io/v1") 
-        .setProject("68c3ec870024955539b0");
-
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
-
-    const databaseId = "68c3f10d002b0dfc0b2d";
-    const indexId = "68cd1987002bae34ea4b";
-    const paymentsId = "68cd19990006cbb33843";
-    const situationId = "68cd6b7f00330a840d96";
-    const btn = event.currentTarget;   
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = "Loading..."; 
+async function situation() {
+    if (!await initUser()) return;
 
     try {
-        
-        const user = await account.get();
-        console.log("Logged in as:", user.email);
-        const email = await user.email;
-        console.log("Email", email);           
-        const employee = user.name;
+        const employee = userName;
+        const email = userEmail;
 
         function generateShiftId(employee, logDate) {
             return `${employee}_${logDate}_${crypto.randomUUID()}`;
         }
 
-        const id = generateShiftId(employee,logDate);
+        const id = generateShiftId(employee, logDate);
 
         const selectedDate = new Date(logDate);
-        
-        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
         const yyyy = selectedDate.getFullYear();
-
         const monthYear = `${yyyy}-${mm}`;
 
+        // Get gain documents
+        const gainDocs = await getDocuments('gain');
+        const matchingGain = gainDocs.documents.filter(
+            doc => doc.email === email && doc.monthYear === monthYear
+        );
 
-        const gainPompisteId = "68dbbb760034fb10a518"
-        const gainDocs = await databases.listDocuments(databaseId, gainPompisteId, [Appwrite.Query.equal("email", email)], [Appwrite.Query.equal("monthYear", monthYear)]);
-        const doc = gainDocs.documents;     
-
-
-        if ( doc.length === 0) {
-
+        if (matchingGain.length === 0) {
             const newData = {
-               employee,
-               email,
-               gainPayments,
-               logDate,
-               monthYear
+                employee,
+                email,
+                gainPayments,
+                logDate,
+                monthYear
             };
             
-            await databases.createDocument(
-                databaseId,
-                gainPompisteId,
-                "unique()",
-                newData
-            );
-
+            await saveData('gain', newData);
         } else {
-
-            const docId = doc[0].$id;
-            const newGain = gainPayments + doc[0].gainPayments;
+            const doc = matchingGain[0];
+            const newGain = gainPayments + doc.gainPayments;
             
-            console.log("Code",docId);
-            
-            
-            const oldData = {
-               employee,
-               email,
-               gainPayments: newGain,
-               logDate,
-               monthYear
-            };
-
-            await databases.updateDocument(
-                databaseId,
-                gainPompisteId,
-                docId,
-                oldData
+            await updateDocumentByField(
+                'gain',
+                'email',
+                email,
+                { gainPayments: newGain, logDate, monthYear }
             );
-            
         }
-        
 
         const dataIndex = {
-            venteLitresPms, 
-            totalPms, 
-            venteLitresAgo, 
+            venteLitresPms,
+            totalPms,
+            venteLitresAgo,
             totalAgo,
             totalVente,
             pms1,
@@ -318,49 +270,53 @@ async function situation(event) {
         };
 
         const dataPayments = {
-            momo, 
-            momoLoss, 
+            momo,
+            momoLoss,
             totalFiche,
-            bon, 
+            bon,
             listBC,
             listSFC,
             bankCard,
             spFuelCard,
-            cash5000, 
-            cash2000, 
-            cash1000, 
+            cash5000,
+            cash2000,
+            cash1000,
             cash500,
-            totalCash, 
-            totalPayments, 
+            totalCash,
+            totalPayments,
             gainPayments,
             email,
             logDate,
             shift,
             employee,
             id,
-            loans : JSON.stringify(loans),
-            fiche : JSON.stringify(fiche),
+            loans: JSON.stringify(loans),
+            fiche: JSON.stringify(fiche),
             totalLoans,
             totalVente
         };
 
-        const response = await databases.listDocuments(databaseId, situationId, [Appwrite.Query.equal("logDate", logDate)]);
+        // Get situation documents
+        const situationDocs = await getDocuments('situation');
+        const todaySituation = situationDocs.documents.filter(doc => doc.logDate === logDate);
 
-        if (shift === "Morning" && response.documents.length === 0 ) {
+        let dataSituation;
+
+        if (shift === "Morning" && todaySituation.length <= 1) {
             dataSituation = {
-                momo, 
-                momoLoss, 
-                totalFiche, 
+                momo,
+                momoLoss,
+                totalFiche,
                 bon,
                 spFuelCard,
                 bankCard,
-                totalCash, 
+                totalCash,
                 totalLoans,
-                totalPayments, 
+                totalPayments,
                 gainPayments,
-                venteLitresPms, 
-                totalPms, 
-                venteLitresAgo, 
+                venteLitresPms,
+                totalPms,
+                venteLitresAgo,
                 totalAgo,
                 totalVente,
                 pms1,
@@ -372,139 +328,71 @@ async function situation(event) {
                 logDate,
             };
 
-            await databases.createDocument(
-                databaseId,
-                situationId,
-                "unique()", // Appwrite generates an ID
-                dataSituation
-            )
+            await saveData('situation', dataSituation);
 
-        } else if ( (shift === "Afternoon" || shift === "Morning") && response.documents.length !== 0) {
-            const doc = response.documents[0];
+        } else if ((shift === "Afternoon" || shift === "Morning" || shift === "Evening") && todaySituation.length !== 0) {
+            const doc = todaySituation[0];
 
-            const docId = doc.$id;
-
-            momo += doc.momo;
-            momoLoss += doc.momoLoss;
-            totalFiche += doc.totalFiche;
-            bon += doc.bon;
-            spFuelCard += doc.spFuelCard;
-            bankCard += doc.bankCard;
-            totalCash += doc.totalCash;
-            totalLoans += doc.totalLoans;
-            totalPayments += doc.totalPayments;
-            gainPayments += doc.gainPayments;
-            venteLitresPms += doc.venteLitresPms;
-            totalPms += doc.totalPms;
-            venteLitresAgo += doc.venteLitresAgo;
-            totalAgo += doc.totalAgo;
-            totalVente += doc.totalVente;
-            
             dataSituation = {
-                momo, 
-                momoLoss,
-                totalFiche,
-                bon,
-                spFuelCard,
-                bankCard,
-                totalCash, 
-                totalLoans,
-                totalPayments, 
-                gainPayments,
-                venteLitresPms, 
-                totalPms, 
-                venteLitresAgo, 
-                totalAgo,
-                totalVente,
-            }
+                momo: momo + doc.momo,
+                momoLoss: momoLoss + doc.momoLoss,
+                totalFiche: totalFiche + doc.totalFiche,
+                bon: bon + doc.bon,
+                spFuelCard: spFuelCard + doc.spFuelCard,
+                bankCard: bankCard + doc.bankCard,
+                totalCash: totalCash + doc.totalCash,
+                totalLoans: totalLoans + doc.totalLoans,
+                totalPayments: totalPayments + doc.totalPayments,
+                gainPayments: gainPayments + doc.gainPayments,
+                venteLitresPms: venteLitresPms + doc.venteLitresPms,
+                totalPms: totalPms + doc.totalPms,
+                venteLitresAgo: venteLitresAgo + doc.venteLitresAgo,
+                totalAgo: totalAgo + doc.totalAgo,
+                totalVente: totalVente + doc.totalVente,
+            };
 
-            const updated = await databases.updateDocument(
-            databaseId,
-            situationId,
-            docId,
-            dataSituation)
-            
-        } else if(shift === "Evening" && response.documents.length !== 0 ){
-            const doc = response.documents[0];
+            await updateDocumentByField('situation', 'logDate', logDate, dataSituation);
 
-            const docId = doc.$id;
-            const done = true;
+        } else if (shift === "Night" && todaySituation.length !== 0) {
+            const doc = todaySituation[0];
 
-            momo += doc.momo;
-            momoLoss += doc.momoLoss;
-            totalFiche += doc.totalFiche;
-            bon += doc.bon;
-            spFuelCard += doc.spFuelCard;
-            bankCard += doc.bankCard;
-            totalCash += doc.totalCash;
-            totalLoans += doc.totalLoans;
-            totalPayments += doc.totalPayments;
-            gainPayments += doc.gainPayments;
-            venteLitresPms += doc.venteLitresPms;
-            totalPms += doc.totalPms;
-            venteLitresAgo += doc.venteLitresAgo;
-            totalAgo += doc.totalAgo;
-            totalVente += doc.totalVente;
-            
             dataSituation = {
-                momo, 
-                momoLoss, 
-                totalFiche,
-                bon, 
-                spFuelCard,
-                bankCard,
-                totalCash, 
-                totalLoans,
-                totalPayments, 
-                gainPayments,
-                venteLitresPms, 
-                totalPms, 
-                venteLitresAgo, 
-                totalAgo,
-                totalVente,
+                momo: momo + doc.momo,
+                momoLoss: momoLoss + doc.momoLoss,
+                totalFiche: totalFiche + doc.totalFiche,
+                bon: bon + doc.bon,
+                spFuelCard: spFuelCard + doc.spFuelCard,
+                bankCard: bankCard + doc.bankCard,
+                totalCash: totalCash + doc.totalCash,
+                totalLoans: totalLoans + doc.totalLoans,
+                totalPayments: totalPayments + doc.totalPayments,
+                gainPayments: gainPayments + doc.gainPayments,
+                venteLitresPms: venteLitresPms + doc.venteLitresPms,
+                totalPms: totalPms + doc.totalPms,
+                venteLitresAgo: venteLitresAgo + doc.venteLitresAgo,
+                totalAgo: totalAgo + doc.totalAgo,
+                totalVente: totalVente + doc.totalVente,
                 pms2,
                 pms4,
                 ago2,
                 ago4,
-                done,
-            }
+                done: true,
+            };
 
-            const updated = await databases.updateDocument(
-            databaseId,
-            situationId,
-            docId,
-            dataSituation)
-            
+            await updateDocumentByField('situation', 'logDate', logDate, dataSituation);
         }
-        
-        
-        
 
-        await databases.createDocument(
-            databaseId,
-            indexId,
-            "unique()", // Appwrite generates an ID
-            dataIndex
-        );
+        await saveData('index', dataIndex);
+        await saveData('payments', dataPayments);
 
-        await databases.createDocument(
-            databaseId,
-            paymentsId,
-            "unique()", // Appwrite generates an ID
-            dataPayments
-        );
-
-        console.log("monthYear",monthYear);
-        
-
-        alert("Data saved successfully"); 
+        alert("Data saved successfully");
 
         function clearOutputs() {
-
             const outputs = document.querySelectorAll(".output");
             outputs.forEach(el => {
                 el.textContent = "0";
             });
+            document.getElementById("momo").value = "";
         }
 
         clearOutputs();
@@ -514,119 +402,87 @@ async function situation(event) {
 
     } catch (err) {
         console.error("Error:", err.message);
-
-        // If user is not logged in, redirect them to login
-        if (err.message.includes("Unauthorized")) {
-            alert("You must log in first!");
-            // window.location.href = "/sign-in/sign-in.html";
-        } else {
-            alert("Error: " + err.message);
-        }
-    } finally {
-
-        btn.disabled = false;
-        btn.textContent = originalText;
-        
+        alert("Error: " + err.message);
     }
-    
 }
 
-async function addLoan(event) {
-  const btn = event.currentTarget;   
-  const originalText = btn.textContent;
-
-  btn.disabled = true;
-  btn.textContent = "Loading..."; 
-
+async function addLoan() {
     try {
-    
-    
         const container = document.getElementById("loanContainer");
         container.innerHTML = "";
 
-        const res = await fetch("https://mywebapp-backend.onrender.com/api/attributes/loans");
+        const res = await fetch(`${API_BASE}/attributes/loans`);
         const data = await res.json();
         const attributes = data.attributes;
 
         for (let i = 0; i < attributes.length; i++) {
+            const div = document.createElement("div");
+            
+            if (attributes[i].key === "employee" || attributes[i].key === "logDate" || attributes[i].key === "monthYear") {
+                continue;
+            }
 
-        const div = document.createElement("div");
-        
-        if (attributes[i].key === "employee" || attributes[i].key === "logDate" || attributes[i].key === "monthYear" ) {
-            continue;
-        }
+            div.innerHTML = `
+                <label for="${attributes[i].key}"> ${(attributes[i].key).toUpperCase()}: &nbsp;</label>
+                <input class="loan" type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
+            `;
 
-        div.innerHTML = `
-            <label for="${attributes[i].key}"> ${(attributes[i].key).toUpperCase()}: &nbsp;</label>
-            <input class="loan" type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
-        `;
-
-        container.appendChild(div);    
+            container.appendChild(div);
         }
 
         const submit = document.createElement("button");
-        submit.type = "button"; 
+        submit.type = "button";
         submit.className = "action-btn";
         submit.textContent = "Save Loan";
-        submit.onclick = (e) => storeLoan(e);
+        submit.onclick = async (e) => {
+            submit.disabled = true;
+            try {
+                await storeLoan(e);
+            } finally {
+                submit.disabled = false;
+            }
+        };
+        submit.style.marginRight = "10px";
         container.appendChild(submit);
 
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.className = "cancel";
+        cancelBtn.textContent = "Cancel";
+        cancelBtn.onclick = (e) => cancel("loanContainer");
+        container.appendChild(cancelBtn);
 
     } catch (error) {
-        console.log(error);    
-    } finally {      
-
-        btn.disabled = false;
-        btn.textContent = originalText;
+        console.log(error);
     }
 }
 
-
 function mapTypeToInput(appwriteType) {
-  switch (appwriteType) {
-    case "integer":
-      return "number";
-    case "float":
-      return "number";
-    case "boolean":
-      return "checkbox";
-    case "email":
-      return "email";
-    case "url":
-      return "url";
-    case "datetime":
-      return "date";
-    default:
-      return "text"; // for string, enum, etc.
-  }
+    switch (appwriteType) {
+        case "integer":
+            return "number";
+        case "float":
+            return "number";
+        case "boolean":
+            return "checkbox";
+        case "email":
+            return "email";
+        case "url":
+            return "url";
+        case "datetime":
+            return "date";
+        default:
+            return "text";
+    }
 }
 
 let loans = [];
-async function storeLoan(event) {
-    const client = new Appwrite.Client()
-    .setEndpoint("https://cloud.appwrite.io/v1") 
-    .setProject("68c3ec870024955539b0");
-    
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
+async function storeLoan() {
+    if (!await initUser()) return;
 
-    const databaseId = "68c3f10d002b0dfc0b2d";
-    const loansId = "68fbe6f80019b53fb32f";
-    const paymentsId = "68cd19990006cbb33843";
-
-    const btn = event.currentTarget;   
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = "Loading..."; 
-
-    const user = await account.get();        
-    const employee = user.name;  
-    
+    const employee = userName;
     const today = new Date();
-
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-11
-    const day = String(today.getDate()).padStart(2, '0');        // Days 1-31
+    const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
 
     logDate = document.getElementById("logDate").value;
@@ -637,163 +493,85 @@ async function storeLoan(event) {
     const company = document.getElementById("company").value;
     
     try {
-
         const loanData = {
             plate,
             company,
             logDate,
-            monthYear, 
+            monthYear,
             employee,
             amount
- 
         };
 
-        await databases.createDocument(
-        databaseId,
-        loansId,
-        "unique()", // Appwrite generates an ID
-        loanData
-        );
-
-        alert("Data saved successfully");        
+        await saveData('loans', loanData);
+        alert("Data saved successfully");
         
     } catch (err) {
-      console.error("Error:", err.message);
-      alert("Error: " + err.message);
-    } finally {
-
-        btn.disabled = false;
-        btn.textContent = originalText;
-        
+        console.error("Error:", err.message);
+        alert("Error: " + err.message);
     }
+
     const container = document.getElementById("loanContainer");
     container.innerHTML = "";
 
-
-    loans.push({company,amount});
-    
-    
-
-    // try {
-    //     // 1. Find the document by attribute
-    //     const docs = await databases.listDocuments(
-    //         databaseId,
-    //         paymentsId,
-    //         [ Appwrite.Query.equal("logDate", logDate) ] // filter by your known attribute
-    //     );
-
-    //     if (docs.total === 0) {
-    //         console.log("No document found!");
-    //         return;
-    //     }
-
-    //     const docId = docs.documents[0].$id; // get the first match
-
-    //     // 2. Update the null fields
-    //     const updated = await databases.updateDocument(
-    //         databaseId,
-    //         situationId,
-    //         docId,
-    //         {
-    //             initialAgo: initialAgo,
-    //             receivedAgo: receivedAgo,
-    //             physicalStockAgo: physicalStockAgo,
-    //             theoryStockAgo: theoryStockAgo,
-    //             gainFuelAgo: gainFuelAgo,
-    //             initialPms: initialPms,
-    //             receivedPms: receivedPms,
-    //             physicalStockPms: physicalStockPms,
-    //             theoryStockPms: theoryStockPms,
-    //             gainFuelPms: gainFuelPms,
-    //         }
-    //     );
-
-    //     console.log("Updated document:", updated);
-
-    //     alert("Data saved successfully");
-
-    // } catch (error) {
-    //     alert("Error updating:", error);
-    // } finally {
-
-    //     btn.disabled = false;
-    //     btn.textContent = originalText;
-        
-    // }
-
-
+    loans.push({ company, amount });
 }
-async function addFiche(event) {
-  const btn = event.currentTarget;   
-  const originalText = btn.textContent;
 
-  btn.disabled = true;
-  btn.textContent = "Loading..."; 
-
+async function addFiche() {
     try {
-    
-    
         const container = document.getElementById("ficheContainer");
         container.innerHTML = "";
 
-        const res = await fetch("https://mywebapp-backend.onrender.com/api/attributes/fiche");
+        const res = await fetch(`${API_BASE}/attributes/fiche`);
         const data = await res.json();
         const attributes = data.attributes;
 
         for (let i = 0; i < attributes.length; i++) {
+            const div = document.createElement("div");
+            
+            if (attributes[i].key === "employee" || attributes[i].key === "logDate") {
+                continue;
+            }
 
-        const div = document.createElement("div");
-        
-        if (attributes[i].key === "employee" || attributes[i].key === "logDate" ) {
-            continue;
-        }
+            div.innerHTML = `
+                <label for="${attributes[i].key}"> ${(attributes[i].key).toUpperCase()}: &nbsp;</label>
+                <input class="loan" type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
+            `;
 
-        div.innerHTML = `
-            <label for="${attributes[i].key}"> ${(attributes[i].key).toUpperCase()}: &nbsp;</label>
-            <input class="loan" type="${mapTypeToInput(attributes[i].type)}" id="${attributes[i].key}" placeholder="Enter the ${attributes[i].key}">
-        `;
-
-        container.appendChild(div);    
+            container.appendChild(div);
         }
 
         const submit = document.createElement("button");
-        submit.type = "button"; 
+        submit.type = "button";
         submit.className = "action-btn";
         submit.textContent = "Save Fiche";
-        submit.onclick = (e) => storeFiche(e);
+        submit.onclick = async (e) => {
+            submit.disabled = true;
+            try {
+                await storeFiche(e);
+            } finally {
+                submit.disabled = false;
+            }
+        };
+        submit.style.marginRight = "10px";
         container.appendChild(submit);
 
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.className = "cancel";
+        cancelBtn.textContent = "Cancel";
+        cancelBtn.onclick = (e) => cancel("ficheContainer");
+        container.appendChild(cancelBtn);
 
     } catch (error) {
-        console.log(error);    
-    } finally {      
-
-        btn.disabled = false;
-        btn.textContent = originalText;
+        console.log(error);
     }
 }
 
 let fiche = [];
-async function storeFiche(event) {
-    const client = new Appwrite.Client()
-    .setEndpoint("https://cloud.appwrite.io/v1") 
-    .setProject("68c3ec870024955539b0");
-    
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
+async function storeFiche() {
+    if (!await initUser()) return;
 
-    const databaseId = "68c3f10d002b0dfc0b2d";
-    const ficheId = "69007206001aed40d6f4";
-
-    const btn = event.currentTarget;   
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = "Loading..."; 
-
-    const user = await account.get();        
-    const employee = user.name;  
-
+    const employee = userName;
     logDate = document.getElementById("logDate").value;
 
     const plate = document.getElementById("plate").value;
@@ -801,96 +579,33 @@ async function storeFiche(event) {
     const company = document.getElementById("company").value;
     
     try {
-
         const ficheData = {
             plate,
             company,
-            logDate, 
+            logDate,
             employee,
             amount
- 
         };
 
-        await databases.createDocument(
-        databaseId,
-        ficheId,
-        "unique()", // Appwrite generates an ID
-        ficheData
-        );
-
-        alert("Data saved successfully");        
+        await saveData('fiche', ficheData);
+        alert("Data saved successfully");
         
     } catch (err) {
-      console.error("Error:", err.message);
-      alert("Error: " + err.message);
-    } finally {
-
-        btn.disabled = false;
-        btn.textContent = originalText;
-        const container = document.getElementById("ficheContainer");
-        container.innerHTML = "";
-        
+        console.error("Error:", err.message);
+        alert("Error: " + err.message);
     }
+
     const container = document.getElementById("ficheContainer");
     container.innerHTML = "";
 
-
-    fiche.push({company,amount});
-    
-    
-
-    // try {
-    //     // 1. Find the document by attribute
-    //     const docs = await databases.listDocuments(
-    //         databaseId,
-    //         paymentsId,
-    //         [ Appwrite.Query.equal("logDate", logDate) ] // filter by your known attribute
-    //     );
-
-    //     if (docs.total === 0) {
-    //         console.log("No document found!");
-    //         return;
-    //     }
-
-    //     const docId = docs.documents[0].$id; // get the first match
-
-    //     // 2. Update the null fields
-    //     const updated = await databases.updateDocument(
-    //         databaseId,
-    //         situationId,
-    //         docId,
-    //         {
-    //             initialAgo: initialAgo,
-    //             receivedAgo: receivedAgo,
-    //             physicalStockAgo: physicalStockAgo,
-    //             theoryStockAgo: theoryStockAgo,
-    //             gainFuelAgo: gainFuelAgo,
-    //             initialPms: initialPms,
-    //             receivedPms: receivedPms,
-    //             physicalStockPms: physicalStockPms,
-    //             theoryStockPms: theoryStockPms,
-    //             gainFuelPms: gainFuelPms,
-    //         }
-    //     );
-
-    //     console.log("Updated document:", updated);
-
-    //     alert("Data saved successfully");
-
-    // } catch (error) {
-    //     alert("Error updating:", error);
-    // } finally {
-
-    //     btn.disabled = false;
-    //     btn.textContent = originalText;
-        
-    // }
-
-
+    fiche.push({ company, amount });
 }
 
 async function MomoLoss() {
     const momo = document.getElementById("momo").value;
+    document.getElementById("tempMomoLoss").textContent = (parseInt((momo / 100) * 0.5).toLocaleString());
+}
 
-    document.getElementById("tempMomoLoss").textContent = parseInt((momo/100)*0.5) ;
+function cancel(id) {
+    document.getElementById(id).innerHTML = "";
 }
