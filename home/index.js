@@ -3,21 +3,32 @@ let venteLitresPms, totalPms, venteLitresAgo, totalAgo;
 let pmsPrice, agoPrice, logDate, shift;
 let userEmail, userName;
 
-const API_BASE = "https://testing-projects-4ttw.onrender.com/api";
+const API_BASE = "https://mywebapp-backend.onrender.com/api";
 
 // Helper function to save data
 async function saveData(collection, data) {
-    return fetch(`${API_BASE}/create/${collection}`, {
+    const response = await fetch(`${API_BASE}/create/${collection}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-    }).then(r => r.json());
+    });
+    
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.details || `Failed to save to ${collection}`);
+    }
+    
+    return response.json();
 }
 
 // Helper function to get documents
 async function getDocuments(collection) {
-    return fetch(`${API_BASE}/documents/${collection}`)
-        .then(r => r.json());
+    const response = await fetch(`${API_BASE}/documents/${collection}`);
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || `Failed to fetch ${collection}`);
+    }
+    return response.json();
 }
 
 // Helper function to update document by field
@@ -91,7 +102,7 @@ async function calculateIndex() {
 
         // Get documents for today
         const response = await getDocuments('index');
-        const todayDocs = response.documents.filter(doc => doc.logDate === logDate);
+        const todayDocs = response.documents ? response.documents.filter(doc => doc.logDate === logDate) : [];
 
         for (const doc of todayDocs) {
             if (pms1 && pms3) {
@@ -121,7 +132,7 @@ async function calculateIndex() {
             pmsMatch = false;
             agoMatch = false;
             
-            const beforeDocs = response.documents.filter(doc => doc.logDate === dateBefore);
+            const beforeDocs = response.documents ? response.documents.filter(doc => doc.logDate === dateBefore) : [];
 
             for (const doc of beforeDocs) {
                 if (pms1 && pms3) {
@@ -220,9 +231,9 @@ async function situation() {
 
         // Get gain documents
         const gainDocs = await getDocuments('gain');
-        const matchingGain = gainDocs.documents.filter(
+        const matchingGain = gainDocs.documents ? gainDocs.documents.filter(
             doc => doc.email === email && doc.monthYear === monthYear
-        );
+        ) : [];
 
         if (matchingGain.length === 0) {
             const newData = {
@@ -298,7 +309,7 @@ async function situation() {
 
         // Get situation documents
         const situationDocs = await getDocuments('situation');
-        const todaySituation = situationDocs.documents.filter(doc => doc.logDate === logDate);
+        const todaySituation = situationDocs.documents ? situationDocs.documents.filter(doc => doc.logDate === logDate) : [];
 
         let dataSituation;
 

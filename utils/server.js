@@ -45,12 +45,18 @@ const collections = {
   index: process.env.APPWRITE_INDEX_ID,
   payments: process.env.APPWRITE_PAYMENTS_ID,
   situation: process.env.APPWRITE_SITUATION_ID,
-  gain: process.env.APPWRITE_GAIN_ID,
+  gain: process.env.APPWRITE_GAIN_ID || process.env.APPWRITE_GAINPOMPISTE_ID, // Support both names
   loans: process.env.APPWRITE_LOANS_ID,
   fiche: process.env.APPWRITE_FICHE_ID,
   stock: process.env.APPWRITE_STOCK_ID,
   gainTesting: process.env.APPWRITE_GAINTESTING_ID,
 };
+
+// Log collections on startup for debugging
+console.log("📦 Configured collections:", Object.keys(collections));
+Object.entries(collections).forEach(([name, id]) => {
+  if (!id) console.warn(`⚠️  Missing collection ID for: ${name}`);
+});
 
 // ✅ Helper: Fetch all documents with pagination
 async function fetchAllDocuments(collectionId) {
@@ -96,14 +102,18 @@ app.get("/api/documents/:collection", async (req, res) => {
   const collectionId = collections[collection];
 
   if (!collectionId) {
-    return res.status(400).json({ error: `Collection '${collection}' not found` });
+    console.error(`❌ Collection '${collection}' not found. Available: ${Object.keys(collections).join(', ')}`);
+    return res.status(400).json({ 
+      error: `Collection '${collection}' not found`,
+      available: Object.keys(collections)
+    });
   }
 
   try {
     const documents = await fetchAllDocuments(collectionId);
-    res.json({ documents });
+    res.json({ documents, total: documents.length });
   } catch (error) {
-    console.error("Error fetching documents:", error);
+    console.error(`Error fetching documents from ${collection}:`, error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -125,8 +135,14 @@ app.post("/api/create/:collection", async (req, res) => {
     const tableId = collections[tableKey];
     
     if (!tableId) {
-      return res.status(400).json({ error: `Collection '${tableKey}' not found` });
+      console.error(`❌ Collection '${tableKey}' not found. Available: ${Object.keys(collections).join(', ')}`);
+      return res.status(400).json({ 
+        error: `Collection '${tableKey}' not found`,
+        available: Object.keys(collections)
+      });
     }
+
+    console.log(`📝 Creating document in ${tableKey} (${tableId})`);
 
     const result = await databases.createDocument(
       databaseId,
@@ -139,7 +155,11 @@ app.post("/api/create/:collection", async (req, res) => {
 
   } catch (error) {
     console.error("Create error:", error);
-    res.status(500).json({ error: "Failed to create document", details: error.message });
+    res.status(500).json({ 
+      error: "Failed to create document", 
+      details: error.message,
+      type: error.type || 'unknown'
+    });
   }
 });
 
