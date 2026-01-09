@@ -331,11 +331,6 @@ app.post('/api/init', async (req, res) => {
         email: user.email,
         id: user.$id
       },
-      // This fulfills your request to send the table IDs
-      config: {
-        databaseId: CONFIG.databaseId,
-        tables: CONFIG.ids
-      }
     });
 
   } catch (error) {
