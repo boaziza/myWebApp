@@ -1,7 +1,7 @@
 // utils/server.js
 import express from "express";
 import cors from "cors";
-import { Query, ID } from "node-appwrite";
+import { Query, ID, Client, Account } from "node-appwrite";
 import * as sdk from "node-appwrite";
 import dotenv from "dotenv";
 
@@ -297,6 +297,50 @@ app.post("/api/query/:collection", async (req, res) => {
   } catch (error) {
     console.error("Query error:", error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/init', async (req, res) => {
+    
+  // 1. Get the JWT (Token) sent from the frontend
+  const { jwt } = req.body;
+
+  if (!jwt) {
+    return res.status(401).json({ error: "No session token provided" });
+  }
+
+  try {
+    // 2. Initialize Appwrite Client PER REQUEST
+    // We do this inside the route so we can attach the specific user's token
+    const client = new Client()
+      .setEndpoint(process.env.APPWRITE_ENDPOINT)
+      .setProject(process.env.APPWRITE_PROJECT_ID)
+      .setJWT(jwt); // <--- This logs the server in AS the user
+
+    const account = new Account(client);
+
+    // 3. Fetch the user's details
+    const user = await account.get();
+
+    // 4. Send back ONLY what the frontend needs
+    // We combine the User Info + The Table IDs in one clean response
+    res.json({
+      status: "success",
+      user: {
+        name: user.name,
+        email: user.email,
+        id: user.$id
+      },
+      // This fulfills your request to send the table IDs
+      config: {
+        databaseId: CONFIG.databaseId,
+        tables: CONFIG.ids
+      }
+    });
+
+  } catch (error) {
+    console.error("Auth Error:", error.message);
+    res.status(401).json({ error: "Invalid session or login expired" });
   }
 });
 

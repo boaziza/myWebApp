@@ -1,3 +1,6 @@
+// Import Appwrite (only needed for creating the initial handshake)
+import { Client, Account } from 'appwrite';
+
 let totalVente, pms1, pms2, pms3, pms4, ago1, ago2, ago3, ago4;
 let venteLitresPms, totalPms, venteLitresAgo, totalAgo;
 let pmsPrice, agoPrice, logDate, shift;
@@ -40,19 +43,51 @@ async function updateDocumentByField(collection, searchField, searchValue, updat
     }).then(r => r.json());
 }
 
-// Initialize user session (you'll need to implement authentication separately)
+const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject("68a9b3e90029e6a10ff5");
+
+const account = new Account(client);
+
+// This replaces your old "initUser" function
 async function initUser() {
-    // You'll need to implement your own auth system
-    // For now, storing in localStorage as placeholder
-    userEmail = localStorage.getItem('userEmail');
-    userName = localStorage.getItem('userName');
-    
-    if (!userEmail || !userName) {
+    try {
+        // 1. Generate a temporary "Secret Handshake" (JWT)
+        // This validates the user without exposing their permanent password
+        const session = await account.createJWT();
+
+        // 2. Send it to YOUR server
+        const response = await fetch('http://localhost:3000/api/init', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jwt: session.jwt })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            console.log("Backend Initialized!");
+            console.log("User:", data.user.name);
+            console.log("Config loaded:", data.config);
+
+            // 3. Store the clean data (as placeholders)
+            localStorage.setItem('userEmail', data.user.email);
+            localStorage.setItem('userName', data.user.name);
+            
+            // OPTIONAL: Store your DB IDs in memory or global state
+            // window.APP_CONFIG = data.config; 
+            
+            return true;
+        } else {
+            console.warn("Login check failed:", data.error);
+            return false;
+        }
+
+    } catch (error) {
+        console.error("Server connection error:", error);
         alert("Please log in first!");
-        // Redirect to login page
         return false;
     }
-    return true;
 }
 
 async function calculateIndex() {
