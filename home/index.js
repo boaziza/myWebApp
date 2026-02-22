@@ -1,6 +1,3 @@
-// Import Appwrite (only needed for creating the initial handshake)
-import { Client, Account } from 'appwrite';
-
 let totalVente, pms1, pms2, pms3, pms4, ago1, ago2, ago3, ago4;
 let venteLitresPms, totalPms, venteLitresAgo, totalAgo;
 let pmsPrice, agoPrice, logDate, shift;
@@ -43,52 +40,52 @@ async function updateDocumentByField(collection, searchField, searchValue, updat
     }).then(r => r.json());
 }
 
-const client = new Client()
-    .setEndpoint("https://cloud.appwrite.io/v1")
-    .setProject("68a9b3e90029e6a10ff5");
+// const client = new Client()
+//     .setEndpoint("https://cloud.appwrite.io/v1")
+//     .setProject("68c3ec870024955539b0");
 
-const account = new Account(client);
+// const account = new Account(client);
 
-// This replaces your old "initUser" function
-async function initUser() {
-    try {
-        // 1. Generate a temporary "Secret Handshake" (JWT)
-        // This validates the user without exposing their permanent password
-        const session = await account.createJWT();
+// // This replaces your old "initUser" function
+// async function initUser() {
+//     try {
+//         // 1. Generate a temporary "Secret Handshake" (JWT)
+//         // This validates the user without exposing their permanent password
+//         const session = await account.createJWT();
 
-        // 2. Send it to YOUR server
-        const response = await fetch('http://localhost:3000/api/init', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ jwt: session.jwt })
-        });
+//         // 2. Send it to YOUR server
+//         const response = await fetch('http://localhost:3000/api/init', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ jwt: session.jwt })
+//         });
 
-        const data = await response.json();
+//         const data = await response.json();
 
-        if (data.status === 'success') {
-            console.log("Backend Initialized!");
-            console.log("User:", data.user.name);
-            console.log("Config loaded:", data.config);
+//         if (data.status === 'success') {
+//             console.log("Backend Initialized!");
+//             console.log("User:", data.user.name);
+//             console.log("Config loaded:", data.config);
 
-            // 3. Store the clean data (as placeholders)
-            localStorage.setItem('userEmail', data.user.email);
-            localStorage.setItem('userName', data.user.name);
+//             // 3. Store the clean data (as placeholders)
+//             localStorage.setItem('userEmail', data.user.email);
+//             localStorage.setItem('userName', data.user.name);
             
-            // OPTIONAL: Store your DB IDs in memory or global state
-            // window.APP_CONFIG = data.config; 
+//             // OPTIONAL: Store your DB IDs in memory or global state
+//             // window.APP_CONFIG = data.config; 
             
-            return true;
-        } else {
-            console.warn("Login check failed:", data.error);
-            return false;
-        }
+//             return true;
+//         } else {
+//             console.warn("Login check failed:", data.error);
+//             return false;
+//         }
 
-    } catch (error) {
-        console.error("Server connection error:", error);
-        alert("Please log in first!");
-        return false;
-    }
-}
+//     } catch (error) {
+//         console.error("Server connection error:", error);
+//         alert("Please log in first!");
+//         return false;
+//     }
+// }
 
 async function calculateIndex() {
     pmsPrice = 1989;
@@ -247,11 +244,11 @@ async function payments() {
 }
 
 async function situation() {
-    if (!await initUser()) return;
+    // if (!await initUser()) return;
 
     try {
-        const employee = userName;
-        const email = userEmail;
+        const employee = "userName";
+        const email = "user@example.com";
 
         function generateShiftId(employee, logDate) {
             return `${employee}_${logDate}_${crypto.randomUUID()}`;
@@ -524,9 +521,9 @@ function mapTypeToInput(appwriteType) {
 
 let loans = [];
 async function storeLoan() {
-    if (!await initUser()) return;
+    // if (!await initUser()) return;
 
-    const employee = userName;
+    const employee = "userName";
     const today = new Date();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
@@ -615,9 +612,9 @@ async function addFiche() {
 
 let fiche = [];
 async function storeFiche() {
-    if (!await initUser()) return;
+    // if (!await initUser()) return;
 
-    const employee = userName;
+    const employee = "userName";
     logDate = document.getElementById("logDate").value;
 
     const plate = document.getElementById("plate").value;
@@ -648,7 +645,7 @@ async function storeFiche() {
 }
 
 async function MomoLoss() {
-    const momo = document.getElementById("momo").value;
+    momo = document.getElementById("momo").value;
     document.getElementById("tempMomoLoss").textContent = (parseInt((momo / 100) * 0.5).toLocaleString());
 }
 
